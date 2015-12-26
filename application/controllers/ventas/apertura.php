@@ -48,7 +48,7 @@ class Apertura extends CI_Controller {
                 $lista[$indice]->codigo   = $value->APERTUP_Codigo;
                 $lista[$indice]->local    = $value->LOCC_Nombre;
                 $lista[$indice]->aula     = $value->AULAC_Nombre;
-                $lista[$indice]->turno     = $value->APERTUC_Turno;
+                $lista[$indice]->turno     = $value->TURNOP_Codigo;
 		$lista[$indice]->ciclo    = $value->COMPC_Nombre;
                 $lista[$indice]->tipoestudio = $value->TIPC_Nombre;
                 $lista[$indice]->estado   = $value->APERTUC_FlagEstado;
