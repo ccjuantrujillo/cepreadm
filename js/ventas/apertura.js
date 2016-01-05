@@ -192,6 +192,11 @@ function selecciona_curso(codigo){
     window.close();
 }
 
+function selecciona_aula(codigo){
+    window.opener.selecciona_aula(codigo); 
+    window.close();
+}
+
 function selectDia(n,valor){
     valor = (valor) ? valor : null;
     a      = "dia["+n+"]";

@@ -3,29 +3,34 @@ class Alumno_model extends CI_Model{
     var $table;
     public function __construct(){
         parent::__construct();
-        $this->table     = "user";
+        $this->table_persona = "ant_persona";
+        $this->table_ciclo = "ant_ciclo";
+        $this->table     = "ant_alumno";
     }
 
     public function seleccionar($default='',$filter='',$filter_not='',$number_items='',$offset=''){
         if($default!="") $arreglo = array($default=>':: Seleccione ::');
         foreach($this->listar($filter,$filter_not,$number_items,$offset) as $indice=>$valor){
-            $indice1   = $valor->user_id;
-            $valor1    = $valor->lastname." ".$valor->firstname;
+            $indice1   = $valor->ALUMP_Codigo;
+            $valor1    = $valor->PERSC_ApellidoPaterno." ".$valor->PERSC_ApellidoMaterno." ".$valor->PERSC_Nombre;
             $arreglo[$indice1] = $valor1;
         }
         return $arreglo;
     }
 
     public function listar($filter,$filter_not='',$number_items='',$offset=''){
-        $this->db->select('*');
+        $this->db->select('*',FALSE);
         $this->db->from($this->table." as c",$number_items,$offset);
-        if(isset($filter->alumno) && $filter->alumno!='')    $this->db->where(array("c.user_id"=>$filter->user_id));
-        if(isset($filter_not->alumno) && $filter_not->alumno!=''){
-            if(is_array($filter_not->alumno) && count($filter_not->alumno)>0){
-                $this->db->where_not_in('c.user_id',$filter_not->alumno);
+        $this->db->join($this->table_persona.' as d','d.PERSP_Codigo=c.PERSP_Codigo','inner');
+        $this->db->join($this->table_ciclo.' as e','e.CICLOP_Codigo=c.CICLOP_Codigo','inner');
+        if(isset($filter->alumno) && $filter->alumno!='')  $this->db->where(array("c.ALUMP_Codigo"=>$filter->alumno));
+        if(isset($filter->ciclo))    $this->db->where(array("c.CICLOP_Codigo"=>$filter->ciclo));
+        if(isset($filter_not->cliente) && $filter_not->cliente!=''){
+            if(is_array($filter_not->cliente) && count($filter_not->cliente)>0){
+                $this->db->where_not_in('c.CLIP_Codigo',$filter_not->cliente);
             }
             else{
-                $this->db->where('c.user_id !=',$filter_not->alumno);
+                $this->db->where('c.CLIP_Codigo !=',$filter_not->cliente);
             }
         }
         if(isset($filter->order_by) && count($filter->order_by)>0){
@@ -58,12 +63,12 @@ class Alumno_model extends CI_Model{
     }
 
     public function modificar($codigo,$data){
-        $this->db->where("user_id",$codigo);
+        $this->db->where("ALUMP_Codigo",$codigo);
         $this->db->update($this->table,$data);
     }
 
     public function eliminar($codigo){
-        $this->db->delete($this->table,array('user_id' => $codigo));
+        $this->db->delete($this->table,array('ALUMP_Codigo' => $codigo));
     }
 }
 ?>

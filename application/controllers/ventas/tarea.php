@@ -362,83 +362,83 @@ class Tarea extends CI_Controller {
                 $profesor = $this->input->get_post('profesor');
                 $desde    = $this->input->get_post('desde');
                 $hasta    = $this->input->get_post('hasta');                
-                $ciclo    = $this->input->get_post('ciclo'); 
-                $ciclo   = 1;
+                $ciclo    = $this->input->get_post('ciclo_rpt'); 
                 $filter = new stdClass();
                 if($curso!=0) $filter->curso = $curso;
                 if($profesor!=0) $filter->profesor = $profesor;
                 $filter->order_by= array("e.PROD_Codigo"=>"asc","d.PROP_Codigo"=>"asc");
                 $tareas = $this->tareadetalle_model->listar($filter);
-                $filter = new stdClass();
-                $ciclo = 1;
-                $filter->ciclo = $ciclo;
-                $ciclos = $this->ciclo_model->obtener($filter);
-                $this->load->library("fpdf/pdf");
-                $CI = & get_instance();
-                $CI->pdf->FPDF('P');
-                $CI->pdf->AliasNbPages();
-                $CI->pdf->AddPage();
-                $CI->pdf->SetTextColor(0,0,0);
-                $CI->pdf->SetFillColor(216,216,216);
-                $CI->pdf->SetFont('Arial','B',11);
-                $CI->pdf->Image('img/uni.gif',10,8,10);
-                $CI->pdf->Cell(0,13,"SEGUIMIENTO DE TAREAS ASIGNADAS",0,1,"C",0);
-                $CI->pdf->Cell(0,1,"CICLO: ".$ciclos->COMPC_Nombre,0,1,"C",0);
-                $CI->pdf->SetFont('Arial','B',7);   
-                $profe_ant = 0;
-                $curso_ant = 0;
-                foreach($tareas as $item=>$value){
-                    //if($value->PROD_Codigo!=$curso_ant) $CI->pdf->Cell(120,5,"Curso: ".$value->PROD_Nombre,0,1,"L",0);
-                    if($value->PROP_Codigo!=$profe_ant){
-                        $CI->pdf->Cell(0,3,"",0,1,"L",0);
-                        $CI->pdf->Cell(120,3,"Curso: ".$value->PROD_Nombre,0,1,"L",0);
-                        $CI->pdf->Cell(120,4,"Profesor: ".$value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno.", ".$value->PERSC_Nombre,0,1,"L",0);   
-                        $CI->pdf->Cell(20,5,"T.Estudio",1,0,"C",0);  
-                        $CI->pdf->Cell(33,5,"Tipo Tarea",1,0,"C",0);
-                        $CI->pdf->Cell(12,5,"Numero",1,0,"C",0);                    
-                        $CI->pdf->Cell(14,5,"Cantidad",1,0,"C",0);  
-                        $CI->pdf->Cell(60,5,"Tema",1,0,"C",0); 
-                        $CI->pdf->Cell(20,5,"F.Compromiso",1,0,"C",0); 
-                        $CI->pdf->Cell(18,5,"F.Entrega",1,0,"C",0); 
-                        $CI->pdf->Cell(17,5,"Situacion",1,1,"C",0); 
-                    }
-                    $CI->pdf->Cell(20,5,$value->TIPC_Nombre,1,0,"L",0);  
-                    $CI->pdf->Cell(33,5,$value->TIPOTAREAC_Nombre,1,0,"L",0);
-                    $CI->pdf->Cell(12,5,$value->TAREAC_Numero,1,0,"R",0);                    
-                    $CI->pdf->Cell(14,5,$value->TAREADETC_Cantidad,1,0,"R",0);  
-                    $CI->pdf->Cell(60,5,$value->TEMAC_Descripcion,1,0,"L",0); 
-                    $CI->pdf->Cell(20,5,$value->TAREAC_FechaEntrega,1,0,"C",0); 
-                    $CI->pdf->Cell(18,5,$value->TAREADETC_FechaEntrega,1,0,"C",0); 
-                    switch ($value->TAREADETC_Situacion){
-                        case 1:
-                            $msgsituacion = "Pendiente";
-                            $CI->pdf->SetTextColor(216,0,0);
-                            break;
-                        case 2:
-                            $CI->pdf->SetTextColor(0,216,0);
-                            $msgsituacion = "Ok";
-                            break;                     
-                        case 3:
-                            $CI->pdf->SetTextColor(219,200,0);
-                            $msgsituacion = "Leve";
-                            break;    
-                        case 4:
-                            $CI->pdf->SetTextColor(205,117,020);
-                            $msgsituacion = "Retraso";
-                            break;  
-                    }
-                    $CI->pdf->Cell(17,5,$msgsituacion,1,1,"C",0); 
-                    $CI->pdf->SetTextColor(0,0,0);
-                    $profe_ant = $value->PROP_Codigo;
-                    $curso_ant = $value->PROD_Codigo;
-                }   
-                $CI->pdf->Output();
+                if($ciclo!=0){
+                    $filter = new stdClass();
+                     $filter->ciclo = $ciclo;
+                     $ciclos = $this->ciclo_model->obtener($filter);
+                     $this->load->library("fpdf/pdf");
+                     $CI = & get_instance();
+                     $CI->pdf->FPDF('P');
+                     $CI->pdf->AliasNbPages();
+                     $CI->pdf->AddPage();
+                     $CI->pdf->SetTextColor(0,0,0);
+                     $CI->pdf->SetFillColor(216,216,216);
+                     $CI->pdf->SetFont('Arial','B',11);
+                     $CI->pdf->Image('img/uni.gif',10,8,10);
+                     $CI->pdf->Cell(0,13,"SEGUIMIENTO DE TAREAS ASIGNADAS",0,1,"C",0);
+                     $CI->pdf->Cell(0,1,"CICLO: ".$ciclos->COMPC_Nombre,0,1,"C",0);
+                     $CI->pdf->SetFont('Arial','B',7);   
+                     $profe_ant = 0;
+                     $curso_ant = 0;
+                     foreach($tareas as $item=>$value){
+                         if($value->PROP_Codigo!=$profe_ant){
+                             $CI->pdf->Cell(0,3,"",0,1,"L",0);
+                             $CI->pdf->Cell(120,3,"Curso: ".$value->PROD_Nombre,0,1,"L",0);
+                             $CI->pdf->Cell(120,4,"Profesor: ".$value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno.", ".$value->PERSC_Nombre,0,1,"L",0);   
+                             $CI->pdf->Cell(20,5,"T.Estudio",1,0,"C",0);  
+                             $CI->pdf->Cell(33,5,"Tipo Tarea",1,0,"C",0);
+                             $CI->pdf->Cell(12,5,"Numero",1,0,"C",0);                    
+                             $CI->pdf->Cell(14,5,"Cantidad",1,0,"C",0);  
+                             $CI->pdf->Cell(60,5,"Tema",1,0,"C",0); 
+                             $CI->pdf->Cell(20,5,"F.Compromiso",1,0,"C",0); 
+                             $CI->pdf->Cell(18,5,"F.Entrega",1,0,"C",0); 
+                             $CI->pdf->Cell(17,5,"Situacion",1,1,"C",0); 
+                         }
+                         $CI->pdf->Cell(20,5,$value->TIPC_Nombre,1,0,"L",0);  
+                         $CI->pdf->Cell(33,5,$value->TIPOTAREAC_Nombre,1,0,"L",0);
+                         $CI->pdf->Cell(12,5,$value->TAREAC_Numero,1,0,"R",0);                    
+                         $CI->pdf->Cell(14,5,$value->TAREADETC_Cantidad,1,0,"R",0);  
+                         $CI->pdf->Cell(60,5,$value->TEMAC_Descripcion,1,0,"L",0); 
+                         $CI->pdf->Cell(20,5,$value->TAREAC_FechaEntrega,1,0,"C",0); 
+                         $CI->pdf->Cell(18,5,$value->TAREADETC_FechaEntrega,1,0,"C",0); 
+                         switch ($value->TAREADETC_Situacion){
+                             case 1:
+                                 $msgsituacion = "Pendiente";
+                                 $CI->pdf->SetTextColor(216,0,0);
+                                 break;
+                             case 2:
+                                 $CI->pdf->SetTextColor(0,216,0);
+                                 $msgsituacion = "Ok";
+                                 break;                     
+                             case 3:
+                                 $CI->pdf->SetTextColor(219,200,0);
+                                 $msgsituacion = "Leve";
+                                 break;    
+                             case 4:
+                                 $CI->pdf->SetTextColor(205,117,020);
+                                 $msgsituacion = "Retraso";
+                                 break;  
+                         }
+                         $CI->pdf->Cell(17,5,$msgsituacion,1,1,"C",0); 
+                         $CI->pdf->SetTextColor(0,0,0);
+                         $profe_ant = $value->PROP_Codigo;
+                         $curso_ant = $value->PROD_Codigo;
+                     }  
+                     $CI->pdf->Output();
+                }
                 break;
         }
     }
     
     public function rpt_seguimiento_tareas(){
         $curso    = $this->input->get_post('curso_rpt');
+        $ciclo    = $this->input->get_post('ciclo_rpt');
         $profesor = $this->input->get_post('profesor');
         $desde    = $this->input->get_post('desde');
         $hasta    = $this->input->get_post('hasta');         
@@ -448,7 +448,11 @@ class Tarea extends CI_Controller {
         $menu       = get_menu($filter);           
         $filter       = new stdClass();
         $data['selprofesor'] = form_dropdown('profesor',$this->profesor_model->seleccionar('0',$filter),0,"id='profesor' class='comboGrande'");      
+        $filter       = new stdClass();
+        $filter->order_by=array("p.PROD_Nombre"=>"asc");
         $data['selcurso']    = form_dropdown('curso_rpt',$this->curso_model->seleccionar('0',$filter),0,"id='curso_rpt' class='comboGrande'");      
+        $filter       = new stdClass();
+        $data['selciclo']   = form_dropdown('ciclo_rpt',$this->ciclo_model->seleccionar('0',$filter),$ciclo,"id='ciclo_rpt' class='comboMedio'");        
         $data["desde"] = $desde;
         $data["hasta"] = $hasta;
         $data["menu"]  = $menu;

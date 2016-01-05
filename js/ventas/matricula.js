@@ -23,9 +23,12 @@ jQuery(document).ready(function(){
        $("#clave").val(curso+ascii);
     });    
     
-    $("body").on('click',"#ver_cliente",function(){
-        url = base_url+"index.php/ventas/alumno/buscar";
-        window.open(url,"_blank","width=700,height=400,scrollbars=yes,status=yes,resizable=yes,screenx=0,screeny=0");          
+    $("body").on('click',"#ver_aula",function(){
+        url = base_url+"index.php/ventas/apertura/buscar/";
+        mywin = window.open("","wmatricula","width=700,height=400,scrollbars=yes,status=yes,resizable=yes,screenx=0,screeny=0");          
+        $("#frmPersona").attr("action",url);
+        $("#frmPersona").attr("target","wmatricula");
+        $("#frmPersona").submit();
     });    
     
    $("body").on('change',"#local",function(){
@@ -46,8 +49,16 @@ jQuery(document).ready(function(){
        $.post(url,dataString,function(data){
            $('#mensaje').html(data);
        });             
+   });  
+   
+   $("body").on("click",".pasar",function(e){
+       return !$("#alum_total option:selected").remove().appendTo("#alum_matriculados");
+   });
+   
+   $("body").on("click",".quitar",function(e){
+       return !$("#alum_matriculados option:selected").remove().appendTo("#alum_total");
    });   
-    
+       
     $("body").on('click',"#imprimir",function(){
         codigo   = $("#codigo").val();
         url = base_url+"index.php/ventas/matricula/ver/"+codigo;
@@ -119,12 +130,15 @@ function eliminar(codigo){
     }
 }
 
-function selecciona_familia(codigo){
-    url    = base_url+"index.php/ventas/alumno/obtener/"+codigo;
-    $.getJSON(url,function(data){
-        nomper  = data.lastname+' '+data.firstname;
-        coduser = data.user_id;
+function selecciona_aula(codigo){
+    objRes = new Object();
+    objRes.apertura = codigo;
+    dataString   = {objeto: JSON.stringify(objRes)};
+    url    = base_url+"index.php/ventas/apertura/obtener/";
+    $.post(url,dataString,function(data){
+        nomper  = data.AULAC_Nombre+' '+data.TURNOC_Descripcion;
+        apertura = data.APERTUP_Codigo;
         $("#nombres").val(nomper);
-        $("#user_id").val(coduser);
-    });
+        $("#apertura").val(apertura);
+    },"json");
 }

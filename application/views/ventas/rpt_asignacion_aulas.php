@@ -11,10 +11,10 @@
     <script type="text/javascript" src="<?php echo js;?>jquery-ui.min.js"></script>    
     <script type="text/javascript" src="<?php echo js;?>jquery.simplemodal.js"></script>     
     <script type="text/javascript" src="<?php echo js;?>constants.js"></script>     
-    <script type="text/javascript" src="<?php echo js;?>ventas/tarea.js"></script>	
+    <script type="text/javascript" src="<?php echo js;?>ventas/asignacion.js"></script>	
 </head>
 <body>
-<div class="contenido" > 
+<div class="contenido"> 
     <div class="header"><?php echo $header;?></div>
     <div class="menu"><ul id="nav"><?php echo $menu;?></ul></div>
     <div class="titulo">
@@ -26,8 +26,6 @@
                     <?php echo $selciclo;?>
                     <label>Curso:</label>
                     <?php echo $selcurso;?>
-                    <label>Profesor:</label>
-                    <?php echo $selprofesor;?>
                 </div>
             <?php echo $form_close;?>
 	</div>         

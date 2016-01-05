@@ -90,6 +90,10 @@ class Matricula extends CI_Controller {
             $lista->ciclo       = $ciclo!=""?$ciclo:$orden->CICLOP_Codigo;
             $lista->local       = $local!=""?$local:$orden->LOCP_Codigo;
             $lista->aula        = $aula!=""?$aula:$orden->AULAP_Codigo;
+            $filter = new stdClass();
+            $filter->ciclo      = $ciclo;
+            $filter->order_by   = array("d.PERSC_ApellidoPaterno"=>"asc","d.PERSC_ApellidoMaterno"=>"asc","d.PERSC_Nombre"=>"asc");
+            $lista->alumnos     = $this->alumno_model->listar($filter);            
         }
         elseif($accion == "n"){ 
             $lista->apellidos   = "";  
@@ -102,10 +106,14 @@ class Matricula extends CI_Controller {
             $lista->ciclo       = $ciclo;
             $lista->local       = $local;
             $lista->aula        = $aula;
+            $filter = new stdClass();
+            $filter->ciclo      = $ciclo;
+            $filter->order_by   = array("d.PERSC_ApellidoPaterno"=>"asc","d.PERSC_ApellidoMaterno"=>"asc","d.PERSC_Nombre"=>"asc");
+            $lista->alumnos     = $this->alumno_model->seleccionar("0",$filter); 
         } 
         $arrEstado          = array("0"=>"::Seleccione::","1"=>"ACTIVO","2"=>"INACTIVO");
         $data['titulo']     = $accion=="e"?"Editar Matricula":"Nueva Matricula"; 
-        $data['form_open']  = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));     
+        $data['form_open']  = form_open('',array("name"=>"frmPersona","id"=>"frmPersona"));     
         $data['form_close'] = form_close();         
         $data['lista']	    = $lista;  
         $data['accion']	    = $accion;  
@@ -120,7 +128,9 @@ class Matricula extends CI_Controller {
         $data['selciclo']   = form_dropdown('ciclo',$this->ciclo_model->seleccionar('0'),$lista->ciclo,"id='ciclo' class='comboMedio'");         
         $data['sellocal']   = form_dropdown('local',$this->local_model->seleccionar('0'),$lista->local,"id='local' class='comboMedio'"); 
         $data['selestado']  = form_dropdown('estado',$arrEstado,$lista->estado,"id='estado' class='comboMedio'");
-        $data['oculto']     = form_hidden(array("accion"=>$accion,"codigo"=>$codigo));
+        $data['selalum_total'] = form_multiselect('alum_total[]',$lista->alumnos,$lista->estado,"id='alum_total' class='comboMultipleGrande'");
+        $data['selalum_matri'] = form_multiselect('alum_matriculados[]',array(),$lista->estado,"id='alum_matriculados' class='comboMultipleGrande'");
+        $data['oculto']        = form_hidden(array("accion"=>$accion,"codigo"=>$codigo));
         $this->load->view("ventas/matricula_nuevo",$data);
     }
 

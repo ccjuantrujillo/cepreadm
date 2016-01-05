@@ -12,6 +12,20 @@ jQuery(document).ready(function(){
         });          
     });
     
+   $("body").on("click","#pdf",function(){
+        url = base_url+"index.php/ventas/asignacion/export_pdf/rpt_asignacion_aulas";
+        $("#frmReporte").attr("action",url);
+        $("#frmReporte").attr("target","framereporte");
+        $("#frmReporte").submit();
+    });  
+    
+   $("body").on("click","#pdf_horario",function(){
+        url = base_url+"index.php/ventas/asignacion/export_pdf/rpt_horario_curso";
+        $("#frmReporte").attr("action",url);
+        $("#frmReporte").attr("target","framereporte");
+        $("#frmReporte").submit();
+    });      
+    
     $("body").on('click',"#generar",function(){
        curso  = $("#curso").val();
        usuario  = $("#usuario").val();
@@ -164,9 +178,6 @@ jQuery(document).ready(function(){
             tr.empty();
             tr.append("<td align='center'><input type='hidden' id='codigodetalle["+n+"]' name='codigodetalle["+n+"]' value='"+codigodetalle+"'>"+(parseInt(n)+1)+"</td>");
             tr.append("<td align='center' valgin='top'><select class='comboMinimo' name='dia["+n+"]' id='dia["+n+"]'><option value=''>::Seleccione::</option></select></td>");
-            tr.append("<td align='center'><select class='comboMinimo' name='tipoestudiociclo["+n+"]' id='tipoestudiociclo["+n+"]'><option value='0'>::Seleccione::</option></select></td>");
-            tr.append("<td align='center'><select class='comboMedio' name='local["+n+"]' id='local["+n+"]' onchange='selectAula("+n+",this.value)'><option value='0'>::Seleccione::</option></select></td>");
-            tr.append("<td align='center'><select class='comboMinimo' name='aula["+n+"]' id='aula["+n+"]'><option value='0'>::Seleccione::</option></select></td>");
             tr.append("<td align='center'><input type='time' maxlength='5' class='cajaReducida' name='desde["+n+"]' id='desde["+n+"]' value='00:00'></td>");
             tr.append("<td align='center'><input type='time' maxlength='5' class='cajaReducida' name='hasta["+n+"]' id='hasta["+n+"]' value='00:00'></td>");
             tr.append("<td align='center'><a href='#' class='editardetalle'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>");       
@@ -211,7 +222,7 @@ function selecciona_curso(codigo){
     dataString   = {objeto: JSON.stringify(objRes)};
     $.post(url,dataString,function(data){
         $("#course_id").val(data.id);
-        $("#code").val(data.code);
+        //$("#code").val(data.code);
         $("#title").val(data.title);
     },"json");
 }

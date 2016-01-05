@@ -31,8 +31,9 @@
                 <td class="formss" align="left">
                     <input name="curso" id="curso" type="hidden" value="<?php echo $lista->curso;?>" readonly="readonly" class="cajaMedia" style="background-color: #E6E6E6"/>
                     <input name="course_id" id="course_id" type="hidden" value="<?php echo $lista->course_id;?>"/>
-                    <input name="code" id="code" type="text" value="<?php echo $lista->code;?>" readonly="readonly" class="cajaMedia" style="background-color: #E6E6E6"/>
+<!--                    <input name="code" id="code" type="text" value="< ?php echo $lista->code;?>" readonly="readonly" class="cajaMedia" style="background-color: #E6E6E6"/>-->
                     <input name="title" id="title" type="text" value="<?php echo $lista->title;?>" class="cajaGrande" readonly="readonly" style="background-color: #E6E6E6"/>&nbsp;&nbsp;
+                    <?php echo $selgrupo;?>
                     <?php if($accion=='n'):;?>
                         <input id="ver_cursos" name="ver_cursos" type="button" class="aceptarlog2" alt="Buscar curso" title="Buscar curso" value="Buscar" />
                     <?php endif;?>

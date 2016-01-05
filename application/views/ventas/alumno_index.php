@@ -6,6 +6,7 @@
     <title><?php echo titulo;?></title>
     <link rel="stylesheet" href="<?php echo css;?>estructura.css" type="text/css" />     
     <link rel="stylesheet" href="<?php echo css;?>menu.css" type="text/css" /> 
+    <link rel="stylesheet" href="<?php echo css;?>jquery-ui.css" type="text/css" />      
     <script type="text/javascript" src="<?php echo js;?>jquery.js"></script>
     <script type="text/javascript" src="<?php echo js;?>jquery-ui.min.js"></script>
     <script type="text/javascript" src="<?php echo js;?>jquery.simplemodal.js"></script>
@@ -25,11 +26,11 @@
             <table>
               <tr class="list1">
                 <td width="43">No</td>
-                <td width="43">Codigo</td>
-                <td width="193">Apellidos y Nombres</td>
+                <td width="40">Codigo</td>
+                <td width="85">Ciclo</td>
+                <td width="190">Apellidos y Nombres</td>
                 <td width="86">Email</td>
-                <td width="63">Estado</td>
-                <td width="86">Fecha registro</td>                
+                <td width="63">Estado</td>             
                 <td width="50">Editar</td>
                 <td width="50">Eliminar</td>
               </tr>
@@ -43,10 +44,10 @@
                   <tr class="<?php echo $clase;?>" id="<?php echo $value->codigo;?>">
                     <td><?php echo ++$j;?></td>
                     <td align="center"><?php echo $value->codigo;?></td>
-                    <td align="left"><?php echo $value->apellidos." ".$value->nombres;?></td>
-                    <td align="center"><?php echo $value->email;?></td>
+                    <td align="left"><?php echo $value->ciclo;?></td>
+                    <td align="left"><?php echo $value->paterno." ".$value->materno." ".$value->nombres;?></td>
+                    <td align="left"><?php echo $value->email;?></td>
                     <td align="center"><img src="<?php echo img.($flgestado==1?"check.jpg":"uncheck.jpg");?>" height="20px" width="20px"/><?php echo $estado;?></td>
-                    <td align="center"><?php echo date_sql($value->fechareg);?></td>
                     <td><a href="#" class="editar"><img src="<?php echo img;?>editar.jpg"/></a></td>
                     <td><a href="#" class="eliminar"><img src="<?php echo img;?>eliminar.jpg"/></a></td>
                   </tr>

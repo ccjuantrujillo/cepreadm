@@ -6,7 +6,8 @@ class Alumno extends Persona
     public function __construct(){
         parent::__construct();
         $this->load->model(ventas.'matricula_model');
-        $this->load->model(chamilo.'user_model');
+        $this->load->model(ventas.'alumno_model');
+        $this->load->model(maestros.'ciclo_model');
         $this->load->helper('menu');
         $this->configuracion = $this->config->item('conf_pagina');
     }
@@ -23,20 +24,22 @@ class Alumno extends Persona
         $filter     = new stdClass();
         $filter_not = new stdClass();
         $filter->status = 5;
-        $filter->order_by    = array("a.lastname"=>"asc","a.firstname"=>"asc");
-        $registros = count($this->user_model->listar($filter,$filter_not));
-        $clientes  = $this->user_model->listar($filter,$filter_not,$this->configuracion['per_page'],$j);
+        $filter->order_by    = array("e.COMPC_Nombre"=>"desc","d.PERSC_ApellidoPaterno"=>"asc","d.PERSC_ApellidoMaterno"=>"asc","d.PERSC_Nombre"=>"asc");
+        $registros = count($this->alumno_model->listar($filter,$filter_not));
+        $clientes  = $this->alumno_model->listar($filter,$filter_not,$this->configuracion['per_page'],$j);
         $item      = 1;
         $lista     = array();
         if(count($clientes)>0){
             foreach($clientes as $indice => $value){
-                $arrFecha = explode(" ",$value->registration_date);
-                $lista[$indice]             = new stdClass();
-                $lista[$indice]->nombres   = $value->firstname;
-                $lista[$indice]->apellidos = $value->lastname;
-                $lista[$indice]->email     = $value->email;
-                $lista[$indice]->codigo    = $value->user_id;
-                $lista[$indice]->estado    = $value->active;
+                $arrFecha = explode(" ",$value->ALUMC_FechaRegistro);
+                $lista[$indice]            = new stdClass();
+                $lista[$indice]->nombres   = $value->PERSC_Nombre;
+                $lista[$indice]->paterno   = $value->PERSC_ApellidoPaterno;
+                $lista[$indice]->materno   = $value->PERSC_ApellidoMaterno;
+                $lista[$indice]->email     = $value->PERSC_Email;
+                $lista[$indice]->codigo    = $value->ALUMP_Codigo;
+                $lista[$indice]->estado    = $value->ALUMC_FlagEstado;
+                $lista[$indice]->ciclo     = $value->COMPC_Nombre;
                 $lista[$indice]->fechareg  = $arrFecha[0];
             }
         }
@@ -58,17 +61,20 @@ class Alumno extends Persona
          $lista = new stdClass();
          if($accion == "e"){
              $filter            = new stdClass();
-             $filter->user_id = $codigo;
-             $alumnos            = $this->user_model->obtener($filter);
-             $lista->dni         = $alumnos->ant_dni;
-             $lista->direccion   = $alumnos->ant_direccion;
-             $lista->telefono    = $alumnos->phone;
-             $lista->email       = $alumnos->email;
-             $lista->fnacimiento = date_sql($alumnos->ant_nacimiento);
-             $lista->apellidos   = $alumnos->lastname;
-             $lista->nombres     = $alumnos->firstname;
-             $lista->estado      = $alumnos->active;
-             $lista->codigo      = $alumnos->user_id;
+             $filter->alumno     = $codigo;
+             $alumnos            = $this->alumno_model->obtener($filter);
+             $lista->dni         = $alumnos->PERSC_NumeroDocIdentidad;
+             $lista->direccion   = $alumnos->PERSC_Direccion;
+             $lista->telefono    = $alumnos->PERSC_Telefono;
+             $lista->email       = $alumnos->PERSC_Email;
+             $lista->fnacimiento = date_sql($alumnos->PERSC_FechaNacimiento);
+             $lista->paterno     = $alumnos->PERSC_ApellidoPaterno;
+             $lista->materno     = $alumnos->PERSC_ApellidoMaterno;
+             $lista->nombres     = $alumnos->PERSC_Nombre;
+             $lista->estado      = $alumnos->ALUMC_FlagEstado;
+             $lista->codigo      = $alumnos->ALUMP_Codigo;
+             $lista->codigo_padre = $alumnos->PERSP_Codigo;
+             $lista->ciclo        = $alumnos->CICLOP_Codigo;
          }
          elseif($accion == "n"){
              $lista->dni         = "";
@@ -76,10 +82,13 @@ class Alumno extends Persona
              $lista->telefono    = "";
              $lista->email       = "";
              $lista->fnacimiento = "";
-             $lista->apellidos   = "";
+             $lista->paterno     = "";
+             $lista->materno     = "";
              $lista->nombres     = "";
              $lista->estado      = 1;
              $lista->codigo      = "";
+             $lista->codigo_padre = "";
+             $lista->ciclo        = 0;
          }
          $arrEstado          = array("0"=>"::Seleccione::","1"=>"ACTIVO","2"=>"INACTIVO");
          $data['titulo']     = $accion=="e"?"Editar Alumno":"Crear Alumno";
@@ -87,33 +96,29 @@ class Alumno extends Persona
          $data['form_close'] = form_close();
          $data['lista']	     = $lista;
          $data['selestado']  = form_dropdown('estado',$arrEstado,$lista->estado,"id='estado' class='comboMedio'");
-         $data['oculto']     = form_hidden(array("accion"=>$accion,"codigo"=>$lista->codigo));
+         $data['selciclo']   = form_dropdown('ciclo',$this->ciclo_model->seleccionar("0"),$lista->ciclo,"id='ciclo' class='comboMedio'");
+         $data['oculto']     = form_hidden(array("accion"=>$accion,"codigo"=>$lista->codigo,"codigo_padre"=>$lista->codigo_padre));
          $this->load->view("ventas/alumno_nuevo",$data);
      }
 
     public function grabar(){
-        $accion  = $this->input->get_post('accion');
-        $codigo  = $this->input->get_post('codigo');
-        $nombres = $this->input->post('nombres');
+        parent::grabar();
+        $accion       = $this->input->get_post('accion');
+        $codigo_padre = $this->input->get_post('codigo_padre');
+        $codigo       = $this->input->get_post('codigo');
+        $user_id      = $this->input->get_post('user_id');
         $resultado = true;
-        $arrApellidos = explode(" ",$this->input->get_post('apellidos'));
-        $username  = substr($nombres, 0,3).$arrApellidos[0];
         $data   = array(
-                        "ant_dni"        => $this->input->post('dni'),
-                        "lastname"       => $this->input->post('apellidos'),
-                        "firstname"      => $this->input->post('nombres'),
-                        "username"       => $username,
-                        "email"          => $this->input->post('email'),
-                        "phone"          => $this->input->post('telefono'),
-                        "ant_direccion"  => $this->input->post('direccion'),
-                        "ant_nacimiento" => date_sql_ret($this->input->post('fnacimiento')),
-                        "active"         => $this->input->post('estado')
+                        "ALUMC_FlagEstado" => $this->input->post('estado'),
+                        "user_id"          => $this->input->post('apellidos'),
+                        "CICLOP_Codigo"    => $this->input->post('ciclo'),
+                        "PERSP_Codigo"     => $this->codigo
                        );
         if($accion == "n"){
-            $this->user_model->insertar($data);
+            $this->alumno_model->insertar($data);
         }
         elseif($accion == "e"){
-            $this->user_model->modificar($codigo,$data);
+            $this->alumno_model->modificar($codigo,$data);
         }
         echo json_encode($resultado);
     }
@@ -121,10 +126,14 @@ class Alumno extends Persona
     public function eliminar(){
         $resultado = true;
         $codigo    = $this->input->post('codigo');
-        $this->user_model->eliminar($codigo);
+        $filter    = new stdClass();
+        $filter->alumno = $codigo;
+        $alumnos   = $this->alumno_model->obtener($filter); 
+        $this->alumno_model->eliminar($codigo);
+        $this->persona_model->eliminar($alumnos->PERSP_Codigo);
         echo json_encode($resultado);
     }
-
+    
     public function buscar($j=0){
         $filter     = new stdClass();
         $filter_not = new stdClass();
@@ -163,8 +172,8 @@ class Alumno extends Persona
 
     public function obtener($codigo){
         $filter    = new stdClass();
-        $filter->user_id = $codigo;
-        $clientes  = $this->user_model->obtener($filter);
+        $filter->alumno = $codigo;
+        $clientes  = $this->alumno_model->obtener($filter);
         $resultado = json_encode($clientes);
         echo $resultado;
     }

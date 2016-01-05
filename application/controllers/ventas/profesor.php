@@ -153,49 +153,53 @@ class Profesor extends Persona
      }           
      
     public function grabar(){
-        parent::grabar();
-        $accion       = $this->input->get_post('accion');
-        $codigo_padre = $this->input->get_post('codigo_padre');
-        $codigo       = $this->input->get_post('codigo');
-        $user_id      = $this->input->get_post('user_id');
-        /*Grabamos en chamilo*/
-        $apellidos = $this->input->get_post('paterno')." ".$this->input->get_post('materno');
-        $nombres   = $this->input->get_post('nombres');
-        $username  = substr($nombres, 0,3).$this->input->get_post('paterno');
-        $data = array(
-            "lastname"      => $apellidos,
-            "firstname"     => $nombres,
-            "username"      => strtolower($username),                    
-            "password"      => "",                    
-            "auth_source"   => "platform",                    
-            "email"         => $this->input->get_post('email'),                    
-            "status"        => 1,                    
-            "official_code" => strtoupper($username),                    
-            "phone"         => $this->input->get_post('movil'),                    
-            "creator_id"    => 1,                    
-            "language"      => "spanish"                                                
-        );
-        if($accion == "n"){
-            $user_id = $this->user_model->insertar($data);
-        }
-        elseif($accion == "e"){
-            unset($data["username"]);
-            unset($data["official_code"]);
-            $this->user_model->modificar($user_id,$data);
-        }
-        /*Grabamos en cepreadm*/
-        $data         = array(
-                        "PERSP_Codigo"           => $this->codigo,
-                        "PROC_FechaModificacion" => date('Y-m-d H:i:s',time()),
-                        "PROC_FlagEstado"        => $this->input->post('estado'),
-                        "PROD_Codigo"            => $this->input->post('curso'),
-                        "user_id"                => $user_id
-                       );
-        if($accion == "n"){
-            $persona = $this->profesor_model->insertar($data);
-        }
-        elseif($accion == "e"){
-            $this->profesor_model->modificar($codigo,$data);
+        $curso        = $this->input->post('curso');
+        if($curso!=0){
+            parent::grabar();
+            $accion       = $this->input->get_post('accion');
+            $codigo_padre = $this->input->get_post('codigo_padre');
+            $codigo       = $this->input->get_post('codigo');
+            $user_id      = $this->input->get_post('user_id');
+
+            /*Grabamos en chamilo*/
+    //        $apellidos = $this->input->get_post('paterno')." ".$this->input->get_post('materno');
+    //        $nombres   = $this->input->get_post('nombres');
+    //        $username  = substr($nombres, 0,3).$this->input->get_post('paterno');
+    //        $data = array(
+    //            "lastname"      => $apellidos,
+    //            "firstname"     => $nombres,
+    //            "username"      => strtolower($username),                    
+    //            "password"      => "",                    
+    //            "auth_source"   => "platform",                    
+    //            "email"         => $this->input->get_post('email'),                    
+    //            "status"        => 1,                    
+    //            "official_code" => strtoupper($username),                    
+    //            "phone"         => $this->input->get_post('movil'),                    
+    //            "creator_id"    => 1,                    
+    //            "language"      => "spanish"                                                
+    //        );
+    //        if($accion == "n"){
+    //            $user_id = $this->user_model->insertar($data);
+    //        }
+    //        elseif($accion == "e"){
+    //            unset($data["username"]);
+    //            unset($data["official_code"]);
+    //            $this->user_model->modificar($user_id,$data);
+    //        }
+            /*Grabamos en cepreadm*/
+            $data         = array(
+                            "PERSP_Codigo"           => $this->codigo,
+                            "PROC_FechaModificacion" => date('Y-m-d H:i:s',time()),
+                            "PROC_FlagEstado"        => $this->input->post('estado'),
+                            "PROD_Codigo"            => $curso,
+                            "user_id"                => $user_id
+                           );
+            if($accion == "n"){
+                $persona = $this->profesor_model->insertar($data);
+            }
+            elseif($accion == "e"){
+                $this->profesor_model->modificar($codigo,$data);
+            }            
         }
     }
 

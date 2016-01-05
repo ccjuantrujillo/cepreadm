@@ -89,7 +89,7 @@ class Apertura extends CI_Controller {
             $lista->tipoestudiociclo = $apertura->TIPCICLOP_Codigo;
 	    $lista->local       = $local!=""?$local:$apertura->LOCP_Codigo; 
             $lista->aula        = $apertura->AULAP_Codigo;
-            $lista->turno       = $apertura->APERTUC_Turno;
+            $lista->turno       = $apertura->TURNOP_Codigo;
             $lista->estado      = $apertura->APERTUC_FlagEstado;
             $filter             = new stdClass();
             $filter->apertura   = $codigo;
@@ -327,6 +327,39 @@ class Apertura extends CI_Controller {
         $CI->pdf->Cell(181,5,$ordenes->ORDENC_Observacion,1,1,"L",1);
         $CI->pdf->Output();
     }
+    
+    public function buscar($j=0){
+        $ciclo = $this->input->post("ciclo");
+        $filter     = new stdClass();
+        $filter_not = new stdClass();
+        $filter->ciclo = $ciclo;
+        //$filter->order_by    = array("d.PERSC_ApellidoPaterno"=>"asc","d.PERSC_ApellidoMaterno"=>"asc","d.PERSC_Nombre"=>"asc");
+        $registros = count($this->apertura_model->listar($filter,$filter_not));
+        $apertura  = $this->apertura_model->listar($filter,$filter_not,$this->configuracion['per_page'],$j);
+        $item      = 1;
+        $lista     = array();
+        if(count($apertura)>0){
+            foreach($apertura as $indice => $value){
+                $lista[$indice]          = new stdClass();
+                $lista[$indice]->codigo  = $value->APERTUP_Codigo;
+                $lista[$indice]->tipoestudio  = $value->TIPC_Nombre;
+                $lista[$indice]->local   = $value->LOCC_Nombre;
+                $lista[$indice]->aula    = $value->AULAC_Nombre;
+                $lista[$indice]->turno   = $value->TURNOC_Descripcion;
+            }
+        }
+        $configuracion = $this->configuracion;
+        $configuracion['base_url']    = base_url()."index.php/ventas/alumno/buscar";
+        $configuracion['total_rows']  = $registros;
+        $this->pagination->initialize($configuracion);
+        /*Enviamos los datos a la vista*/
+        $data['lista']      = $lista;
+        $data['titulo']     = "Buscar aulas";
+        $data['j']          = $j;
+        $data['registros']  = $registros;
+        $data['paginacion'] = $this->pagination->create_links();
+        $this->load->view("ventas/apertura_buscar",$data);
+    }    
     
     public function obtener(){
         $obj    = $this->input->post('objeto');

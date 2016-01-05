@@ -8,8 +8,10 @@ class Asignacion extends CI_Controller {
         $this->load->model(ventas.'asignacion_model');
         $this->load->model(ventas.'asignaciondetalle_model');
         $this->load->model(ventas.'alumno_model');
+        $this->load->model(ventas.'profesor_model');
         $this->load->model(ventas.'actividad_model');
-        $this->load->model(maestros.'persona_model');        
+        $this->load->model(maestros.'persona_model');    
+        $this->load->model(maestros.'turno_model');    
         $this->load->model(seguridad.'permiso_model');          
         $this->load->model(almacen.'curso_model');  
         $this->load->model(maestros.'ciclo_model');  
@@ -90,6 +92,7 @@ class Asignacion extends CI_Controller {
             $lista->curso       = $asignacion->PROD_Codigo; 
             $lista->course_id   = $asignacion->course_id; 
             $lista->code        = $asignacion->code; 
+            $lista->grupo       = $asignacion->ASIGC_Grupo; 
             $lista->title       = $asignacion->title; 
             $lista->asignacion  = $asignacion->ASIGP_Codigo;
             $lista->estado      = $asignacion->ASIGC_FlagEstado;
@@ -108,6 +111,7 @@ class Asignacion extends CI_Controller {
             $lista->curso       = ""; 
             $lista->course_id   = ""; 
             $lista->code        = ""; 
+            $lista->grupo       = ""; 
             $lista->title       = ""; 
             $lista->asignacion  = "";
             $lista->estado      = "1";
@@ -115,6 +119,7 @@ class Asignacion extends CI_Controller {
             $lista->asignaciondetalle = array();
         } 
         $arrEstado          = array("0"=>"::Seleccione::","1"=>"ACTIVO","2"=>"INACTIVO");
+        $arrGrupo           = array("0"=>"::Seleccione::","1"=>"GRUPO 1","2"=>"GRUPO 2");
         $data['titulo']     = $accion=="e"?"Editar Carga de Trabajo":"Nueva Carga de Trabajo"; 
         $data['form_open']  = form_open('',array("name"=>"frmPersona","id"=>"frmPersona"));     
         $data['form_close'] = form_close();         
@@ -124,6 +129,7 @@ class Asignacion extends CI_Controller {
         $data['semana']	    = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado");     
         $data['selciclo']   = form_dropdown('ciclo',$this->ciclo_model->seleccionar("0"),$lista->ciclo,"id='ciclo' class='comboMedio' ".($accion=="e"?"disabled":"")."");         
         $data['selestado']  = form_dropdown('estado',$arrEstado,$lista->estado,"id='estado' class='comboMedio' ".($accion=="e"?"disabled":"")."");
+        $data['selgrupo']   = form_dropdown('grupo',$arrGrupo,$lista->grupo,"id='grupo' class='comboMedio'");
         $data['oculto']     = form_hidden(array("accion"=>$accion,"codigo"=>$codigo));
         $this->load->view("ventas/asignacion_nuevo",$data);
     }
@@ -138,6 +144,7 @@ class Asignacion extends CI_Controller {
 			"PROP_Codigo"      => $this->input->post('profesor'),
                         "ASIGC_Fecha"      => date_sql_ret($this->input->post('fecha')),
                         "ASIGC_FlagEstado" => $this->input->post('estado'),
+                        "ASIGC_Grupo"      => $this->input->post('grupo'),
                         "course_id"        => $this->input->post('course_id')
                        );
         $resultado = false;
@@ -369,4 +376,207 @@ class Asignacion extends CI_Controller {
                 </div>";
         }
     }
+    
+    public function export_pdf($type){     
+        switch ($type) {
+            case 'rpt_asignacion_aulas':
+                $curso    = $this->input->get_post('curso_rpt');
+                $ciclo = $this->input->get_post('ciclo_rpt');
+                $filter = new stdClass();
+                $filter->curso = $curso;
+                $filter->order_by= array("d.PERSC_ApellidoPaterno"=>"asc");
+                $profesores = $this->profesor_model->listar($filter);
+                if($ciclo!=0 && $curso!=0){
+                    $filter = new stdClass();
+                    $filter->ciclo = $ciclo;
+                    $ciclos = $this->ciclo_model->obtener($filter);
+                    $this->load->library("fpdf/pdf");
+                    $CI = & get_instance();
+                    $CI->pdf->FPDF('L');
+                    $CI->pdf->AliasNbPages();
+                    $CI->pdf->AddPage();
+                    $CI->pdf->SetTextColor(0,0,0);
+                    $CI->pdf->SetFillColor(216,216,216);
+                    $CI->pdf->SetFont('Arial','B',11);
+                    $CI->pdf->Image('img/uni.gif',10,8,10);
+                    $CI->pdf->Cell(0,5,"ASIGNACION DE AULAS",0,1,"C",0);
+                    $CI->pdf->Cell(0,10,$ciclos->COMPC_Nombre,0,1,"C",0);
+                    $CI->pdf->SetFont('Arial','B',6);   
+                    /*Fila de turnos*/
+                    $filter = new stdClass();
+                    $filter->estado = 1;                
+                    $turnos = $this->turno_model->listar($filter);
+                    $CI->pdf->Cell(45,4,"",0,0,"L",0);
+                    foreach($turnos as $item => $value){
+                       $CI->pdf->Cell(84,4,$value->TURNOC_Descripcion,1,0,"C",0); 
+                    }
+                    $CI->pdf->Cell(10,4,"",0,1,"L",0);
+                    /*Fila de tipos de estudio*/
+                    $CI->pdf->Cell(45,4,"",0,0,"L",0);
+                    for($i=0;$i<count($turnos);$i++){
+                        $filter = new stdClass();
+                        $filter->ciclo = $ciclo;
+                        $tiposestudio = $this->tipoestudiociclo_model->listar($filter);
+                        foreach($tiposestudio as $item=>$value){
+                            $arr_tipoe = explode(" ",$value->TIPC_Nombre);
+                            $nom_tipoe = count($arr_tipoe)==2?$arr_tipoe[1]:$arr_tipoe[0];
+                            $CI->pdf->Cell(12,4,$nom_tipoe,1,0,"C",0);
+                        }
+                    }
+                    $CI->pdf->Cell(71,4,"AULAS",1,1,"C",0);
+                    /*Fila de grupos*/
+                     $CI->pdf->Cell(45,4,"",0,0,"L",0);
+                     for($i=0;$i<count($tiposestudio)*count($turnos);$i++){
+                         $CI->pdf->Cell(6,4,"I",1,0,"C",0);
+                         $CI->pdf->Cell(6,4,"II",1,0,"C",0);
+                     }
+                     foreach($tiposestudio as $item=>$value){
+                         $arr_tipoe = explode(" ",$value->TIPC_Nombre);
+                         $nom_tipoe = count($arr_tipoe)==2?$arr_tipoe[1]:$arr_tipoe[0];
+                         $CI->pdf->Cell(9,4,$nom_tipoe,1,0,"C",0);
+                     }
+                     $CI->pdf->Cell(8,4,"TOTAL",1,1,"L",0);
+
+                     /*lISTADO de profesores*/
+                    foreach($profesores as $item=>$value){
+                        $CI->pdf->Cell(5,4,$item+1,1,0,"L",0);
+                        $CI->pdf->Cell(40,4,$value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno.", ".$value->PERSC_Nombre,1,0,"L",0);   
+                        foreach($turnos as $itm1=>$val1){
+                            $turno_id = $val1->TURNOP_Codigo;
+                            foreach($tiposestudio as $itm2=>$val2){
+                                $tipoestudio_id = $val2->TIPP_Codigo;
+                                for($grupo_id=1;$grupo_id<=2;$grupo_id++){
+                                    $filter = new stdClass();
+                                    $filter->turno       = $turno_id;
+                                    $filter->tipoestudio = $tipoestudio_id;
+                                    $filter->grupo       = $grupo_id;
+                                    $filter->profesor    = $value->PROP_Codigo;
+                                    $aulas = $this->asignacion_model->rpt_asignacion_aulas($filter);
+                                    $nom_aula = isset($aulas->AULAC_Nombre)?$aulas->AULAC_Nombre:"";
+                                    $CI->pdf->Cell(6,4,$nom_aula,1,0,"C",0);  
+                                    if($nom_aula!=""){
+                                        if(isset($cantidad[$tipoestudio_id])){
+                                            $cantidad[$tipoestudio_id] = $cantidad[$tipoestudio_id] + 1;
+                                        }
+                                        else{
+                                            $cantidad[$tipoestudio_id] = 1;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        $t_valor = 0;
+                        foreach($tiposestudio as $itm3=>$val3){
+                            $tipo_id = $val3->TIPP_Codigo;
+                            $valor = isset($cantidad[$tipo_id])?$cantidad[$tipo_id]:0;
+                            $t_valor = $t_valor + $valor;
+                            $CI->pdf->Cell(9,4,$valor,1,0,"R",0);
+                            $cantidad[$tipo_id] = 0;
+                        }
+                        $CI->pdf->Cell(8,4,$t_valor,1,1,"R",0);
+                        $t_valor = 0;
+                    }   
+                    $CI->pdf->Output();                    
+                }
+                break;
+            case 'rpt_horario_curso':
+               $curso    = $this->input->get_post('curso_rpt');
+                $ciclo = $this->input->get_post('ciclo_rpt');
+                $filter = new stdClass();
+                $filter->ciclo = $ciclo;
+                $ciclos = $this->ciclo_model->obtener($filter);
+                $this->load->library("fpdf/pdf");
+                $CI = & get_instance();
+                $CI->pdf->FPDF('P');
+                $CI->pdf->AliasNbPages();
+                $CI->pdf->AddPage();
+                $CI->pdf->SetTextColor(0,0,0);
+                $CI->pdf->SetFillColor(216,216,216);
+                $CI->pdf->SetFont('Arial','B',11);
+                $CI->pdf->Image('img/uni.gif',10,8,10);
+                $CI->pdf->Cell(0,5,"HORARIO POR CURSO",0,1,"C",0);
+                if($ciclo!=0){                    
+                    $CI->pdf->Cell(0,10,$ciclos->COMPC_Nombre,0,1,"C",0);
+                    $CI->pdf->SetFont('Arial','B',8);  
+                    $arrDias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado");
+                    foreach($arrDias as $item => $value){
+                        if($item>0){
+                            $CI->pdf->Cell(28,4,strtoupper($arrDias[$item]),1,0,"C",0);
+                        }
+                        else{
+                            $CI->pdf->Cell(18,4,"AULA",1,0,"C",0);
+                        }
+                    }
+                    $CI->pdf->Cell(1,4,"",0,1,"C",0);
+                    $filter = new stdClass();
+                    $filter->order_by = array("a.AULAC_Nombre"=>"asc");
+                    $aulas = $this->aula_model->listar($filter);
+                    foreach($aulas as $item => $value){
+                        for($i=0;$i<4;$i++){
+                            $nom_curso = "";
+                            $id_aula = $value->AULAP_Codigo;
+                            if($i==0)
+                                $nom_aula = $value->AULAC_Nombre;
+                            else
+                                $nom_aula = "";
+                            $CI->pdf->Cell(18,4,$nom_aula,1,0,"C",0);
+                            for($id_dia=1;$id_dia<7;$id_dia++){
+                                $filter = new stdClass();
+                                $filter->ciclo = $ciclo;
+                                $filter->dia   = $id_dia;
+                                $filter->aula  = $id_aula;
+                                if($curso!=0)  $filter->curso = $curso;
+                                $cursos = $this->asignaciondetalle_model->rpt_horario_curso($filter);
+                                $nom_curso = isset($cursos->PROD_Nombre)?$cursos->PROD_Nombre:"";
+                                $nom_profesor = isset($cursos->PROD_Nombre)?"/".$cursos->PERSC_ApellidoPaterno:"";
+                                $CI->pdf->Cell(28,4,$nom_curso.$nom_profesor,1,0,"C",0);    
+                            }
+                            $CI->pdf->Cell(5,4,"",0,1,"C",0);    
+                        }
+                    }                    
+                }
+                $CI->pdf->Output();
+                break;
+        }
+    }    
+    
+    public function rpt_asignacion_aulas(){
+        $curso  = $this->input->get_post('curso_rpt');
+        $ciclo  = $this->input->get_post('ciclo_rpt');        
+        $filter           = new stdClass();
+        $filter->rol      = $this->session->userdata('rolusu');		
+        $filter->order_by = array("m.MENU_Orden"=>"asc");
+        $menu       = get_menu($filter);           
+        $filter       = new stdClass();
+        $filter->order_by = array("p.PROD_Nombre"=>"asc");
+        $data['selcurso']    = form_dropdown('curso_rpt',$this->curso_model->seleccionar('0',$filter),$curso,"id='curso_rpt' class='comboGrande'");      
+        $filter       = new stdClass();
+        $data['selciclo']    = form_dropdown('ciclo_rpt',$this->ciclo_model->seleccionar('0',$filter),$ciclo,"id='ciclo_rpt' class='comboMedio'");
+        $data["menu"]  = $menu;
+        $data["form_open"] = form_open("",array("name"=>"frmReporte","id"=>"frmReporte","method"=>"post"));
+        $data["form_close"] = form_close();
+        $data['header']  = get_header();
+        $data["titulo"]  = "Reporte de asignacion de aulas";        
+        $this->load->view(ventas."rpt_asignacion_aulas",$data);
+    }
+    
+    public function rpt_horario_curso(){
+        $curso  = $this->input->get_post('curso_rpt');
+        $ciclo  = $this->input->get_post('ciclo_rpt');        
+        $filter             = new stdClass();
+        $filter->rol        = $this->session->userdata('rolusu');		
+        $filter->order_by   = array("m.MENU_Orden"=>"asc");
+        $menu               = get_menu($filter);           
+        $filter             = new stdClass();
+        $filter->order_by   = array("p.PROD_Nombre"=>"asc");
+        $data['selcurso']   = form_dropdown('curso_rpt',$this->curso_model->seleccionar('0',$filter),$curso,"id='curso_rpt' class='comboGrande'");      
+        $filter             = new stdClass();
+        $data['selciclo']   = form_dropdown('ciclo_rpt',$this->ciclo_model->seleccionar('0',$filter),$ciclo,"id='ciclo_rpt' class='comboMedio'");
+        $data["menu"]       = $menu;
+        $data["form_open"]  = form_open("",array("name"=>"frmReporte","id"=>"frmReporte","method"=>"post"));
+        $data["form_close"] = form_close();
+        $data['header']  = get_header();
+        $data["titulo"]  = "Reporte de horario por curso";        
+        $this->load->view(ventas."rpt_horario_curso",$data);
+    }    
 }
