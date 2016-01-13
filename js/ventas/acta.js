@@ -105,6 +105,18 @@ jQuery(document).ready(function(){
         else{
             alert("Primero debe guardar el acta");
         }
+    });    
+    
+    $("body").on('click',"#ver_exposiciones",function(){
+        if($('#codigo').val()!=""){
+            curso = $("#curso").val();
+            acta  = $("#codigo").val();
+            url = base_url+"index.php/ventas/actaexposicion/editar/"+acta+"/"+curso;
+            window.open(url,"_blank","width=850,height=400,scrollbars=yes,status=yes,resizable=yes,screenx=0,screeny=0");                      
+        }
+        else{
+            alert("Primero debe guardar el acta");
+        }
     });      
     
    $("body").on('change',"#ciclo",function(){

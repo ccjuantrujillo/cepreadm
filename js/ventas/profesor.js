@@ -468,7 +468,17 @@ jQuery(document).ready(function(){
             $("#content-1").css("opacity",1);            
             alert('Primero debe grabar los datos principales');   
         }
-    });     
+    });
+    
+    $("body").on('change',"#curso",function(){
+       accion      = $("#accion").val();
+       codigo      = $("#codigo").val();
+       dataString  = $('#frmPersona').serialize();
+       url = base_url+"index.php/ventas/profesor/editar/"+accion+"/"+codigo;
+       $.post(url,dataString,function(data){
+           $('#mensaje').html(data);
+       });             
+   });      
 });
 
 function abrir_formulario_ubigeo(){

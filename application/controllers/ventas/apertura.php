@@ -135,7 +135,7 @@ class Apertura extends CI_Controller {
 			"AULAP_Codigo"        => $this->input->post('aula'),
                         "CICLOP_Codigo"       => $this->input->post('ciclo'),
                         "APERTUC_Descripcion" => "",
-                        "APERTUC_Turno"       => $this->input->post('turno'),
+                        "TURNOP_Codigo"       => $this->input->post('turno'),
                         "APERTUC_FlagEstado"  => $this->input->post('estado'),
                         "APERTUC_Fecha"       => date_sql_ret($this->input->post('fecha'))
                        );

@@ -1,13 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="Content-Language" content="es"> 
-    <title><?php echo titulo;?></title>        
-    <link href="<?php echo css;?>estructura.css" rel="stylesheet" type="text/css" />
-    <link href="<?php echo css;?>jquery-ui.css" rel="stylesheet" type="text/css" />    
-</head>
-<body>
 <div class="contenidotabla" >  
     <h1><?php echo $titulo;?></h1>    
     <?php echo $form_open;?>
@@ -45,6 +35,7 @@
                 <td align="left" colspan="5" class="formss">
                     <span><textarea style="width:480px;" type='text' name="agenda" id="agenda" class="get text"><?php echo $lista->agenda;?></textarea></span>
                     <span><input id="ver_asistentes" name="ver_asistentes" type="button" class="aceptarlog2" alt="Ver asistentes" title="Ver asistentes" value="Asistentes"></span>
+                    <span><input id="ver_exposiciones" name="ver_exposiciones" type="button" class="aceptarlog2" alt="Ver exposiciones" title="Ver exposiciones" value="Exposiciones"></span>
                     <span><a href="#" id="agregar">Agregar</a></span>
                 </td>
             </tr>
@@ -90,5 +81,3 @@
     <?php echo $oculto;?>
     <?php echo $form_close;?>
 </div>
-</body>
-</html>

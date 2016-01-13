@@ -15,6 +15,7 @@ class Profesor extends Persona
         $this->load->model(ventas.'profesorsociedad_model');
         $this->load->model(seguridad.'rol_model');
         $this->load->model(almacen.'curso_model');
+        $this->load->model(almacen.'subcurso_model');
         $this->load->model(maestros.'tipodocumento_model');
         $this->load->model(maestros.'grado_model');
         $this->load->model(maestros.'universidad_model');
@@ -73,6 +74,7 @@ class Profesor extends Persona
     }
 
     public function editar($accion,$codigo=""){
+        $curso = $this->input->get_post('curso');
          $lista = new stdClass();
          if($accion == "e"){
              $filter            = new stdClass();
@@ -93,7 +95,8 @@ class Profesor extends Persona
              $lista->codigo     = $codigo;
              $lista->codigo_padre = $profesores->PERSP_Codigo;
              $lista->estado     = $profesores->PROC_FlagEstado;
-             $lista->curso      = $profesores->PROD_Codigo;
+             $lista->curso      = $curso!=""?$curso:$profesores->PROD_Codigo;
+             $lista->subcurso   = $profesores->SUBCURSOP_Codigo;
              $lista->tipodoc    = $profesores->TIPDOCP_Codigo;    
              $lista->user_id    = $profesores->user_id;    
          }
@@ -115,7 +118,8 @@ class Profesor extends Persona
              $lista->codigo     = "";
              $lista->codigo_padre = "";
              $lista->estado     = 1;
-             $lista->curso      = 1;
+             $lista->curso      = $curso;
+             $lista->subcurso   = 0;
              $lista->tipodoc    = 1;  
              $lista->user_id    = 0;
          }
@@ -124,15 +128,18 @@ class Profesor extends Persona
          $arrMes             = array("0"=>"Mes","1"=>"Enero","2"=>"Febrero","3"=>"Marzo","4"=>"Abril","5"=>"Mayo","6"=>"Junio","7"=>"Julio","8"=>"Agosto","9"=>"Setiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
          $arrAno[0]="Año";
          for($i=1950;$i<=2020;$i++)  $arrAno[$i]=$i;
-         $data['titulo']     = $accion=="e"?"Editar Profesor":"Crear Profesor";
-         $data['form_open']  = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));
-         $data['form_close'] = form_close();
-         $data['lista']	     = $lista;
-         $data['selsexo']    = form_dropdown('sexo',$arrSexo,$lista->sexo,"id='sexo' class='comboMedio'");
-         $data['selestado']  = form_dropdown('estado',$arrEstado,$lista->estado,"id='estado' class='comboMedio'");
-         $data['selcurso']   = form_dropdown('curso',$this->curso_model->seleccionar("00"),$lista->curso,"id='curso' class='comboMedio'");
-         $data['seltipodoc'] = form_dropdown('tipodoc',$this->tipodocumento_model->seleccionar(),$lista->tipodoc,"id='tipodoc' class='comboMedio'"); 
-         $data['oculto']     = form_hidden(array("accion"=>$accion,"codigo"=>$lista->codigo,"codigo_padre"=>$lista->codigo_padre,"user_id"=>$lista->user_id));
+         $data['titulo']      = $accion=="e"?"Editar Profesor":"Crear Profesor";
+         $data['form_open']   = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));
+         $data['form_close']  = form_close();
+         $data['lista']	      = $lista;
+         $data['selsexo']     = form_dropdown('sexo',$arrSexo,$lista->sexo,"id='sexo' class='comboMedio'");
+         $data['selestado']   = form_dropdown('estado',$arrEstado,$lista->estado,"id='estado' class='comboMedio'");
+         $data['selcurso']    = form_dropdown('curso',$this->curso_model->seleccionar("00"),$lista->curso,"id='curso' class='comboMedio'");
+         $filter = new stdClass();
+         $filter->curso = $lista->curso;
+         $data['selsubcurso'] = form_dropdown('subcurso',$this->subcurso_model->seleccionar("00",$filter),$lista->subcurso,"id='subcurso' class='comboMedio'");
+         $data['seltipodoc']  = form_dropdown('tipodoc',$this->tipodocumento_model->seleccionar(),$lista->tipodoc,"id='tipodoc' class='comboMedio'"); 
+         $data['oculto']      = form_hidden(array("accion"=>$accion,"codigo"=>$lista->codigo,"codigo_padre"=>$lista->codigo_padre,"user_id"=>$lista->user_id));
          $data['experiencia'] = listar_experiencia($codigo);
          $data['estudios']    = listar_estudios($codigo);
          $data['idiomas']     = listar_idiomas($codigo);
@@ -160,38 +167,12 @@ class Profesor extends Persona
             $codigo_padre = $this->input->get_post('codigo_padre');
             $codigo       = $this->input->get_post('codigo');
             $user_id      = $this->input->get_post('user_id');
-
-            /*Grabamos en chamilo*/
-    //        $apellidos = $this->input->get_post('paterno')." ".$this->input->get_post('materno');
-    //        $nombres   = $this->input->get_post('nombres');
-    //        $username  = substr($nombres, 0,3).$this->input->get_post('paterno');
-    //        $data = array(
-    //            "lastname"      => $apellidos,
-    //            "firstname"     => $nombres,
-    //            "username"      => strtolower($username),                    
-    //            "password"      => "",                    
-    //            "auth_source"   => "platform",                    
-    //            "email"         => $this->input->get_post('email'),                    
-    //            "status"        => 1,                    
-    //            "official_code" => strtoupper($username),                    
-    //            "phone"         => $this->input->get_post('movil'),                    
-    //            "creator_id"    => 1,                    
-    //            "language"      => "spanish"                                                
-    //        );
-    //        if($accion == "n"){
-    //            $user_id = $this->user_model->insertar($data);
-    //        }
-    //        elseif($accion == "e"){
-    //            unset($data["username"]);
-    //            unset($data["official_code"]);
-    //            $this->user_model->modificar($user_id,$data);
-    //        }
-            /*Grabamos en cepreadm*/
             $data         = array(
                             "PERSP_Codigo"           => $this->codigo,
                             "PROC_FechaModificacion" => date('Y-m-d H:i:s',time()),
                             "PROC_FlagEstado"        => $this->input->post('estado'),
                             "PROD_Codigo"            => $curso,
+                            "SUBCURSOP_Codigo"       => $this->input->post('subcurso'),
                             "user_id"                => $user_id
                            );
             if($accion == "n"){
