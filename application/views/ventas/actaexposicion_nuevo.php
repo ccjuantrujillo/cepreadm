@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="<?php echo css;?>bootstrap.min.css" type="text/css"/>
     <link rel="stylesheet" href="<?php echo css;?>style.css" type="text/css"/>
     <link rel="stylesheet" href="<?php echo css;?>jquery.fileupload.css" type="text/css"/>
+    <link rel="stylesheet" href="<?php echo css;?>jquery.fileupload-ui.css" type="text/css"/>
     <script type="text/javascript" src="<?php echo js;?>jquery.js"></script>   
     <script type="text/javascript" src="<?php echo js;?>jquery.simplemodal.js"></script>      
     <script type="text/javascript" src="<?php echo js;?>constants.js"></script>     
@@ -30,7 +31,7 @@
     <span class="btn btn-success fileinput-button">
         <i class="glyphicon glyphicon-plus"></i>
         <span>Add files...</span>
-        <input id="fileupload" type="file" name="files[]" multiple>
+        <input id="fileupload" type="file" name="files[]" multiple value="hola">
     </span>
     <br>
     <br>

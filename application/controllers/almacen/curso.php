@@ -196,8 +196,8 @@ class Curso extends CI_Controller {
     public function obtener(){
         $obj    = $this->input->post('objeto');
         $filter = json_decode($obj);
-        $profesores  = $this->curso_model->listar($filter);
-        $resultado = json_encode($profesores);
+        $cursos  = $this->curso_model->listar($filter);
+        $resultado = json_encode($cursos);
         echo $resultado;
     }    
     

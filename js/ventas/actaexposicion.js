@@ -1,24 +1,16 @@
 jQuery(document).ready(function(){     
     'use strict';
     var url = base_url+'index.php/ventas/actaexposicion/upload',
-        uploadButton = $('<button/>')
-            .addClass('btn btn-primary')
-            .prop('disabled', true)
-            .text('Processing...')
-            .on('click', function () {
-                var $this = $(this),
-                    data = $this.data();
-                $this
-                    .off('click')
-                    .text('Abort')
-                    .on('click', function () {
-                        $this.remove();
-                        data.abort();
-                    });
-                data.submit().always(function () {
-                    $this.remove();
-                });
+        uploadButton = $('<button/>').addClass('btn btn-primary').prop('disabled', true).text('Processing...').on('click', function () {
+            var $this = $(this),data = $this.data();
+            $this.off('click').text('Abort').on('click', function () {
+                $this.remove();
+                data.abort();
             });
+            data.submit().always(function () {
+                $this.remove();
+            });
+        });
     $('#fileupload').fileupload({
         url: url,
         dataType: 'json',
@@ -33,23 +25,18 @@ jQuery(document).ready(function(){
     }).on('fileuploadadd', function (e, data) {
         data.context = $('<div/>').appendTo('#files');
         $.each(data.files, function (index, file) {
-            var node = $('<p/>')
-                    .append($('<span/>').text(file.name));
+            var node = $('<p/>').append($('<span/>').text(file.name));
             if (!index) {
-                node
-                    .append('<br>')
-                    .append(uploadButton.clone(true).data(data));
+                node.append('<br>').append(uploadButton.clone(true).data(data));
             }
             node.appendTo(data.context);
         });
-    }).on('fileuploadprocessalways', function (e, data) {
+    }).on('fileuploadprocessalways', function (e, data){
         var index = data.index,
             file = data.files[index],
             node = $(data.context.children()[index]);
         if (file.preview) {
-            node
-                .prepend('<br>')
-                .prepend(file.preview);
+            node.prepend('<br>').prepend(file.preview);
         }
         if (file.error) {
             node
