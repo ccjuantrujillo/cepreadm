@@ -8,7 +8,7 @@
                 <td>Codigo:</td>
                 <td class="formss"><input name="modulo" id="modulo" type="text" value="<?php echo $lista->codigo;?>" readonly="readonly" class="cajaMinima" style="background-color: #E6E6E6"></td>
                 <td>Tipo Estudio:</td>
-                <td class="formss"><input name="descripcion" id="descripcion" type="text" value="<?php echo $lista->descripcion;?>" class="cajaMinima"/></td>                
+                <td class="formss"><?php echo $seltipoestudio;?></td>                
               </tr>                  
               <tr>
                 <td>Turno:</td>
@@ -21,12 +21,12 @@
               </tr>                   
             </table>
         </div>
-        <div id="detalle" style = "float: left; height: 270px;overflow: auto; width: 100%;background: #e8edff;">
+        <div id="detalle" style = "float: left; height: 400px;overflow: auto; width: 100%;background: #e8edff;">
             <table width="100%" id="tabla_detalle">
                 <tr>
                     <th width="3%" align="center">No</th>
-                    <th width="5%" align="center">Dia</th>
-                    <th width="7%" align="center">Curso</th>
+                    <th width="15%" align="center">Dia</th>
+                    <th width="15%" align="center">Curso</th>
                     <th align="center">Desde</th> 
                     <th align="center">Hasta</th> 
                     <th align="center">Acciones</th>
@@ -35,10 +35,10 @@
                 if(count($lista->modulodetalle)>0){
                     foreach($lista->modulodetalle as $item => $value){
                         ?>
-                        <tr id="<?php echo $value->ASIGDETP_Codigo;?>">
+                        <tr id="<?php echo $value->MODULODETP_Codigo;?>">
                             <td width="3%" align="center"><?php echo $item+1;?></td>
                             <td align="center"><?php echo $semana[$value->MODULODETC_Dia];?></td>
-                            <td align="center"><?php echo $semana[$value->PROD_Codigo];?></td>
+                            <td align="center"><?php echo $value->PROD_Nombre;?></td>
                             <td align="center"><?php echo substr($value->MODULODETC_Desde,0,5);?></td> 
                             <td align="center"><?php echo substr($value->MODULODETC_Hasta,0,5);?></td> 
                             <td align="center">

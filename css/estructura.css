@@ -45,8 +45,8 @@ blockquote, q {quotes: "" "";}
 .menu{float: left;width: 100%;}
 .titulo{float: left;border-bottom: 1px solid #ccc;padding: 5px 0;width: 100%;margin-bottom: 10px;margin-top: 5px;}
 .titulo h1{font-size: 35px;text-align: center;font-family:"Times New Roman","Times","serif";}
-.mensaje{clear: left;width: 80%;margin:0px auto;text-align: center;background-color:#D5E2F2; color:#F00;padding:4px 0px;}
-.tabla{margin:0px auto;text-align: center;width:80%;height: auto;} 
+.mensaje{clear: left;width: 85%;margin:0px auto;text-align: center;background-color:#D5E2F2; color:#F00;padding:4px 0px;}
+.tabla{margin:0px auto;text-align: center;width:85%;height: auto;} 
 .tabla table{border-color:#EDEDED;width: 100%;padding: 0px;border-spacing: 0px;} 
 .tabla tr.list1 td { background-color:#D9E8FB; text-align:center; padding:3px 0;}
 .tabla tr.list1 td a{ color:#069;}

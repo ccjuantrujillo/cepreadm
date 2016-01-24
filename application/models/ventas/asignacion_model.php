@@ -14,6 +14,7 @@ class Asignacion_model extends CI_Model
         $this->table_course = "course";
         $this->table_apertura = "ant_apertura";
         $this->table_aula     = "ant_aula";
+        $this->table_modulo   = "ant_modulo";
     }
     
     public function seleccionar($default='',$filter='',$filter_not='',$number_items='',$offset=''){
@@ -35,6 +36,8 @@ class Asignacion_model extends CI_Model
 	$this->db->join($this->table_curso.' as i','i.PROD_Codigo=d.PROD_Codigo','inner');
         $this->db->join($this->table_ciclo.' as h','h.CICLOP_Codigo=c.CICLOP_Codigo','inner');
         $this->db->join($this->table_course.' as j','j.id=c.course_id','inner');
+        $this->db->join($this->table_apertura.' as k','k.APERTUP_Codigo=j.APERTUP_Codigo','inner');
+        $this->db->join($this->table_modulo.' as l','l.MODULOP_Codigo=k.MODULOP_Codigo','inner');
         if(isset($filter->ciclo) && $filter->ciclo!='')            $this->db->where(array("c.CICLOP_Codigo"=>$filter->ciclo));
         if(isset($filter->curso) && $filter->curso!='')            $this->db->where(array("d.PROD_Codigo"=>$filter->curso));
         if(isset($filter->asignacion) && $filter->asignacion!='')  $this->db->where(array("c.ASIGP_Codigo"=>$filter->asignacion));

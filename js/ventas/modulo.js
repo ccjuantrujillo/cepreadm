@@ -50,7 +50,7 @@ jQuery(document).ready(function(){
         $("#tabla_detalle").append(fila);
         selectDia(n);
         selectCurso(n);
-        selectTipoEstudio(n);
+//        selectTipoEstudio(n);
 //            selectLocal(n);   
     });       
     
@@ -174,15 +174,14 @@ jQuery(document).ready(function(){
             tr.empty();
             tr.append("<td align='center'><input type='hidden' id='codigodetalle["+n+"]' name='codigodetalle["+n+"]' value='"+codigodetalle+"'>"+(parseInt(n)+1)+"</td>");
             tr.append("<td align='center' valgin='top'><select class='comboMinimo' name='dia["+n+"]' id='dia["+n+"]'><option value=''>::Seleccione::</option></select></td>");
+            tr.append("<td align='center' valgin='top'><select class='comboMinimo' name='curso["+n+"]' id='curso["+n+"]'><option value=''>::Seleccione::</option></select></td>");
             tr.append("<td align='center'><input type='time' maxlength='5' class='cajaReducida' name='desde["+n+"]' id='desde["+n+"]' value='00:00'></td>");
             tr.append("<td align='center'><input type='time' maxlength='5' class='cajaReducida' name='hasta["+n+"]' id='hasta["+n+"]' value='00:00'></td>");
             tr.append("<td align='center'><a href='#' class='editardetalle'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>");       
-            selectDia(n,data["ASIGDETC_Dia"]);
-            selectTipoEstudio(n,data["TIPCICLOP_Codigo"]);
-            selectLocal(n,data["LOCP_Codigo"]); 
-            selectAula(n,data["LOCP_Codigo"],data["AULAP_Codigo"]);
-            document.getElementById("desde["+n+"]").value=data["ASIGDETC_Desde"];
-            document.getElementById("hasta["+n+"]").value=data["ASIGDETC_Hasta"];
+            selectDia(n,data["MODULODETC_Dia"]);
+            selectCurso(n,data["PROD_Codigo"]);
+            document.getElementById("desde["+n+"]").value=data["MODULODETC_Desde"];
+            document.getElementById("hasta["+n+"]").value=data["MODULODETC_Hasta"];
        });
      });   
     
@@ -240,19 +239,19 @@ function selectDia(n,valor){
 function selectCurso(n,valor){
     valor = (valor) ? valor : null;
     b      = "curso["+n+"]";
-    select = document.getElementById(b);
+    select2 = document.getElementById(b);
     url    = base_url+"index.php/almacen/curso/obtener";
     objRes = new Object();
     dataString   = {objeto: JSON.stringify(objRes)};
     $.post(url,dataString,function(data){
         $.each(data, function(item,val){
-            opt       = document.createElement('option');
-            opt.value = val.PROD_Codigo;
-            if(valor==val.PROD_Codigo){opt.selected=true;}
-            opt.appendChild(document.createTextNode(val.PROD_Nombre));
-            select.appendChild(opt);
+            opt2       = document.createElement('option');
+            opt2.value = val.PROD_Codigo;
+            if(valor==val.PROD_Codigo){opt2.selected=true;}
+            opt2.appendChild(document.createTextNode(val.PROD_Nombre));
+            select2.appendChild(opt2);
         });        
-    });
+    },"json");
 }
 
 function selectTipoEstudio(n,valor){

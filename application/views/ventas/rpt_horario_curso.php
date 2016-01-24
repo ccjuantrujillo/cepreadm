@@ -26,6 +26,8 @@
                     <?php echo $selciclo;?>
                     <label>Curso:</label>
                     <?php echo $selcurso;?>
+                    <label>Turno:</label>
+                    <?php echo $selturno;?>                    
                 </div>
             <?php echo $form_close;?>
 	</div>         

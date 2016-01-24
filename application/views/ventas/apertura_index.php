@@ -29,7 +29,8 @@
             <td width="70">Ciclo</td>
             <td width="60">Aula</td>
             <td width="60">Turno</td>
-            <td width="60">Tipo Estudio</td>            
+            <td width="60">Tipo Estudio</td>  
+            <td width="60">Modulo</td>  
             <td width="86">Fecha</td>
             <td width="63">Estado</td>
             <td width="50">Ver</td>
@@ -48,7 +49,8 @@
                 <td align="center"><?php echo $value->ciclo;?></td>
                 <td align="left"><?php echo $value->aula;?></td>
                 <td align="left"><?php echo $arrturno[$value->turno];?></td>
-                <td align="center"><?php echo $value->tipoestudio;?></td>                
+                <td align="center"><?php echo $value->tipoestudio;?></td>  
+                <td align="center"><?php echo $value->modulo;?></td>  
                 <td align="center"><?php echo $value->fecha;?></td>
                 <td align="center"><img src="<?php echo img.($flgestado==1?"check.jpg":"uncheck.jpg");?>" height="20px" width="20px"/><?php echo $estado;?></td>
                 <td><a href="#" class="ver"><img src="<?php echo img;?>ver.png"/></a></td>                        

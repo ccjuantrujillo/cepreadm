@@ -37,26 +37,58 @@ jQuery(document).ready(function(){
        $("#clave").val(curso+ascii);
     });    
     
-    $("body").on('click',"#agregar",function(){
-        profesor = $("#profesor").val();
+//    $("body").on('click',"#agregar",function(){
+//        profesor = $("#profesor").val();
+//        if(profesor!=""){
+//            n      = $("#tabla_detalle tr").length - 1;
+//            fila   = "<tr>";
+//            fila  += "<td align='center'><input type='hidden' id='codigodetalle["+n+"]' name='codigodetalle["+n+"]' value=''>"+(parseInt(n)+1)+"</td>";
+//            fila  += "<td align='center' valgin='top'><select class='comboMinimo' name='dia["+n+"]' id='dia["+n+"]'><option value=''>::Seleccione::</option></select></td>";
+//            fila  += "<td align='center'><input type='time' maxlength='5' class='cajaReducida' name='desde["+n+"]' id='desde["+n+"]' value='00:00'></td>";
+//            fila  += "<td align='center'><input type='time' maxlength='5' class='cajaReducida' name='hasta["+n+"]' id='hasta["+n+"]' value='00:00'></td>";        
+//            fila  += "<td align='center'><a href='#' class='editardetalle'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>";
+//            fila  += "</tr>";
+//            $("#tabla_detalle").append(fila);
+//            selectDia(n);
+//            selectTipoEstudio(n);
+//            selectLocal(n);   
+//        }
+//        else{
+//            alert("Primero debe seleccionar un profesor.");
+//        }
+//    });    
+
+    $("body").on("click","#agregar",function(){
+        profesor  = $("#profesor").val();
+        codmodulo = $("#codmodulo").val();
+        curso     = $("#curso").val();
         if(profesor!=""){
+            url = base_url+"index.php/ventas/modulo/obtenerdetalle2";
+            objMod = new Object();
+            objMod.curso = curso;
+            objMod.modulo = codmodulo;
+            dataString = {objeto:JSON.stringify(objMod)};
             n      = $("#tabla_detalle tr").length - 1;
-            fila   = "<tr>";
-            fila  += "<td align='center'><input type='hidden' id='codigodetalle["+n+"]' name='codigodetalle["+n+"]' value=''>"+(parseInt(n)+1)+"</td>";
-            fila  += "<td align='center' valgin='top'><select class='comboMinimo' name='dia["+n+"]' id='dia["+n+"]'><option value=''>::Seleccione::</option></select></td>";
-            fila  += "<td align='center'><input type='time' maxlength='5' class='cajaReducida' name='desde["+n+"]' id='desde["+n+"]' value='00:00'></td>";
-            fila  += "<td align='center'><input type='time' maxlength='5' class='cajaReducida' name='hasta["+n+"]' id='hasta["+n+"]' value='00:00'></td>";        
-            fila  += "<td align='center'><a href='#' class='editardetalle'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>";
-            fila  += "</tr>";
-            $("#tabla_detalle").append(fila);
-            selectDia(n);
-            selectTipoEstudio(n);
-            selectLocal(n);   
+            fila = "";            
+            $.post(url,dataString,function(data){
+                $.each(data,function(item,value){
+                   fila  = "<tr>";
+                   fila  += "<td align='center'><input type='hidden' id='codigodetalle["+n+"]' name='codigodetalle["+n+"]' value=''>"+(parseInt(n)+1)+"</td>";
+                   fila  += "<td align='center' valgin='top'><select class='comboMinimo' name='dia["+n+"]' id='dia["+n+"]'><option value=''>::Seleccione::</option></select></td>";
+                   fila  += "<td align='center'><input type='time' maxlength='5' class='cajaReducida' name='desde["+n+"]' id='desde["+n+"]' value='"+value.MODULODETC_Desde+"'></td>";
+                   fila  += "<td align='center'><input type='time' maxlength='5' class='cajaReducida' name='hasta["+n+"]' id='hasta["+n+"]' value='"+value.MODULODETC_Hasta+"'></td>";        
+                   fila  += "<td align='center'><a href='#' class='editardetalle'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>";                   
+                   fila  += "</tr>";
+                   $("#tabla_detalle").append(fila);
+                   selectDia(n,value.MODULODETC_Dia); 
+                   n++;
+                });
+            },"json");
         }
         else{
-            alert("Primero debe seleccionar un profesor.");
+            alert("Primero debe seleccionar a un profesor");
         }
-    });       
+    });
     
     $("body").on('click',"#ver_profesor",function(){
         url = base_url+"index.php/ventas/profesor/buscar";
@@ -211,6 +243,10 @@ function selecciona_profesor(codigo){
             $("#nombres").val(nomper);
             $("#nombre_curso").val(value.PROD_Nombre);
             $("#curso").val(value.PROD_Codigo);
+            $("#title").val("");
+            $("#codmodulo").val("");
+            $("#modulo").val("");
+            
         });
     },"json");
 }
@@ -222,7 +258,8 @@ function selecciona_curso(codigo){
     dataString   = {objeto: JSON.stringify(objRes)};
     $.post(url,dataString,function(data){
         $("#course_id").val(data.id);
-        //$("#code").val(data.code);
+        $("#codmodulo").val(data.MODULOP_Codigo);
+        $("#modulo").val(data.MODULOC_Descripcion);
         $("#title").val(data.title);
     },"json");
 }

@@ -26,6 +26,7 @@
            <tr class="list1">
              <td width="43">No</td>
              <td width="43">Codigo</td>
+             <td width="100">Tipo Estudio</td>
              <td width="100">Turno</td>
              <td width="100">Modulo</td>                 
              <td width="50">Editar</td>
@@ -39,6 +40,7 @@
                <tr class="<?php echo $clase;?>" id="<?php echo $value->codigo;?>">
                  <td><?php echo ++$j;?></td>
                  <td><?php echo $value->codigo;?></td>
+                 <td><?php echo $value->tipoestudio;?></td>
                  <td><?php echo $value->turno;?></td>
                  <td><?php echo $value->modulo;?></td>
                  <td><a href="#" class="editar"><img src="<?php echo img;?>editar.jpg"/></a></td>

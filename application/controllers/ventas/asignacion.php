@@ -6,10 +6,12 @@ class Asignacion extends CI_Controller {
         parent::__construct(); 
         if(!isset($_SESSION['login'])) die("Sesion terminada. <a href='".  base_url()."'>Registrarse e ingresar.</a> ");           
         $this->load->model(ventas.'asignacion_model');
+        $this->load->model(ventas.'apertura_model');
         $this->load->model(ventas.'asignaciondetalle_model');
         $this->load->model(ventas.'alumno_model');
         $this->load->model(ventas.'profesor_model');
         $this->load->model(ventas.'actividad_model');
+        $this->load->model(ventas.'modulodetalle_model');
         $this->load->model(maestros.'persona_model');    
         $this->load->model(maestros.'turno_model');    
         $this->load->model(seguridad.'permiso_model');          
@@ -38,7 +40,7 @@ class Asignacion extends CI_Controller {
         $filter     = new stdClass();
         if($_SESSION["acceso"]==2)  $filter->curso = $_SESSION["codcurso"];
         if($_SESSION["acceso"]==3)  $filter->profesor = $_SESSION["codprofesor"];   
-        $filter->order_by = array("c.CICLOP_Codigo"=>"desc","e.PERSC_ApellidoPaterno"=>"asc","e.PERSC_ApellidoMaterno"=>"asc");
+        $filter->order_by = array("c.CICLOP_Codigo"=>"desc","i.PROD_Nombre"=>"asc","e.PERSC_ApellidoPaterno"=>"asc","e.PERSC_ApellidoMaterno"=>"asc");
         $filter_not = new stdClass(); 
         $registros = count($this->asignacion_model->listar($filter,$filter_not));
         $matricula   = $this->asignacion_model->listar($filter,$filter_not,$this->configuracion['per_page'],$j);
@@ -56,6 +58,7 @@ class Asignacion extends CI_Controller {
                 $lista[$indice]->fecha    = $value->fecha;
                 $lista[$indice]->curso    = $value->PROD_Nombre;
                 $lista[$indice]->title    = $value->title;
+                $lista[$indice]->modulo   = $value->MODULOC_Descripcion;
             }
         }
         $configuracion = $this->configuracion;
@@ -92,6 +95,8 @@ class Asignacion extends CI_Controller {
             $lista->curso       = $asignacion->PROD_Codigo; 
             $lista->course_id   = $asignacion->course_id; 
             $lista->code        = $asignacion->code; 
+            $lista->modulo      = $asignacion->MODULOC_Descripcion; 
+            $lista->codmodulo   = $asignacion->MODULOP_Codigo; 
             $lista->grupo       = $asignacion->ASIGC_Grupo; 
             $lista->title       = $asignacion->title; 
             $lista->asignacion  = $asignacion->ASIGP_Codigo;
@@ -114,12 +119,13 @@ class Asignacion extends CI_Controller {
             $lista->grupo       = ""; 
             $lista->title       = ""; 
             $lista->asignacion  = "";
+            $lista->modulo      = "";
+            $lista->codmodulo   = "";
             $lista->estado      = "1";
             $lista->ciclo       = $ciclo;
             $lista->asignaciondetalle = array();
         } 
         $arrEstado          = array("0"=>"::Seleccione::","1"=>"ACTIVO","2"=>"INACTIVO");
-        $arrGrupo           = array("0"=>"::Seleccione::","1"=>"GRUPO 1","2"=>"GRUPO 2");
         $data['titulo']     = $accion=="e"?"Editar Carga de Trabajo":"Nueva Carga de Trabajo"; 
         $data['form_open']  = form_open('',array("name"=>"frmPersona","id"=>"frmPersona"));     
         $data['form_close'] = form_close();         
@@ -129,8 +135,7 @@ class Asignacion extends CI_Controller {
         $data['semana']	    = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado");     
         $data['selciclo']   = form_dropdown('ciclo',$this->ciclo_model->seleccionar("0"),$lista->ciclo,"id='ciclo' class='comboMedio' ".($accion=="e"?"disabled":"")."");         
         $data['selestado']  = form_dropdown('estado',$arrEstado,$lista->estado,"id='estado' class='comboMedio' ".($accion=="e"?"disabled":"")."");
-        $data['selgrupo']   = form_dropdown('grupo',$arrGrupo,$lista->grupo,"id='grupo' class='comboMedio'");
-        $data['oculto']     = form_hidden(array("accion"=>$accion,"codigo"=>$codigo));
+        $data['oculto']     = form_hidden(array("accion"=>$accion,"codigo"=>$codigo,"codmodulo"=>$lista->codmodulo));
         $this->load->view("ventas/asignacion_nuevo",$data);
     }
 
@@ -482,9 +487,13 @@ class Asignacion extends CI_Controller {
             case 'rpt_horario_curso':
                $curso    = $this->input->get_post('curso_rpt');
                 $ciclo = $this->input->get_post('ciclo_rpt');
+                $turno = $this->input->get_post('turno_rpt');
                 $filter = new stdClass();
                 $filter->ciclo = $ciclo;
                 $ciclos = $this->ciclo_model->obtener($filter);
+                $filter = new stdClass();
+                $filter->turno = $turno;
+                $turnos = $this->turno_model->obtener($filter);                
                 $this->load->library("fpdf/pdf");
                 $CI = & get_instance();
                 $CI->pdf->FPDF('P');
@@ -494,9 +503,10 @@ class Asignacion extends CI_Controller {
                 $CI->pdf->SetFillColor(216,216,216);
                 $CI->pdf->SetFont('Arial','B',11);
                 $CI->pdf->Image('img/uni.gif',10,8,10);
-                $CI->pdf->Cell(0,5,"HORARIO POR CURSO",0,1,"C",0);
+                $CI->pdf->Cell(0,5,"HORARIO POR AULA",0,1,"C",0);
                 if($ciclo!=0){                    
                     $CI->pdf->Cell(0,10,$ciclos->COMPC_Nombre,0,1,"C",0);
+                    if($turno!=0)  $CI->pdf->Cell(0,5,"TURNO:".strtoupper($turnos->TURNOC_Descripcion),0,1,"C",0);
                     $CI->pdf->SetFont('Arial','B',8);  
                     $arrDias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado");
                     foreach($arrDias as $item => $value){
@@ -509,16 +519,32 @@ class Asignacion extends CI_Controller {
                     }
                     $CI->pdf->Cell(1,4,"",0,1,"C",0);
                     $filter = new stdClass();
-                    $filter->order_by = array("a.AULAC_Nombre"=>"asc");
-                    $aulas = $this->aula_model->listar($filter);
+                    $filter->ciclo = $ciclo;
+                    if($turno!=0)  $filter->turno = $turno;
+                    $filter->order_by = array("c.TURNOP_Codigo"=>"asc","f.AULAC_Nombre"=>"asc");
+                    $aulas = $this->apertura_model->listar($filter);
                     foreach($aulas as $item => $value){
-                        for($i=0;$i<4;$i++){
-                            $nom_curso = "";
-                            $id_aula = $value->AULAP_Codigo;
-                            if($i==0)
-                                $nom_aula = $value->AULAC_Nombre;
-                            else
-                                $nom_aula = "";
+                        $nom_curso = "";
+                        $id_aula   = $value->AULAP_Codigo;
+                        $id_modulo = $value->MODULOP_Codigo;
+                        $nom_turno = substr($value->TURNOC_Descripcion,0,1);
+                        $nom_aula  = $value->AULAC_Nombre." - ".$nom_turno; 
+                        /*Obetngo array de cursos aperturados por dia de la tabla modelodetalle*/
+                        for($id_dia=1;$id_dia<7;$id_dia++){
+                            $filter = new stdClass();
+                            $filter->dia   = $id_dia;
+                            $filter->modulo = $id_modulo;
+                            if($curso!=0)  $filter->curso = $curso;
+                            $filter->order_by = array("c.MODULODETC_Desde"=>"asc");
+                            $cursos     = $this->modulodetalle_model->listar($filter);
+                            $j = 0;
+                            foreach($cursos as $item2=>$value2){
+                                $arrCursos[$j][$id_dia] = $value2->PROD_Nombre;
+                                $arrCursos[$j+1][$id_dia] = $value2->PROD_Nombre;
+                                $j=$j+2;
+                            }
+                        }
+                        for($i=0;$i<count($arrCursos);$i++){
                             $CI->pdf->Cell(18,4,$nom_aula,1,0,"C",0);
                             for($id_dia=1;$id_dia<7;$id_dia++){
                                 $filter = new stdClass();
@@ -526,10 +552,18 @@ class Asignacion extends CI_Controller {
                                 $filter->dia   = $id_dia;
                                 $filter->aula  = $id_aula;
                                 if($curso!=0)  $filter->curso = $curso;
-                                $cursos = $this->asignaciondetalle_model->rpt_horario_curso($filter);
-                                $nom_curso = isset($cursos->PROD_Nombre)?$cursos->PROD_Nombre:"";
-                                $nom_profesor = isset($cursos->PROD_Nombre)?"/".$cursos->PERSC_ApellidoPaterno:"";
-                                $CI->pdf->Cell(28,4,$nom_curso.$nom_profesor,1,0,"C",0);    
+                                $asignacion = $this->asignaciondetalle_model->rpt_horario_curso($filter);
+                                $nom_curso  = isset($arrCursos[$i][$id_dia])?$arrCursos[$i][$id_dia]:"";
+                                if(isset($asignacion->PERSC_ApellidoPaterno)){
+                                    $nom_profesor = $asignacion->PERSC_ApellidoPaterno;
+                                }
+                                else{
+                                    $nom_profesor = $nom_curso!=""?"No Asignado":"";
+                                }
+                                if($i%2==0)
+                                    $CI->pdf->Cell(28,4,$nom_curso,1,0,"C",0);    
+                                else
+                                    $CI->pdf->Cell(28,4,$nom_profesor,1,0,"C",0);    
                             }
                             $CI->pdf->Cell(5,4,"",0,1,"C",0);    
                         }
@@ -562,7 +596,8 @@ class Asignacion extends CI_Controller {
     
     public function rpt_horario_curso(){
         $curso  = $this->input->get_post('curso_rpt');
-        $ciclo  = $this->input->get_post('ciclo_rpt');        
+        $ciclo  = $this->input->get_post('ciclo_rpt');   
+        $turno  = $this->input->get_post('turno_rpt');   
         $filter             = new stdClass();
         $filter->rol        = $this->session->userdata('rolusu');		
         $filter->order_by   = array("m.MENU_Orden"=>"asc");
@@ -572,11 +607,12 @@ class Asignacion extends CI_Controller {
         $data['selcurso']   = form_dropdown('curso_rpt',$this->curso_model->seleccionar('0',$filter),$curso,"id='curso_rpt' class='comboGrande'");      
         $filter             = new stdClass();
         $data['selciclo']   = form_dropdown('ciclo_rpt',$this->ciclo_model->seleccionar('0',$filter),$ciclo,"id='ciclo_rpt' class='comboMedio'");
+        $data['selturno']   = form_dropdown('turno_rpt',$this->turno_model->seleccionar('0',$filter),$turno,"id='turno_rpt' class='comboMedio'");
         $data["menu"]       = $menu;
         $data["form_open"]  = form_open("",array("name"=>"frmReporte","id"=>"frmReporte","method"=>"post"));
         $data["form_close"] = form_close();
         $data['header']  = get_header();
-        $data["titulo"]  = "Reporte de horario por curso";        
+        $data["titulo"]  = "Reporte de horario por aula";        
         $this->load->view(ventas."rpt_horario_curso",$data);
     }    
 }

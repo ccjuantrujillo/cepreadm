@@ -7,17 +7,19 @@ class Apertura extends CI_Controller {
         if(!isset($_SESSION['login'])) die("Sesion terminada. <a href='".  base_url()."'>Registrarse e ingresar.</a> ");           
         $this->load->model(ventas.'apertura_model');
         $this->load->model(ventas.'actividad_model');  
+        $this->load->model(ventas.'modulo_model');  
         $this->load->model(seguridad.'permiso_model');          
         $this->load->model(maestros.'ciclo_model');  
         $this->load->model(maestros.'aula_model'); 
         $this->load->model(maestros.'tipoestudio_model'); 
         $this->load->model(maestros.'tipoestudiociclo_model'); 
         $this->load->model(maestros.'local_model'); 
+        $this->load->model(maestros.'turno_model'); 
         $this->load->model(chamilo.'course_model'); 
-        $this->load->model(chamilo.'course_rel_user_model'); 
-        $this->load->model(chamilo.'c_course_setting_model'); 
-        $this->load->model(chamilo.'c_document_model'); 
-        $this->load->model(chamilo.'access_url_rel_course_model'); 
+//        $this->load->model(chamilo.'course_rel_user_model'); 
+//        $this->load->model(chamilo.'c_course_setting_model'); 
+//        $this->load->model(chamilo.'c_document_model'); 
+//        $this->load->model(chamilo.'access_url_rel_course_model'); 
         $this->load->helper('menu');
         $this->configuracion = $this->config->item('conf_pagina');
         $this->login   = $this->session->userdata('login');
@@ -50,6 +52,7 @@ class Apertura extends CI_Controller {
                 $lista[$indice]->aula     = $value->AULAC_Nombre;
                 $lista[$indice]->turno     = $value->TURNOP_Codigo;
 		$lista[$indice]->ciclo    = $value->COMPC_Nombre;
+                $lista[$indice]->modulo   = $value->MODULOC_Descripcion;
                 $lista[$indice]->tipoestudio = $value->TIPC_Nombre;
                 $lista[$indice]->estado   = $value->APERTUC_FlagEstado;
                 $lista[$indice]->fecha    = date_sql($value->APERTUC_Fecha);
@@ -77,6 +80,8 @@ class Apertura extends CI_Controller {
     public function editar($accion,$codigo=""){
         $ciclo = $this->input->get_post('ciclo'); 
         $local = $this->input->get_post('local'); 
+        $turno = $this->input->get_post('turno'); 
+        $aula  = $this->input->get_post('aula'); 
         $tipoestudiociclo = $this->input->get_post('tipoestudiociclo'); 
         $lista = new stdClass();
         if($accion == "e"){
@@ -87,9 +92,11 @@ class Apertura extends CI_Controller {
             $lista->ciclo       = $ciclo!=""?$ciclo:$apertura->CICLOP_Codigo;
             $lista->fecha       = date_sql(substr($apertura->APERTUC_Fecha,0,10)); 
             $lista->tipoestudiociclo = $apertura->TIPCICLOP_Codigo;
+            $lista->tipoestudio = $apertura->TIPP_Codigo;
 	    $lista->local       = $local!=""?$local:$apertura->LOCP_Codigo; 
-            $lista->aula        = $apertura->AULAP_Codigo;
-            $lista->turno       = $apertura->TURNOP_Codigo;
+            $lista->aula        = $aula!=""?$aula:$apertura->AULAP_Codigo;
+            $lista->modulo      = $apertura->MODULOP_Codigo;
+            $lista->turno       = $turno!=""?$turno:$apertura->TURNOP_Codigo;
             $lista->estado      = $apertura->APERTUC_FlagEstado;
             $filter             = new stdClass();
             $filter->apertura   = $codigo;
@@ -101,29 +108,40 @@ class Apertura extends CI_Controller {
             $lista->fecha       = date("d/m/Y",time());
             $lista->tipoestudiociclo = $tipoestudiociclo;
             $lista->local       = $local;
-            $lista->aula        = 0;
-            $lista->turno       = 0;
+            $lista->aula        = $aula;
+            $lista->turno       = $turno;
             $lista->estado      = "1";
+            $lista->modulo      = 0;
+            $lista->tipoestudio = 0;
             $lista->aperturadetalle = array();
+            if($lista->tipoestudiociclo!=0){
+                $filter = new stdClass();
+                $filter->tipoestudiociclo  = $lista->tipoestudiociclo;
+                $objTipoestudiociclo  = $this->tipoestudiociclo_model->obtener($filter);
+                $lista->tipoestudio   = $objTipoestudiociclo->TIPP_Codigo;                
+            }
         } 
-        $arrEstado          = array("0"=>"::Seleccione::","1"=>"ACTIVO","2"=>"INACTIVO");
-        $arrTurno           = array("0"=>"::Seleccione::","1"=>"Mañana","2"=>"Tarde","3"=>"Noche");
-        $data['titulo']     = $accion=="e"?"Editar Apertura de aula":"Nueva Apertura de aula"; 
-        $data['form_open']  = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));     
-        $data['form_close'] = form_close();         
-        $data['lista']	    = $lista;  
-        $data['accion']	    = $accion;    
-        $data['selciclo']   = form_dropdown('ciclo',$this->ciclo_model->seleccionar("0"),$lista->ciclo,"id='ciclo' class='comboMedio' ".($accion == "e"?"disabled='disabled'":"")."");         
-        $data['sellocal']   = form_dropdown('local',$this->local_model->seleccionar("0"),$lista->local,"id='local' class='comboMedio' ".($accion == "e"?"disabled='disabled'":"")."");
-        $filter             = new stdClass();
-        $filter->local      = $lista->local;
-        $data['selaula']    = form_dropdown('aula',$this->aula_model->seleccionar("0",$filter),$lista->aula,"id='aula' class='comboMedio' ".($accion == "e"?"disabled='disabled'":"")."");
-        $data['selturno']   = form_dropdown('turno',$arrTurno,$lista->turno,"id='turno' class='comboMedio' ".($accion == "e"?"disabled='disabled'":"")."");
-        $data['selestado']  = form_dropdown('estado',$arrEstado,$lista->estado,"id='estado' class='comboMedio'");
-        $filter             = new stdClass();
-        $filter->ciclo      = $lista->ciclo;
-        $data['seltipoe']   = form_dropdown('tipoestudiociclo',$this->tipoestudiociclo_model->seleccionar("0",$filter),$lista->tipoestudiociclo,"id='tipoestudiociclo' class='comboMedio' ".($accion == "e"?"disabled='disabled'":"")."");
-        $data['oculto']     = form_hidden(array("accion"=>$accion,"codigo"=>$codigo));
+        $arrEstado           = array("0"=>"::Seleccione::","1"=>"ACTIVO","2"=>"INACTIVO");
+        $data['titulo']      = $accion=="e"?"Editar Apertura de aula":"Nueva Apertura de aula"; 
+        $data['form_open']   = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));     
+        $data['form_close']  = form_close();         
+        $data['lista']	     = $lista;  
+        $data['accion']	     = $accion;    
+        $data['selciclo']    = form_dropdown('ciclo',$this->ciclo_model->seleccionar("0"),$lista->ciclo,"id='ciclo' class='comboMedio' ".($accion == "e"?"disabled='disabled'":"")."");         
+        $data['sellocal']    = form_dropdown('local',$this->local_model->seleccionar("0"),$lista->local,"id='local' class='comboMedio' ".($accion == "e"?"disabled='disabled'":"")."");
+        $filter              = new stdClass();
+        $filter->local       = $lista->local;
+        $data['selaula']     = form_dropdown('aula',$this->aula_model->seleccionar("0",$filter),$lista->aula,"id='aula' class='comboMedio' ".($accion == "e"?"disabled='disabled'":"")."");
+        $data['selturno']    = form_dropdown('turno',$this->turno_model->seleccionar("0",$filter),$lista->turno,"id='turno' class='comboMedio' ".($accion == "e"?"disabled='disabled'":"")."");
+        $data['selestado']   = form_dropdown('estado',$arrEstado,$lista->estado,"id='estado' class='comboMedio'");
+        $filter = new stdClass();
+        $filter->turno       = $lista->turno;
+        $filter->tipoestudio = $lista->tipoestudio;        
+        $data['selmodulo']   = form_dropdown('modulo',$this->modulo_model->seleccionar("0",$filter),$lista->modulo,"id='modulo' class='comboMedio' ");
+        $filter              = new stdClass();
+        $filter->ciclo       = $lista->ciclo;
+        $data['seltipoe']    = form_dropdown('tipoestudiociclo',$this->tipoestudiociclo_model->seleccionar("0",$filter),$lista->tipoestudiociclo,"id='tipoestudiociclo' class='comboMedio' ".($accion == "e"?"disabled='disabled'":"")."");
+        $data['oculto']      = form_hidden(array("accion"=>$accion,"codigo"=>$codigo));
         $this->load->view("ventas/apertura_nuevo",$data);
     }
 
@@ -137,7 +155,8 @@ class Apertura extends CI_Controller {
                         "APERTUC_Descripcion" => "",
                         "TURNOP_Codigo"       => $this->input->post('turno'),
                         "APERTUC_FlagEstado"  => $this->input->post('estado'),
-                        "APERTUC_Fecha"       => date_sql_ret($this->input->post('fecha'))
+                        "APERTUC_Fecha"       => date_sql_ret($this->input->post('fecha')),
+                        "MODULOP_Codigo"       => $this->input->post('modulo')
                        );
         $resultado = false;
         if($accion == "n"){
@@ -201,35 +220,35 @@ class Apertura extends CI_Controller {
                     $this->course_model->modificar($course_id[$item],$data); 
                 }    
                 //Grabo en las tablas relacionadas de chamila course_rel_user
-                $data = array(
-                            "course_code" => $code[$item],
-                            "user_id"     => 1,
-                            "status"      => 1,
-                            "role"        => "",
-                            "sort"        => 1
-                        );
-                if($course_id[$item]==""){
-                    $this->course_rel_user_model->insertar($data); 
-                }              
+//                $data = array(
+//                            "course_code" => $code[$item],
+//                            "user_id"     => 1,
+//                            "status"      => 1,
+//                            "role"        => "",
+//                            "sort"        => 1
+//                        );
+//                if($course_id[$item]==""){
+//                    $this->course_rel_user_model->insertar($data); 
+//                }              
                 //Grabo en las tablas relacionadas de chamila c_course_setting
-                if($course_id[$item]==""){
-                    for($i=0;$i<17;$i++){
-                        $data = array("c_id"=>$this->curso_id,"id"=> $i+1,"variable"=>$arrVariable[$i],"category"=>$arrCategoria[$i],"value"=>0);
-                        $this->c_course_setting_model->insertar($data); 
-                    }                    
-                }
+//                if($course_id[$item]==""){
+//                    for($i=0;$i<17;$i++){
+//                        $data = array("c_id"=>$this->curso_id,"id"=> $i+1,"variable"=>$arrVariable[$i],"category"=>$arrCategoria[$i],"value"=>0);
+//                        $this->c_course_setting_model->insertar($data); 
+//                    }                    
+//                }
                 //Grabo en las tablas relacionadas de chamila c_document
-                if($course_id[$item]==""){
-                    $data  = array("c_id"=>$this->curso_id,"id"=>1,"path"=>"/shared_folder","title" => "Carpetas de los usuarios","filetype"=>"folder");
-                    $data2 = array("c_id"=>$this->curso_id,"id"=>2,"path"=>"/chat_files","title" => "Historial de conversaciones en el chat","filetype"=>"folder");
-                    $this->c_document_model->insertar($data); 
-                    $this->c_document_model->insertar($data2);                     
-                }
+//                if($course_id[$item]==""){
+//                    $data  = array("c_id"=>$this->curso_id,"id"=>1,"path"=>"/shared_folder","title" => "Carpetas de los usuarios","filetype"=>"folder");
+//                    $data2 = array("c_id"=>$this->curso_id,"id"=>2,"path"=>"/chat_files","title" => "Historial de conversaciones en el chat","filetype"=>"folder");
+//                    $this->c_document_model->insertar($data); 
+//                    $this->c_document_model->insertar($data2);                     
+//                }
                 //Grabo en las tablas relacionadas de chamila access_url_rel_course
-                if($course_id[$item]==""){
-                    $data = array("access_url_id"=>1,"course_code"=>$code[$item]);
-                    $this->access_url_rel_course_model->insertar($data); 
-                }
+//                if($course_id[$item]==""){
+//                    $data = array("access_url_id"=>1,"course_code"=>$code[$item]);
+//                    $this->access_url_rel_course_model->insertar($data); 
+//                }
             }
         }                            
         echo json_encode($resultado);
@@ -264,13 +283,13 @@ class Apertura extends CI_Controller {
         $filter->code   = $data->code;
         $filter->course = $data->id;
         /*Elimino course_rel_user*/
-        $this->course_rel_user_model->eliminar($filter);
+//        $this->course_rel_user_model->eliminar($filter);
         /*Elimino c_course_setting*/
-        $this->c_course_setting_model->eliminar($filter);
+//        $this->c_course_setting_model->eliminar($filter);
         /*Elimino c_document*/
-        $this->c_document_model->eliminar($filter);
+//        $this->c_document_model->eliminar($filter);
         /*Elimino access_url_rel_course*/     
-        $this->access_url_rel_course_model->eliminar($filter);        
+//        $this->access_url_rel_course_model->eliminar($filter);        
         /*Elimino course*/     
         $this->course_model->eliminar($filter);
 //        echo json_encode(true);

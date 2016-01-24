@@ -7,6 +7,7 @@ class Modulodetalle_model extends CI_Model
         parent::__construct();
         $this->table_modelodetalle = "ant_modulodetalle";
         $this->table_modelo        = "ant_modulo";
+        $this->table_curso         = "ant_curso";
     }
     
     public function seleccionar($default='',$filter='',$filter_not='',$number_items='',$offset=''){
@@ -24,8 +25,11 @@ class Modulodetalle_model extends CI_Model
         $this->db->select('*',FALSE);
         $this->db->from($this->table_modelodetalle." as c",$number_items,$offset);
         $this->db->join($this->table_modelo.' as d','d.MODULOP_Codigo=c.MODULOP_Codigo','inner');
-        if(isset($filter->modelo) && $filter->modelo!='')                 $this->db->where(array("c.MODULOP_Codigo"=>$filter->modelo));
-        if(isset($filter->modelodetalle) && $filter->modelodetalle!='')   $this->db->where(array("c.MODULODETP_Codigo"=>$filter->modelodetalle));
+        $this->db->join($this->table_curso.' as e','e.PROD_Codigo=c.PROD_Codigo','inner');
+        if(isset($filter->modulo) && $filter->modulo!='')                 $this->db->where(array("c.MODULOP_Codigo"=>$filter->modulo));
+        if(isset($filter->dia) && $filter->dia!='')                       $this->db->where(array("c.MODULODETC_Dia"=>$filter->dia));
+        if(isset($filter->curso) && $filter->curso!='')                   $this->db->where(array("c.PROD_Codigo"=>$filter->curso));
+        if(isset($filter->modulodetalle) && $filter->modulodetalle!='')   $this->db->where(array("c.MODULODETP_Codigo"=>$filter->modulodetalle));
         if(isset($filter->order_by) && count($filter->order_by)>0){
             foreach($filter->order_by as $indice=>$value){
                 $this->db->order_by($indice,$value);
@@ -49,19 +53,19 @@ class Modulodetalle_model extends CI_Model
     }
 
     public function insertar($data){
-       $this->db->insert($this->table,$data);
+       $this->db->insert($this->table_modelodetalle,$data);
        return $this->db->insert_id();
     }
 
     public function modificar($codigo,$data){
         $this->db->where("MODULODETP_Codigo",$codigo);
-        $this->db->update($this->table,$data);
+        $this->db->update($this->table_modelodetalle,$data);
     }
 
     public function eliminar($filter){
         if(isset($filter->modulo) && $filter->modulo!='')               $this->db->where(array("MODULOP_Codigo"=>$filter->modulo));
         if(isset($filter->modulodetalle) && $filter->modulodetalle!='') $this->db->where(array("MODULODETP_Codigo"=>$filter->modulodetalle));
-        $this->db->delete($this->table);           
+        $this->db->delete($this->table_modelodetalle);           
     }
 }
 ?>

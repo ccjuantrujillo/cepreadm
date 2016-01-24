@@ -13,6 +13,7 @@ class Course_model extends CI_Model{
         $this->table_aula       = "ant_aula";
         $this->table_tipoestudiociclo = "ant_tipoestudiociclo";
         $this->table_tipoestudio = "ant_tipoestudio";
+        $this->table_modulo      = "ant_modulo";
     }
     
     public function seleccionar($default='',$filter="",$filter_not='',$number_items='',$offset=''){   
@@ -35,6 +36,7 @@ class Course_model extends CI_Model{
         $this->db->join($this->table_aula.' as e','e.AULAP_Codigo=d.AULAP_Codigo','inner');
         $this->db->join($this->table_tipoestudiociclo.' as f','f.TIPCICLOP_Codigo=d.TIPCICLOP_Codigo','inner');
         $this->db->join($this->table_tipoestudio.' as g','g.TIPP_Codigo=f.TIPP_Codigo','inner');
+        $this->db->join($this->table_modulo.' as h','h.MODULOP_Codigo=d.MODULOP_Codigo','inner');
         if(isset($filter->course))    $this->db->where(array("a.id"=>$filter->course));
         if(isset($filter->curso))    $this->db->where(array("c.PROD_Codigo"=>$filter->curso));
         if(isset($filter->apertura))  $this->db->where(array("a.APERTUP_Codigo"=>$filter->apertura));

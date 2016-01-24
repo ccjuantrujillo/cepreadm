@@ -24,6 +24,7 @@
             <td width="30">Tipo Estudio</td>
             <td width="20">Codigo</td>
             <td width="90">Titulo</td>
+            <td width="90">Modulo</td>
           </tr>
           <?php
           if(count($lista)>0){
@@ -44,6 +45,7 @@
                 <td align="center"><?php echo $value->tipoestudio;?></td>
                 <td align="center"><?php echo $value->code;?></td>
                 <td align="center"><?php echo $value->title;?></td>
+                <td align="center"><?php echo $value->modulo;?></td>
               </tr>  
                <?php 
             }

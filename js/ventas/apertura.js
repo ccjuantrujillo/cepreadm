@@ -65,7 +65,7 @@ jQuery(document).ready(function(){
         window.open(url,"_blank","width=700,height=400,scrollbars=yes,status=yes,resizable=yes,screenx=0,screeny=0");          
     });       
    
-    $("body").on('change',"#ciclo,#local",function(){
+    $("body").on('change',"#ciclo,#local,#tipoestudiociclo,#turno",function(){
        accion      = $("#accion").val();
        codigo      = $("#codigo").val();
        dataString  = $('#frmPersona').serialize();

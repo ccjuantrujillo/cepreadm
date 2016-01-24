@@ -143,6 +143,7 @@ class Course extends CI_Controller
                 $lista[$indice]->codigo = $value->id;
                 $lista[$indice]->aula   = $value->AULAC_Nombre;
                 $lista[$indice]->turno  = $value->TURNOP_Codigo;
+                $lista[$indice]->modulo = $value->MODULOC_Descripcion;
                 $lista[$indice]->estado = $value->APERTUC_FlagEstado;
                 $lista[$indice]->code   = $value->code;
                 $lista[$indice]->title  = $value->title;

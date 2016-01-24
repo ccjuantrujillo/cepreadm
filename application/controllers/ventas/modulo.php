@@ -6,6 +6,7 @@ class Modulo extends CI_Controller {
         parent::__construct(); 
         if(!isset($_SESSION['login'])) die("Sesion terminada. <a href='".  base_url()."'>Registrarse e ingresar.</a> ");           
         $this->load->model(maestros.'turno_model');
+        $this->load->model(maestros.'tipoestudio_model');
         $this->load->model(almacen.'curso_model');
         $this->load->model(ventas.'modulo_model');
         $this->load->model(ventas.'modulodetalle_model');
@@ -25,7 +26,7 @@ class Modulo extends CI_Controller {
         $filter->order_by = array("m.MENU_Orden"=>"asc");
         $menu       = get_menu($filter);             
         $filter     = new stdClass();
-        $filter->order_by = array("d.TURNOC_Descripcion"=>"asc","c.MODULOC_Descripcion"=>"asc");
+        $filter->order_by = array("e.TIPC_Nombre"=>"asc","d.TURNOC_Descripcion"=>"asc","c.MODULOC_Descripcion"=>"asc");
         $filter_not = new stdClass(); 
         $registros = count($this->modulo_model->listar($filter,$filter_not));
         $modulos   = $this->modulo_model->listar($filter,$filter_not,$this->configuracion['per_page'],$j);
@@ -33,10 +34,11 @@ class Modulo extends CI_Controller {
         $lista     = array();
         if(count($modulos)>0){
             foreach($modulos as $indice => $value){
-                $lista[$indice]           = new stdClass();
-                $lista[$indice]->codigo   = $value->MODULOP_Codigo;
-                $lista[$indice]->turno    = $value->TURNOC_Descripcion;
-                $lista[$indice]->modulo   = $value->MODULOC_Descripcion;
+                $lista[$indice]              = new stdClass();
+                $lista[$indice]->codigo      = $value->MODULOP_Codigo;
+                $lista[$indice]->turno       = $value->TURNOC_Descripcion;
+                $lista[$indice]->tipoestudio = $value->TIPC_Nombre;
+                $lista[$indice]->modulo      = $value->MODULOC_Descripcion;
             }
         }
         $configuracion = $this->configuracion;
@@ -66,18 +68,21 @@ class Modulo extends CI_Controller {
             $lista->turno       = $moduilos->TURNOP_Codigo; 
 	    $lista->descripcion = $moduilos->MODULOC_Descripcion; 
             $lista->codigo      = $moduilos->MODULOP_Codigo;
+            $lista->tipoestudio = $moduilos->TIPP_Codigo;
             $filter             = new stdClass();
             $filter->modulo     = $codigo;
             $lista->modulodetalle = $this->modulodetalle_model->listar($filter);             
         }
         elseif($accion == "n"){ 
-            $lista->turno         = ""; 
+            $lista->turno         = 0; 
 	    $lista->descripcion   = ""; 
             $lista->codigo        = ""; 
+            $lista->tipoestudio   = 0; 
             $lista->modulodetalle = array();
         } 
         $data['titulo']     = $accion=="e"?"Editar Modulo":"Nuevo Modulo"; 
         $data['selturno']   = form_dropdown('turno',$this->turno_model->seleccionar('0'),$lista->turno,"id='turno' class='comboMedio'");
+        $data['seltipoestudio'] = form_dropdown('tipoestudio',$this->tipoestudio_model->seleccionar('0'),$lista->tipoestudio,"id='tipoestudio' class='comboMedio'");
         $data['form_open']  = form_open('',array("name"=>"frmPersona","id"=>"frmPersona"));     
         $data['form_close'] = form_close();         
         $data['lista']	    = $lista;  
@@ -91,15 +96,11 @@ class Modulo extends CI_Controller {
     public function grabar(){
         $accion = $this->input->get_post('accion');
         $codigo = $this->input->get_post('codigo');
-        $course_id = $this->input->get_post('course_id');
         $codigodetalle = $this->input->get_post('codigodetalle');
         $data   = array(
-                        "CICLOP_Codigo"    => $this->input->post('ciclo'),
-			"PROP_Codigo"      => $this->input->post('profesor'),
-                        "ASIGC_Fecha"      => date_sql_ret($this->input->post('fecha')),
-                        "ASIGC_FlagEstado" => $this->input->post('estado'),
-                        "ASIGC_Grupo"      => $this->input->post('grupo'),
-                        "course_id"        => $this->input->post('course_id')
+                        "TURNOP_Codigo"       => $this->input->post('turno'),
+                        "TIPP_Codigo"         => $this->input->post('tipoestudio'),
+                        "MODULOC_Descripcion" => $this->input->post('descripcion')
                        );
         $resultado = false;
         if($accion == "n"){
@@ -112,22 +113,24 @@ class Modulo extends CI_Controller {
         }          
         /*Grabar detalle*/
         $dia   = $this->input->get_post('dia');
+        $curso = $this->input->get_post('curso');
         $desde = $this->input->get_post('desde');
         $hasta = $this->input->get_post('hasta');
         if(count($codigodetalle)>0 && is_array($codigodetalle)){
             foreach($codigodetalle as $item=>$value){
                 if($dia[$item]!=""){
                     $data = array(
-                                "ASIGP_Codigo"   => $codigo,                        
-                                "ASIGDETC_Dia"   => $dia[$item],
-                                "ASIGDETC_Desde" => $desde[$item],
-                                "ASIGDETC_Hasta" => $hasta[$item]
+                                "MODULOP_Codigo"   => $codigo, 
+                                "PROD_Codigo"      => $curso[$item],
+                                "MODULODETC_Dia"   => $dia[$item],
+                                "MODULODETC_Desde" => $desde[$item],
+                                "MODULODETC_Hasta" => $hasta[$item]
                             );
                     if($codigodetalle[$item]==""){//Insertar
-                        $this->asignaciondetalle_model->insertar($data); 
+                        $this->modulodetalle_model->insertar($data); 
                     }
                     else{//Editar
-                        $this->asignaciondetalle_model->modificar($codigodetalle[$item],$data); 
+                        $this->modulodetalle_model->modificar($codigodetalle[$item],$data); 
                     }                    
                 }
             }
@@ -154,8 +157,8 @@ class Modulo extends CI_Controller {
     public function eliminardetalle(){
         $codigodetalle = $this->input->post('codigodetalle');
         $filter = new stdClass();
-        $filter->asignaciondetalle = $codigodetalle;
-        $this->asignaciondetalle_model->eliminar($filter);
+        $filter->modulodetalle = $codigodetalle;
+        $this->modulodetalle_model->eliminar($filter);
         echo json_encode(true);
     }    
     
@@ -265,10 +268,18 @@ class Modulo extends CI_Controller {
     public function obtenerdetalle(){
         $obj    = $this->input->post('objeto');
         $filter = json_decode($obj);
-        $aulas  = $this->asignaciondetalle_model->obtener($filter);
-        $resultado = json_encode($aulas);       
+        $modulos  = $this->modulodetalle_model->obtener($filter);
+        $resultado = json_encode($modulos);       
         echo $resultado;        
     }
+    
+    public function obtenerdetalle2(){
+        $obj    = $this->input->post('objeto');
+        $filter = json_decode($obj);
+        $modulos  = $this->modulodetalle_model->listar($filter);
+        $resultado = json_encode($modulos);       
+        echo $resultado;        
+    }    
     
      public function export_excel($type) {
         if($this->session->userdata('data_'.$type)){

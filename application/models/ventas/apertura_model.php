@@ -13,6 +13,7 @@ class Apertura_model extends CI_Model
         $this->table_local        = "ant_local";
         $this->table_ciclo        = "ant_ciclo";
         $this->table_turno        = "ant_turno";
+        $this->table_modulo       = "ant_modulo";
     }
     
     public function seleccionar($default='',$filter='',$filter_not='',$number_items='',$offset=''){
@@ -35,8 +36,10 @@ class Apertura_model extends CI_Model
         $this->db->join($this->table_aula.' as f','f.AULAP_Codigo=c.AULAP_Codigo','inner');
         $this->db->join($this->table_local.' as g','g.LOCP_Codigo=f.LOCP_Codigo','inner');
         $this->db->join($this->table_turno.' as i','i.TURNOP_Codigo=c.TURNOP_Codigo','inner');
+        $this->db->join($this->table_modulo.' as j','j.MODULOP_Codigo=c.MODULOP_Codigo','inner');
         if(isset($filter->ciclo))             $this->db->where(array("d.CICLOP_Codigo"=>$filter->ciclo));
         if(isset($filter->apertura))          $this->db->where(array("c.APERTUP_Codigo"=>$filter->apertura));
+        if(isset($filter->turno))             $this->db->where(array("c.TURNOP_Codigo"=>$filter->turno));
         if(isset($filter->aula))              $this->db->where(array("c.AULAP_Codigo"=>$filter->aula));
         if(isset($filter->estado))            $this->db->where(array("c.APERTUC_FlagEstado"=>$filter->estado));
         if(isset($filter->tipoestudiociclo))  $this->db->where(array("c.TIPCICLOP_Codigo"=>$filter->tipoestudiociclo));

@@ -27,11 +27,15 @@
             <td bgcolor="#d5e2f2">Turno:</td>
             <td class="formss" width="30%"><?php echo $selturno;?></td> 
             <td bgcolor="#d5e2f2">Estado:</td>
-            <td class="formss">
-                <?php echo $selestado;?>
-                <input id="agregar" name="ver_cliente" type="button" class="aceptarlog2" alt="Cargar cursos" title="Cargar cursos" value="Cargar cursos"/>
+            <td class="formss"><?php echo $selestado;?></td>      
+          </tr>   
+          <tr>
+            <td bgcolor="#d5e2f2">Modulo:</td>
+            <td class="formss" width="30%"><?php echo $selmodulo;?></td> 
+            <td bgcolor="#d5e2f2">&nbsp;</td>
+            <td class="formss"><input id="agregar" name="ver_cliente" type="button" class="aceptarlog2" alt="Cargar cursos" title="Cargar cursos" value="Cargar cursos"/>
             </td>      
-          </tr>                           
+          </tr>            
         </table>
     </div>
     <div id="detalle" style = "float: left; height: 270px;overflow: auto; width: 100%;background: #e8edff;">

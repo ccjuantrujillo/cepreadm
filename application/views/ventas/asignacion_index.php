@@ -28,8 +28,9 @@
              <td width="50">Codigo</td>
              <td width="60">Ciclo</td>
              <td width="80">Plana</td>
-             <td width="193">Apellidos y Nombres</td>
-             <td width="100">Curso</td>
+             <td width="160">Apellidos y Nombres</td>
+             <td width="120">Curso</td>
+             <td width="90">Modulo</td>
              <td width="86">Fecha</td>
              <!--td width="63">Estado</td-->
              <!--td width="50">Ver</td-->                    
@@ -50,6 +51,7 @@
                  <td><?php echo $value->curso;?></td>
                  <td><?php echo $value->paterno." ".$value->materno." ".$value->nombres;?></td>
                  <td><?php echo $value->title;?></td>
+                 <td><?php echo $value->modulo;?></td>
                  <td><?php echo $value->fecha;?></td>
                  <!--td><img src="< ?php echo img.($flgestado==1?"check.jpg":"uncheck.jpg");?>" height="20px" width="20px"/>< ?php echo $estado;?></td-->
                  <!--td><a href="#" onclick='ver("< ?php echo $value->codigo;?>")'><img src="< ?php echo img;?>ver.png"/></a></td-->
