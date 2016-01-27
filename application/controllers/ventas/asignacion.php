@@ -12,6 +12,7 @@ class Asignacion extends CI_Controller {
         $this->load->model(ventas.'profesor_model');
         $this->load->model(ventas.'actividad_model');
         $this->load->model(ventas.'modulodetalle_model');
+        $this->load->model(ventas.'modulo_model');
         $this->load->model(maestros.'persona_model');    
         $this->load->model(maestros.'turno_model');    
         $this->load->model(seguridad.'permiso_model');          
@@ -429,7 +430,7 @@ class Asignacion extends CI_Controller {
                         }
                     }
                     $CI->pdf->Cell(71,4,"AULAS",1,1,"C",0);
-                    /*Fila de grupos*/
+                    /*Fila de modulos*/
                      $CI->pdf->Cell(45,4,"",0,0,"L",0);
                      for($i=0;$i<count($tiposestudio)*count($turnos);$i++){
                          $CI->pdf->Cell(6,4,"I",1,0,"C",0);
@@ -450,11 +451,16 @@ class Asignacion extends CI_Controller {
                             $turno_id = $val1->TURNOP_Codigo;
                             foreach($tiposestudio as $itm2=>$val2){
                                 $tipoestudio_id = $val2->TIPP_Codigo;
+                                $filter = new stdClass();
+                                $filter->turno = $turno_id;
+                                $filter->tipoestudio = $tipoestudio_id;
+                                $modulos = $this->modulo_model->listar($filter);
                                 for($grupo_id=1;$grupo_id<=2;$grupo_id++){
+                                    $modulo_id = isset($modulos[$grupo_id-1])?$modulos[$grupo_id-1]->MODULOP_Codigo:0;
                                     $filter = new stdClass();
                                     $filter->turno       = $turno_id;
                                     $filter->tipoestudio = $tipoestudio_id;
-                                    $filter->grupo       = $grupo_id;
+                                    $filter->modulo      = $modulo_id;
                                     $filter->profesor    = $value->PROP_Codigo;
                                     $aulas = $this->asignacion_model->rpt_asignacion_aulas($filter);
                                     $nom_aula = isset($aulas->AULAC_Nombre)?$aulas->AULAC_Nombre:"";
@@ -494,17 +500,17 @@ class Asignacion extends CI_Controller {
                 $filter = new stdClass();
                 $filter->turno = $turno;
                 $turnos = $this->turno_model->obtener($filter);                
-                $this->load->library("fpdf/pdf");
-                $CI = & get_instance();
-                $CI->pdf->FPDF('P');
-                $CI->pdf->AliasNbPages();
-                $CI->pdf->AddPage();
-                $CI->pdf->SetTextColor(0,0,0);
-                $CI->pdf->SetFillColor(216,216,216);
-                $CI->pdf->SetFont('Arial','B',11);
-                $CI->pdf->Image('img/uni.gif',10,8,10);
-                $CI->pdf->Cell(0,5,"HORARIO POR AULA",0,1,"C",0);
                 if($ciclo!=0){                    
+                    $this->load->library("fpdf/pdf");
+                    $CI = & get_instance();
+                    $CI->pdf->FPDF('P');
+                    $CI->pdf->AliasNbPages();
+                    $CI->pdf->AddPage();
+                    $CI->pdf->SetTextColor(0,0,0);
+                    $CI->pdf->SetFillColor(216,216,216);
+                    $CI->pdf->SetFont('Arial','B',11);
+                    $CI->pdf->Image('img/uni.gif',10,8,10);
+                    $CI->pdf->Cell(0,5,"HORARIO POR AULA",0,1,"C",0);                    
                     $CI->pdf->Cell(0,10,$ciclos->COMPC_Nombre,0,1,"C",0);
                     if($turno!=0)  $CI->pdf->Cell(0,5,"TURNO:".strtoupper($turnos->TURNOC_Descripcion),0,1,"C",0);
                     $CI->pdf->SetFont('Arial','B',8);  
@@ -567,9 +573,9 @@ class Asignacion extends CI_Controller {
                             }
                             $CI->pdf->Cell(5,4,"",0,1,"C",0);    
                         }
-                    }                    
+                    }
+                    $CI->pdf->Output();
                 }
-                $CI->pdf->Output();
                 break;
         }
     }    

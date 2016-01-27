@@ -25,13 +25,13 @@
         <table>
            <tr class="list1">
              <td width="43">No</td>
-             <td width="50">Codigo</td>
-             <td width="60">Ciclo</td>
+             <td width="45">Codigo</td>
+             <td width="80">Ciclo</td>
              <td width="80">Plana</td>
              <td width="160">Apellidos y Nombres</td>
-             <td width="120">Curso</td>
-             <td width="90">Modulo</td>
-             <td width="86">Fecha</td>
+             <td width="140">Curso</td>
+             <td width="85">Modulo</td>
+             <td width="80">Fecha</td>
              <!--td width="63">Estado</td-->
              <!--td width="50">Ver</td-->                    
              <td width="50">Editar</td>

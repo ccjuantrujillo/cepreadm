@@ -45,8 +45,10 @@ class Modulo_model extends CI_Model
         $listado = $this->listar($filter,$filter_not='',$number_items='',$offset='');
         if(count($listado)>1)
             $resultado = "Existe mas de un resultado";
-        else
+        elseif(count($listado)==1)
             $resultado = (object)$listado[0];
+        else 
+            $resultado = (object)array();
         return $resultado;
     }
 

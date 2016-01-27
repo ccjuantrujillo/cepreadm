@@ -34,7 +34,7 @@ class Tema extends CI_Controller {
         if($_SESSION["acceso"]==2)  $filter->curso = $_SESSION["codcurso"];
         if($_SESSION["acceso"]==3)  $filter->profesor = $_SESSION["codprofesor"];       
         $filter_not = new stdClass(); 
-        $filter->order_by    = array("e.COMPC_Nombre"=>"desc","g.TIPC_Nombre"=>"asc","h.PROD_Nombre"=>"asc","i.PRODATRIB_Nombre"=>"asc");
+        $filter->order_by    = array("e.COMPC_Nombre"=>"desc","g.TIPC_Nombre"=>"asc","h.PROD_Nombre"=>"asc");
         $registros = count($this->tema_model->listar($filter,$filter_not));
         $temas     = $this->tema_model->listar($filter,$filter_not,$this->configuracion['per_page'],$j);
         $item      = 1;
@@ -44,7 +44,7 @@ class Tema extends CI_Controller {
                 $lista[$indice]                 = new stdClass();
                 $lista[$indice]->codigo         = $valor->PRODATRIBDET_Codigo;
                 $lista[$indice]->curso          = $valor->PROD_Nombre;
-                $lista[$indice]->semana         = $valor->PRODATRIB_Nombre;
+                //$lista[$indice]->semana         = $valor->PRODATRIB_Nombre;
                 $lista[$indice]->descripcion    = $valor->TEMAC_Descripcion;
                 $lista[$indice]->ciclo          = $valor->COMPC_Nombre;
                 $lista[$indice]->tipoestudio    = $valor->TIPC_Nombre;
@@ -121,7 +121,7 @@ class Tema extends CI_Controller {
         $codigo = $this->input->get_post('codigo');
         $data   = array(
                         "TEMAC_Descripcion" => ($this->input->post('descripcion')),
-                        "PRODATRIB_Codigo"  => $this->input->post('semana'),
+                        "PRODATRIB_Codigo"  => 0,
                         "TIPCICLOP_Codigo"  => $this->input->post('tipoestudiociclo'),
                         "CURSOCIP_Codigo"   => $this->input->post('cursociclo')
                        );

@@ -92,7 +92,12 @@ jQuery(document).ready(function(){
     
     $("body").on('click',"#ver_profesor",function(){
         url = base_url+"index.php/ventas/profesor/buscar";
-        window.open(url,"_blank","width=700,height=400,scrollbars=yes,status=yes,resizable=yes,screenx=0,screeny=0");          
+        if($("#ciclo").val()!="0"){
+            window.open(url,"_blank","width=700,height=400,scrollbars=yes,status=yes,resizable=yes,screenx=0,screeny=0");              
+        }
+        else{
+            alert("Primero debe ingresar el ciclo");
+        }
     });
     
     $("body").on('click',"#ver_cursos",function(){

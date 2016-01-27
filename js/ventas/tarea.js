@@ -93,12 +93,12 @@ jQuery(document).ready(function(){
     
     $("body").on('click',"#grabar",function(){
         url        = base_url+"index.php/ventas/tarea/grabar";
-        clave      = $("#clave").val();
+        profesor   = $("#profesor").val();
         $('#profesor').removeAttr('disabled');
         $('#ciclo').removeAttr('disabled');
         $('#tipotarea').removeAttr('disabled');
         dataString = $('#frmPersona').serialize();
-        if(clave != ""){
+        if(profesor != "0"){
             $.post(url,dataString,function(data){
                 if(data=="true"){
                     alert('Operacion realizada con exito');    
@@ -110,7 +110,7 @@ jQuery(document).ready(function(){
             });            
         }
         else{
-            alert("Debe escribir una clave");
+            alert("Debe ingresar un responsable");
         }
     }); 
     
@@ -245,7 +245,7 @@ function selectTema(n,tipoestudio,valor){
             opt       = document.createElement('option');
             opt.value = value.PRODATRIBDET_Codigo;
             if(valor==value.PRODATRIBDET_Codigo){opt.selected=true;}
-            texto     = value.PRODATRIB_Nombre +" - "+ value.TEMAC_Descripcion;
+            texto     = value.TEMAC_Descripcion;
             opt.appendChild(document.createTextNode(texto));
             document.getElementById(b).appendChild(opt);
         });

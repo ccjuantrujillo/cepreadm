@@ -26,10 +26,11 @@
         <table>
           <tr class="list1">
             <td width="30">No</td>
+            <td width="30">Codigo</td>
             <td width="95">Ciclo</td>
             <td width="86">Tipo de estudio</td>
             <td width="86">Curso</td>
-            <td width="86">Semana</td>
+<!--            <td width="86">Semana</td>-->
             <td width="193">Descripcion de tema</td>
             <td width="50">Editar</td>
             <td width="50">Eliminar</td>
@@ -41,10 +42,11 @@
                ?>
               <tr class="<?php echo $clase;?>">
                 <td><?php echo ++$j;?></td>
+                <td align="center"><?php echo $value->codigo;?></td>
                 <td align="left"><?php echo $value->ciclo;?></td>
                 <td align="left"><?php echo $value->tipoestudio;?></td>
                 <td align="left"><?php echo $value->curso;?></td>
-                <td align="left"><?php echo $value->semana;?></td>
+<!--                <td align="left">< ?php echo $value->semana;?></td>-->
                 <td align="left"><?php echo $value->descripcion;?></td>
                 <td><a href="#" onclick='editar("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>editar.jpg"/></a></td>
                 <td><a href="#" onclick='eliminar("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>eliminar.jpg"/></a></td>

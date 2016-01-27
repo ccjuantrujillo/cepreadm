@@ -74,5 +74,15 @@ class Actaprofesor extends CI_Controller {
             echo json_encode($resultado);
         }
     }
+    
+    public function eliminar(){
+        $codigo = $this->input->post('codigo');
+        $resultado = false;
+        $filter = new stdClass();
+        $filter->actaprofesor = $codigo;
+        $this->actaprofesor_model->eliminar($filter);
+        $resultado = true;
+        echo json_encode($resultado);
+    }    
 }
 ?>

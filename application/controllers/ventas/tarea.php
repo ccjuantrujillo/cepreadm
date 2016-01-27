@@ -463,4 +463,32 @@ class Tarea extends CI_Controller {
         $data["titulo"]  = "Reporte de seguimiento de tareas por profesor";        
         $this->load->view(ventas."rpt_seguimiento_tareas",$data);
     }
+    
+    public function rpt_problemas_seminarios(){
+        $curso    = $this->input->get_post('curso_rpt');
+        $ciclo    = $this->input->get_post('ciclo_rpt');
+        $profesor = $this->input->get_post('profesor');
+        $desde    = $this->input->get_post('desde');
+        $hasta    = $this->input->get_post('hasta');         
+        $filter           = new stdClass();
+        $filter->rol      = $this->session->userdata('rolusu');		
+        $filter->order_by = array("m.MENU_Orden"=>"asc");
+        $menu       = get_menu($filter);           
+        $filter       = new stdClass();
+        $data['selprofesor'] = form_dropdown('profesor',$this->profesor_model->seleccionar('0',$filter),0,"id='profesor' class='comboGrande'");      
+        $filter       = new stdClass();
+        $filter->order_by=array("p.PROD_Nombre"=>"asc");
+        $data['selcurso']    = form_dropdown('curso_rpt',$this->curso_model->seleccionar('0',$filter),0,"id='curso_rpt' class='comboGrande'");      
+        $filter       = new stdClass();
+        $data['selciclo']   = form_dropdown('ciclo_rpt',$this->ciclo_model->seleccionar('0',$filter),$ciclo,"id='ciclo_rpt' class='comboMedio'");        
+        $data["desde"] = $desde;
+        $data["hasta"] = $hasta;
+        $data["menu"]  = $menu;
+        $data["form_open"] = form_open("",array("name"=>"frmReporte","id"=>"frmReporte","method"=>"post"));
+        $data["form_close"] = form_close();
+        $data["fila"]  = "";
+        $data['header']  = get_header();
+        $data["titulo"]  = "Reporte de problemas para seminario";        
+        $this->load->view(ventas."rpt_problemas_seminarios",$data);
+    }    
 }

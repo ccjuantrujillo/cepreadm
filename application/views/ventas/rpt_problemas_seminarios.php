@@ -11,10 +11,10 @@
     <script type="text/javascript" src="<?php echo js;?>jquery-ui.min.js"></script>    
     <script type="text/javascript" src="<?php echo js;?>jquery.simplemodal.js"></script>     
     <script type="text/javascript" src="<?php echo js;?>constants.js"></script>     
-    <script type="text/javascript" src="<?php echo js;?>ventas/asignacion.js"></script>	
+    <script type="text/javascript" src="<?php echo js;?>ventas/tarea.js"></script>	
 </head>
 <body>
-<div class="contenido"> 
+<div class="contenido" > 
     <div class="header"><?php echo $header;?></div>
     <div class="menu"><ul id="nav"><?php echo $menu;?></ul></div>
     <div class="titulo">
@@ -24,15 +24,15 @@
                 <div>
                     <label>Ciclo:</label>
                     <?php echo $selciclo;?>
-                    <label>Turno:</label>
-                    <?php echo $selturno;?>                      
                     <label>Curso:</label>
                     <?php echo $selcurso;?>
+                    <label>Profesor:</label>
+                    <?php echo $selprofesor;?>
                 </div>
             <?php echo $form_close;?>
 	</div>         
 	<div class="case_botones">       
-            <ul class="lista_botones"><li id="pdf_horario">Ver Pdf</li></ul>
+            <ul class="lista_botones"><li id="pdf">Ver Pdf</li></ul>
 	</div> 	          
     </div>         
     <iframe width="100%" height="500" id="framereporte" name="framereporte" frameborder="1"></iframe>

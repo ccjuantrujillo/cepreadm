@@ -26,13 +26,14 @@
             <td width="30">H.Ingreso</td>
             <td width="30">H.Salida</td>
             <td width="80">Justificacion</td>
+            <td width="30">Accion</td>
           </tr>
           <?php
           if(count($lista)>0){
             foreach($lista as $item => $value){
                 $clase = ($item%2)==0?"list_a":"list_b";
                ?>
-            <tr class="<?php echo $clase;?>">
+            <tr class="<?php echo $clase;?>" id="<?php echo $value->codigo;?>">
                 <td>
                     <?php echo $item+1;?>
                     <input type="hidden" value="<?php echo $value->codigo;?>" id="codigo[<?php echo $item;?>]" name="codigo[<?php echo $item;?>]" class="cajaReducida">
@@ -43,13 +44,14 @@
                 <td><input type="time" value="<?php echo $value->hingreso;?>" id="hingreso[<?php echo $item;?>]" name="hingreso[<?php echo $item;?>]" class="cajaReducida"></td>
                 <td><input type="time" value="<?php echo $value->hsalida;?>" id="hsalida[<?php echo $item;?>]" name="hsalida[<?php echo $item;?>]" class="cajaReducida"></td>
                 <td><input type="text" value="<?php echo $value->observacion;?>" id="observacion[<?php echo $item;?>]" name="observacion[<?php echo $item;?>]" class="cajaGrande"></td>
+                <td align="center"><a href="#" class="eliminar">Eliminar</a></td>
               </tr>  
                <?php 
             }
           }
           else{
               ?>
-            <tr class="list_a"><td colspan='6'>::NO EXISTEN REGISTROS::</td></tr>
+<!--            <tr class="list_a"><td colspan='6'>::NO EXISTEN REGISTROS::</td></tr>-->
               <?php
           }
           ?>

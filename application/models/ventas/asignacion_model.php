@@ -70,13 +70,13 @@ class Asignacion_model extends CI_Model
         $this->db->join($this->table_apertura.' as k','k.APERTUP_Codigo=j.APERTUP_Codigo','inner');
         $this->db->join($this->table_aula.' as l','l.AULAP_Codigo=k.AULAP_Codigo','inner');
         $this->db->join($this->table_tipoestudiociclo.' as m','m.TIPCICLOP_Codigo=k.TIPCICLOP_Codigo','inner');
-        if(isset($filter->ciclo) && $filter->ciclo!='')            $this->db->where(array("c.CICLOP_Codigo"=>$filter->ciclo));
-        if(isset($filter->curso) && $filter->curso!='')            $this->db->where(array("d.PROD_Codigo"=>$filter->curso));
-        if(isset($filter->asignacion) && $filter->asignacion!='')  $this->db->where(array("c.ASIGP_Codigo"=>$filter->asignacion));
-        if(isset($filter->profesor) && $filter->profesor!='')      $this->db->where(array("c.PROP_Codigo"=>$filter->profesor));  
-        if(isset($filter->tipoestudio) && $filter->tipoestudio!='')    $this->db->where(array("m.TIPP_Codigo"=>$filter->tipoestudio));  
-        if(isset($filter->grupo) && $filter->grupo!='')                $this->db->where(array("c.ASIGC_Grupo"=>$filter->grupo));  
-        if(isset($filter->turno) && $filter->turno!='')                $this->db->where(array("k.TURNOP_Codigo"=>$filter->turno));  
+        if(isset($filter->ciclo) && $filter->ciclo!='')              $this->db->where(array("c.CICLOP_Codigo"=>$filter->ciclo));
+        if(isset($filter->curso) && $filter->curso!='')              $this->db->where(array("d.PROD_Codigo"=>$filter->curso));
+        if(isset($filter->asignacion) && $filter->asignacion!='')    $this->db->where(array("c.ASIGP_Codigo"=>$filter->asignacion));
+        if(isset($filter->profesor) && $filter->profesor!='')        $this->db->where(array("c.PROP_Codigo"=>$filter->profesor));  
+        if(isset($filter->tipoestudio) && $filter->tipoestudio!='')  $this->db->where(array("m.TIPP_Codigo"=>$filter->tipoestudio));  
+        if(isset($filter->modulo) && $filter->modulo!='')            $this->db->where(array("k.MODULOP_Codigo"=>$filter->modulo));  
+        if(isset($filter->turno) && $filter->turno!='')              $this->db->where(array("k.TURNOP_Codigo"=>$filter->turno));  
         if(isset($filter_not->persona) && $filter_not->persona!=''){
             if(is_array($filter_not->persona) && count($filter_not->persona)>0){
                 $this->db->where_not_in('c.ASIGP_Codigo',$filter_not->persona);

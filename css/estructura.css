@@ -150,7 +150,7 @@ p#bot{padding-bottom: 5px;}
 .cajaReducida{background-color:#fff;font:8pt helvetica;color:#000;width:60px;border-color:#696969;border-style:solid;border-width:1px;height:17px;border-radius:5px;box-shadow: 2px 2px 3px 1px rgba(0,0,0,.8);line-height: 20px;}
 .cajaMinima{background-color:#fff;font:8pt helvetica;color:#000;width:80px;border-color:#696969;border-style:solid;border-width:1px;height:17px;border-radius:5px;box-shadow: 2px 2px 3px 1px rgba(0,0,0,.8);line-height: 20px;}
 .cajaMedia{background-color:#fff;font:8pt helvetica;color:#000;width:130px;border-color:#696969;border-style:solid;border-width:1px;height:17px;border-radius:5px;box-shadow: 2px 2px 3px 1px rgba(0,0,0,.8);line-height: 20px;}
-.cajaGrande{background-color:#fff;font:8pt helvetica;color:#000;width:180px;border-color:#696969;border-style:solid;border-width:1px;height:17px;border-radius:5px;box-shadow: 2px 2px 3px 1px rgba(0,0,0,.8);line-height: 20px; }
+.cajaGrande{background-color:#fff;font:8pt helvetica;color:#000;width:175px;border-color:#696969;border-style:solid;border-width:1px;height:17px;border-radius:5px;box-shadow: 2px 2px 3px 1px rgba(0,0,0,.8);line-height: 20px; }
 .cajaSuperGrande{background-color:#fff;font:8pt helvetica;color:#000;width:300px;border-color:#696969;border-style:solid;border-width:1px;height:17px;border-radius:5px;box-shadow: 2px 2px 3px 1px rgba(0,0,0,.8);line-height: 20px;}
 
 .comboMedio{background-color:#fff;font:8pt helvetica;color:#000;width:130px;border-color:#696969;border-style:solid;border-width:1px;height:15pt;border-radius:5px;box-shadow: 2px 2px 3px 1px rgba(0,0,0,.8);line-height: 20px; }

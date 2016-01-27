@@ -43,7 +43,7 @@ class Usuario extends Persona{
                 $lista[$indice]->materno  = $value->PERSC_ApellidoMaterno;
                 $lista[$indice]->estado   = $value->USUA_FlagEstado;
                 $lista[$indice]->fechareg = $value->USUA_FechaRegistro;
-                $lista[$indice]->curso    = $profesor->PROD_Nombre;
+                $lista[$indice]->curso    = isset($profesor->PROD_Nombre)?$profesor->PROD_Nombre:"";
             }
         }
         $configuracion = $this->configuracion;

@@ -12,7 +12,8 @@ class Aula extends CI_Controller
         $this->load->model('maestros/local_model');
         $this->load->model('seguridad/permiso_model');
         $this->load->helper('menu');
-        $this->somevar['compania'] = $this->session->userdata('compania');
+        $this->configuracion = $this->config->item('conf_pagina');
+        $this->login   = $this->session->userdata('login');
     }
     
     public function index(){

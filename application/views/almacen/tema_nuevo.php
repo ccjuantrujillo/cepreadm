@@ -24,10 +24,10 @@
               <td width="50%" bgcolor="#d5e2f2">Tipo de estudio</td>
               <td class="formss"><?php echo $seltipoestudio;?> </td>
             </tr>              
-            <tr>
+<!--            <tr>
               <td bgcolor="#d5e2f2">Semana</td>
-              <td class="formss"><?php echo $selsemana;?> </td>
-            </tr>           
+              <td class="formss">< ?php echo $selsemana;?> </td>
+            </tr>           -->
             <tr>
               <td bgcolor="#d5e2f2">Descripcion</td>
               <td class="formss"><textarea name="descripcion" id="descripcion" cols="1" rows="3" style="width:250px" class="textareaGrande"><?php echo $lista->descripcion;?></textarea></td>

@@ -34,7 +34,7 @@ class Tema_model extends CI_Model{
         $this->db->join($this->table_tipoestudiociclo.' as f','f.TIPCICLOP_Codigo=c.TIPCICLOP_Codigo','inner');           
         $this->db->join($this->table_tipoestudio.' as g','g.TIPP_Codigo=f.TIPP_Codigo','inner');         
         $this->db->join($this->table_curso.' as h','h.PROD_Codigo=d.PROD_Codigo','inner'); 
-        $this->db->join($this->table_semana.' as i','i.PRODATRIB_Codigo=c.PRODATRIB_Codigo','inner'); 
+        //$this->db->join($this->table_semana.' as i','i.PRODATRIB_Codigo=c.PRODATRIB_Codigo','inner'); 
         if(isset($filter->curso) && $filter->curso!='')   $this->db->where(array("h.PROD_Codigo"=>$filter->curso));
         if(isset($filter->ciclo) && $filter->ciclo!='')   $this->db->where(array("e.CICLOP_Codigo"=>$filter->ciclo));
         if(isset($filter->semana) && $filter->semana!='') $this->db->where(array("i.PRODATRIB_Codigo"=>$filter->semana));	

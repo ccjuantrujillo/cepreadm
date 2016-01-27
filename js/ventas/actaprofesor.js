@@ -51,24 +51,35 @@ jQuery(document).ready(function(){
         });            
     }); 
     
+//    $("body").on("click",".eliminar",function(){
+//       if(confirm('Esta seguro desea eliminar este registro?')){
+//            coddetalle = $(this).parent().parent().attr("id");
+//            dataString = "codigo="+coddetalle;
+//            url = base_url+"index.php/ventas/acta/eliminar";
+//            $.post(url,dataString,function(data){
+//                if(data=="true"){
+//                    //alert('Operacion realizada con exito');  
+//                    url = base_url+"index.php/ventas/acta/listar";
+//                    location.href = url;
+//                }
+//                else if(data=="false"){
+//                    alert("No se puede eliminar el registro");
+//                }
+//            });           
+//       }        
+//    });           
+    
     $("body").on("click",".eliminar",function(){
        if(confirm('Esta seguro desea eliminar este registro?')){
             coddetalle = $(this).parent().parent().attr("id");
+            $(this).parent().parent().remove();
             dataString = "codigo="+coddetalle;
-            url = base_url+"index.php/ventas/acta/eliminar";
+            url = base_url+"index.php/ventas/actaprofesor/eliminar";
             $.post(url,dataString,function(data){
-                if(data=="true"){
-                    //alert('Operacion realizada con exito');  
-                    url = base_url+"index.php/ventas/acta/listar";
-                    location.href = url;
-                }
-                else if(data=="false"){
-                    alert("No se puede eliminar el registro");
-                }
-            });           
+               
+            });
        }        
-    });           
-    
+    });      
    $("body").on("click",".editar",function(){
         codigo = $(this).parent().parent().attr("id");
         dataString = "";    
