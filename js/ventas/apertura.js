@@ -48,7 +48,7 @@ jQuery(document).ready(function(){
                     fila  += "<td align='center'><input type='hidden' id='course_id["+n+"]' name='course_id["+n+"]' value=''><input type='hidden' id='cursociclo["+n+"]' name='cursociclo["+n+"]' value='"+value.CURSOCIP_Codigo+"'><input type='text' class='cajaMedia' name='curso["+n+"]' id='curso["+n+"]' value='"+txtcurso+"' readonly='readonly'></td>";        
                     fila  += "<td align='center'><input type='text' class='cajaMedia' name='code["+n+"]' id='code["+n+"]' value='"+codigo.toUpperCase()+"' readonly='readonly'></td>";        
                     fila  += "<td align='center'><input type='text' class='cajaGrande' name='title["+n+"]' id='title["+n+"]' value='"+txtcurso+" "+textaula+" "+texttipoestudiociclo+"-"+textturno+"'></td>";
-                    fila  += "<td align='center'><input type='text' maxlength='6' class='cajaReducida' name='disk_quota["+n+"]' id='disk_quota["+n+"]' value='95.4'></td>";        
+                    //fila  += "<td align='center'><input type='text' maxlength='6' class='cajaReducida' name='disk_quota["+n+"]' id='disk_quota["+n+"]' value='95.4'></td>";        
                     fila  += "<td align='center'><a href='#' class='editardetalle'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>";
                     fila  += "</tr>";
                     $("#tabla_detalle").append(fila);

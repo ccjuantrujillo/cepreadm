@@ -30,6 +30,7 @@ jQuery(document).ready(function(){
                 fila += "<td><input type='time' value='' id='hingreso["+n+"]' name='hingreso["+n+"]' class='cajaReducida'></td>";
                 fila += "<td><input type='time' value='' id='hsalida["+n+"]' name='hsalida["+n+"]' class='cajaReducida'></td>";
                 fila += "<td><input type='text' value='' id='observacion["+n+"]' name='observacion["+n+"]' class='cajaGrande'></td>";
+                fila += "<td align='center'><a href='#' class='eliminar'>Eliminar</a></td>";
                 fila += "<tr>";  
 				n++;
             });

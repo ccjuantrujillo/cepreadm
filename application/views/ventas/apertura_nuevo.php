@@ -45,7 +45,7 @@
                 <th align="center">Curso</th> 
                 <th align="center">Codigo</th>
                 <th align="center">Titulo</th> 
-                <th align="center">Espacio(MB)</th> 
+<!--                <th align="center">Espacio(MB)</th> -->
                 <th align="center">Acciones</th>
             </tr>
             <?php
@@ -57,7 +57,7 @@
                         <td align="center"><?php echo $value->PROD_Nombre;?></td> 
                         <td align="center"><?php echo $value->code;?></td>
                         <td align="center"><?php echo $value->title;?></td> 
-                        <td align="center"><?php echo round($value->disk_quota/(1024*1024),1);?></td> 
+<!--                        <td align="center">< ?php echo round($value->disk_quota/(1024*1024),1);?></td> -->
                         <td align="center"><a href='#' class='editardetalle'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>
                     </tr>
                     <?php

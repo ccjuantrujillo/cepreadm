@@ -260,37 +260,41 @@ class Tarea extends CI_Controller {
         //$CI->pdf->Cell(180,5, "Descripcion: ".$tareas->TAREAC_Descripcion ,0,1,"L",0);
         $CI->pdf->Cell(0,5, "DETALLE:" ,0,1,"L",0);
         $CI->pdf->Cell(20,5,"T.ESTUDIO",1,0,"C",0);
-        $CI->pdf->Cell(60,5,"TEMA",1,0,"C",0); 
+        if($tareas->TIPOTAREAP_Codigo!=3){
+            $CI->pdf->Cell(60,5,"TEMA",1,0,"C",0); 
+        }
         $CI->pdf->Cell(40,5,"PROFESOR",1,0,"C",0); 
         $CI->pdf->Cell(20,5,"CANTIDAD",1,0,"C",0);         
-		$CI->pdf->Cell(20,5,"F.ENTREGA",1,0,"C",0);     
-		$CI->pdf->Cell(20,5,"SITUACION",1,1,"C",0);     
+        $CI->pdf->Cell(20,5,"F.ENTREGA",1,0,"C",0);     
+        $CI->pdf->Cell(20,5,"SITUACION",1,1,"C",0);     
         foreach($tareadetalle as $item => $value){
             $CI->pdf->Cell(20,5,$value->TIPC_Nombre,1,0,"L",0);
-            $CI->pdf->Cell(60,5,$value->TEMAC_Descripcion,1,0,"L",0); 
+            if($tareas->TIPOTAREAP_Codigo!=3){
+                $CI->pdf->Cell(60,5,$value->TEMAC_Descripcion,1,0,"L",0); 
+            }
             $CI->pdf->Cell(40,5,$value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno.", ".$value->PERSC_Nombre,1,0,"L",0); 
             $CI->pdf->Cell(20,5,$value->TAREADETC_Cantidad,1,0,"R",0); 
-			$CI->pdf->Cell(20,5,date_sql($value->TAREADETC_FechaEntrega),1,0,"C",0); 
-			switch ($value->TAREADETC_Situacion){
-				case 1:
-					$situacion = "Pendiente";
-					$CI->pdf->SetTextColor(216,0,0);
-					break;
-				case 2:
-					$CI->pdf->SetTextColor(0,216,0);
-					$situacion = "Ok";
-					break;                     
-				case 3:
-					$CI->pdf->SetTextColor(219,200,0);
-					$situacion = "Leve";
-					break;    
-				case 4:
-					$CI->pdf->SetTextColor(205,117,020);
-					$situacion = "Retraso";
-					break;  
-			}			
-			$CI->pdf->Cell(20,5,$situacion,1,1,"C",0); 
-			$CI->pdf->SetTextColor(0,0,0);
+            $CI->pdf->Cell(20,5,date_sql($value->TAREADETC_FechaEntrega),1,0,"C",0); 
+            switch ($value->TAREADETC_Situacion){
+                    case 1:
+                            $situacion = "Pendiente";
+                            $CI->pdf->SetTextColor(216,0,0);
+                            break;
+                    case 2:
+                            $CI->pdf->SetTextColor(0,216,0);
+                            $situacion = "Ok";
+                            break;                     
+                    case 3:
+                            $CI->pdf->SetTextColor(219,200,0);
+                            $situacion = "Leve";
+                            break;    
+                    case 4:
+                            $CI->pdf->SetTextColor(205,117,020);
+                            $situacion = "Retraso";
+                            break;  
+            }			
+            $CI->pdf->Cell(20,5,$situacion,1,1,"C",0); 
+            $CI->pdf->SetTextColor(0,0,0);
         }
         $CI->pdf->SetTextColor(0,0,0);
         $CI->pdf->SetFillColor(255,255,255);
@@ -433,6 +437,83 @@ class Tarea extends CI_Controller {
                      $CI->pdf->Output();
                 }
                 break;
+            case 'rpt_problemas_seminarios':
+                $curso     = $this->input->get_post('curso_rpt');
+                $profesor  = $this->input->get_post('profesor');
+                $desde     = $this->input->get_post('desde');
+                $hasta     = $this->input->get_post('hasta');                
+                $ciclo     = $this->input->get_post('ciclo_rpt'); 
+                $tipotarea = $this->input->get_post('tipotarea'); 
+                if($ciclo!=0 && $curso!=0){
+                     /*Obtengo ciclo*/
+                     $filter = new stdClass();
+                     $filter->ciclo = $ciclo;
+                     $ciclos = $this->ciclo_model->obtener($filter);
+                     /*Obtengo el curso*/
+                     $filter = new stdClass();
+                     $filter->curso = $curso;
+                     $cursos = $this->curso_model->obtener($filter);
+                     /*Obtengo profesores*/
+                     $filter = new stdClass();
+                     if($curso!=0) $filter->curso = $curso;
+                     if($profesor!=0) $filter->profesor = $profesor;
+                     if($tipotarea!=0) $filter->tipotarea = $tipotarea;
+                     $filter->order_by= array("d.PROP_Codigo"=>"asc","e.PROD_Codigo"=>"asc");
+                     $profesores = $this->tareadetalle_model->listar($filter);                                     
+                     /*Obtengo tipos de estudio para el ciclo*/
+                     $filter = new stdClass();
+                     $filter->ciclo = $ciclo;
+                     $tipoestudiociclo = $this->tipoestudiociclo_model->listar($filter);
+                     $this->load->library("fpdf/pdf");
+                     $CI = & get_instance();
+                     $CI->pdf->FPDF('P');
+                     $CI->pdf->AliasNbPages();
+                     $CI->pdf->AddPage();
+                     $CI->pdf->SetTextColor(0,0,0);
+                     $CI->pdf->SetFillColor(216,216,216);
+                     $CI->pdf->SetFont('Arial','B',11);
+                     $CI->pdf->Image('img/uni.gif',10,8,10);
+                     $CI->pdf->Cell(0,5,"PROBLEMAS PARA SEMINARIO",0,1,"C",0);
+                     $CI->pdf->Cell(0,7,"CICLO: ".$ciclos->COMPC_Nombre,0,1,"C",0);
+                     $CI->pdf->Cell(0,5,"CURSO: ".strtoupper($cursos->PROD_Nombre),0,1,"C",0);
+                     $CI->pdf->SetFont('Arial','B',7); 
+                     /*Encabezado*/
+                     $CI->pdf->Cell(7,5,"No",1,0,"C",0); 
+                     $CI->pdf->Cell(40,5,"Tema del problema a elaborar",1,0,"C",0); 
+                     foreach($tipoestudiociclo as $item=>$value){
+                         $CI->pdf->Cell(20,5,strtoupper($value->TIPC_Nombre),1,0,"C",0);
+                     }
+                     $CI->pdf->Cell(0,5,"",0,1,"C",0); 
+                     /*Detalle*/
+                     $id_profesor = "";
+                     if(count($profesores)>0){
+                        foreach($profesores as $item=>$value){
+                           if($id_profesor!=$value->PROP_Codigo){
+                              $CI->pdf->Cell(7,5,"",1,0,"C",0); 
+                              $CI->pdf->Cell(40,5,$value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno." ".$value->PERSC_Nombre,1,0,"L",0);  
+                              $CI->pdf->Cell(140,5,"",1,1,"C",0); 
+                           }
+                           $CI->pdf->Cell(7,5,$item+1,1,0,"C",0);    
+                           $CI->pdf->Cell(40,5,$value->TEMAC_Descripcion,1,0,"L",0);   
+                           foreach($tipoestudiociclo as $item2=>$value2){
+                               $id_tipoestudiociclo = $value2->TIPCICLOP_Codigo;
+                               if($id_tipoestudiociclo==$value->TIPCICLOP_Codigo){
+                                   $CI->pdf->Cell(20,5,$value->TAREADETC_Cantidad,1,0,"C",0); 
+                               }
+                               else{
+                                   $CI->pdf->Cell(20,5,"",1,0,"C",0); 
+                               }
+                           }
+                           $CI->pdf->Cell(0,5,"",0,1,"C",0);   
+                           $id_profesor = $value->PROP_Codigo;
+                        }                        
+                     }
+                     else{
+                         $CI->pdf->Cell(187,5,"::NO EXISTEN REGISTROS::",1,1,"C",0);   
+                     }
+                     $CI->pdf->Output();
+                }
+                break;
         }
     }
     
@@ -465,17 +546,18 @@ class Tarea extends CI_Controller {
     }
     
     public function rpt_problemas_seminarios(){
-        $curso    = $this->input->get_post('curso_rpt');
-        $ciclo    = $this->input->get_post('ciclo_rpt');
-        $profesor = $this->input->get_post('profesor');
-        $desde    = $this->input->get_post('desde');
-        $hasta    = $this->input->get_post('hasta');         
+        $curso     = $this->input->get_post('curso_rpt');
+        $ciclo     = $this->input->get_post('ciclo_rpt');
+        $profesor  = $this->input->get_post('profesor');
+        $desde     = $this->input->get_post('desde');
+        $hasta     = $this->input->get_post('hasta');  
+        $tipotarea = $this->input->get_post('tipotarea');  
         $filter           = new stdClass();
         $filter->rol      = $this->session->userdata('rolusu');		
         $filter->order_by = array("m.MENU_Orden"=>"asc");
         $menu       = get_menu($filter);           
         $filter       = new stdClass();
-        $data['selprofesor'] = form_dropdown('profesor',$this->profesor_model->seleccionar('0',$filter),0,"id='profesor' class='comboGrande'");      
+        $data['seltipotarea']  = form_dropdown('tipotarea',$this->tipotarea_model->seleccionar('0'),$tipotarea,"id='tipotarea' class='comboMedio'"); 
         $filter       = new stdClass();
         $filter->order_by=array("p.PROD_Nombre"=>"asc");
         $data['selcurso']    = form_dropdown('curso_rpt',$this->curso_model->seleccionar('0',$filter),0,"id='curso_rpt' class='comboGrande'");      

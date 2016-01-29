@@ -26,13 +26,13 @@
                     <?php echo $selciclo;?>
                     <label>Curso:</label>
                     <?php echo $selcurso;?>
-                    <label>Profesor:</label>
-                    <?php echo $selprofesor;?>
+                    <label>Tipo:</label>
+                    <?php echo $seltipotarea;?>
                 </div>
             <?php echo $form_close;?>
 	</div>         
 	<div class="case_botones">       
-            <ul class="lista_botones"><li id="pdf">Ver Pdf</li></ul>
+            <ul class="lista_botones"><li id="pdf" class="rpt_problemas_seminarios">Ver Pdf</li></ul>
 	</div> 	          
     </div>         
     <iframe width="100%" height="500" id="framereporte" name="framereporte" frameborder="1"></iframe>

@@ -3,12 +3,19 @@ jQuery(document).ready(function(){
         $("#form_busqueda").submit();
     });
     
-   $("body").on("click","#pdf",function(){
+   $("body").on("click",".rpt_seguimiento_tareas",function(){
         url = base_url+"index.php/ventas/tarea/export_pdf/rpt_seguimiento_tareas";
         $("#frmReporte").attr("action",url);
         $("#frmReporte").attr("target","framereporte");
         $("#frmReporte").submit();
     });    
+    
+   $("body").on("click",".rpt_problemas_seminarios",function(){
+        url = base_url+"index.php/ventas/tarea/export_pdf/rpt_problemas_seminarios";
+        $("#frmReporte").attr("action",url);
+        $("#frmReporte").attr("target","framereporte");
+        $("#frmReporte").submit();
+    });        
     
     $("body").on("click","#nuevo",function(){
         dataString = "";
