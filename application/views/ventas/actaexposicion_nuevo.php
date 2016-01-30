@@ -5,40 +5,45 @@
     <meta http-equiv="Content-Language" content="es"> 
     <title><?php echo titulo;?></title>          
     <link rel="stylesheet" href="<?php echo css;?>estructura.css"/>
-    <link rel="stylesheet" href="<?php echo css;?>bootstrap.min.css" type="text/css"/>
     <link rel="stylesheet" href="<?php echo css;?>style.css" type="text/css"/>
-    <link rel="stylesheet" href="<?php echo css;?>jquery.fileupload.css" type="text/css"/>
-    <link rel="stylesheet" href="<?php echo css;?>jquery.fileupload-ui.css" type="text/css"/>
     <script type="text/javascript" src="<?php echo js;?>jquery.js"></script>   
     <script type="text/javascript" src="<?php echo js;?>jquery.simplemodal.js"></script>      
     <script type="text/javascript" src="<?php echo js;?>constants.js"></script>     
     <script type="text/javascript" src="<?php echo js;?>ventas/actaexposicion.js"></script>  
-    <script type="text/javascript" src="<?php echo js;?>load-image.all.min.js"></script>
-    <script type="text/javascript" src="<?php echo js;?>canvas-to-blob.min.js"></script>
-    <script type="text/javascript" src="<?php echo js;?>bootstrap.min.js"></script>
-    <script type="text/javascript" src="<?php echo js;?>vendor/jquery.ui.widget.js"></script>
-    <script type="text/javascript" src="<?php echo js;?>jquery/jquery.iframe-transport.js"></script>
-    <script type="text/javascript" src="<?php echo js;?>jquery/jquery.fileupload.js"></script>
-    <script type="text/javascript" src="<?php echo js;?>jquery/jquery.fileupload-process.js"></script>
-    <script type="text/javascript" src="<?php echo js;?>jquery/jquery.fileupload-image.js"></script>
-    <script type="text/javascript" src="<?php echo js;?>jquery/jquery.fileupload-audio.js"></script>
-    <script type="text/javascript" src="<?php echo js;?>jquery/jquery.fileupload-video.js"></script>
-    <script type="text/javascript" src="<?php echo js;?>jquery/jquery.fileupload-validate.js"></script>  
-    <script type="text/javascript" src="<?php echo js;?>ventas/actaexposicion.js"></script>
 </head>
 <body>
-<div class="contenido">  
-    <span class="btn btn-success fileinput-button">
-        <i class="glyphicon glyphicon-plus"></i>
-        <span>Add files...</span>
-        <input id="fileupload" type="file" name="files[]" multiple value="hola">
-    </span>
-    <br>
-    <br>
-    <div id="progress" class="progress">
-        <div class="progress-bar progress-bar-success"></div>
-    </div>
-    <div id="files" class="files"></div>  
-</div>	
+<div class="contenido"> 
+    <?php echo $form_open;?>
+        <ul>
+            <li>
+                <label>Archivo:</label>
+                <input id="fileupload" type="file" name="files[]" multiple value="hola">
+            </li>
+            <li>
+                <label>Profesor:</label>
+                <input id="fileupload" type="file" name="files[]" multiple value="hola">
+            </li>
+            <li>
+                <label>Titulo:</label>
+                <input id="fileupload" type="text" name="tema" value="hola">
+            </li>
+            <li>
+                <label>Descripcion:</label>
+                <input id="fileupload" type="text" name="tema" value="hola">
+            </li>
+            <li>
+                <input type="submit" value="Upload">
+            </li>
+        </ul>
+    <?php echo $form_close;?>        
+    <table width="100%" id="tabla_detalle">
+        <tr>
+            <th width="3%" align="center">No</th>
+            <th width="10%" align="center">Nombre</th>
+            <th width="50%" align="center">Descripcion</th>
+            <th align="center">Acciones</th>
+        </tr>
+    </table>  
+</div>
 </body>
 </html>

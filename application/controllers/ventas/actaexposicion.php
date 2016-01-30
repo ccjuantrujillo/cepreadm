@@ -15,7 +15,6 @@ class Actaexposicion extends CI_Controller {
     } 
     
     public function editar($acta=0,$curso=0){
-        echo $acta."-".$curso;
         $filter     = new stdClass();
         $filter->acta  = $acta;
         $filter->order_by    = array("f.PERSC_ApellidoPaterno"=>"asc","f.PERSC_ApellidoMaterno"=>"asc","f.PERSC_Nombre"=>"asc");

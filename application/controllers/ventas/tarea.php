@@ -444,7 +444,7 @@ class Tarea extends CI_Controller {
                 $hasta     = $this->input->get_post('hasta');                
                 $ciclo     = $this->input->get_post('ciclo_rpt'); 
                 $tipotarea = $this->input->get_post('tipotarea'); 
-                if($ciclo!=0 && $curso!=0){
+                if($ciclo!=0 && $curso!=0 && $tipotarea!=0){
                      /*Obtengo ciclo*/
                      $filter = new stdClass();
                      $filter->ciclo = $ciclo;
@@ -453,6 +453,10 @@ class Tarea extends CI_Controller {
                      $filter = new stdClass();
                      $filter->curso = $curso;
                      $cursos = $this->curso_model->obtener($filter);
+                     /*Obtengo el tipo de tarea*/
+                     $filter = new stdClass();
+                     $filter->tipotarea = $tipotarea;
+                     $tipotareas = $this->tipotarea_model->obtener($filter);
                      /*Obtengo profesores*/
                      $filter = new stdClass();
                      if($curso!=0) $filter->curso = $curso;
@@ -474,8 +478,9 @@ class Tarea extends CI_Controller {
                      $CI->pdf->SetFont('Arial','B',11);
                      $CI->pdf->Image('img/uni.gif',10,8,10);
                      $CI->pdf->Cell(0,5,"PROBLEMAS PARA SEMINARIO",0,1,"C",0);
-                     $CI->pdf->Cell(0,7,"CICLO: ".$ciclos->COMPC_Nombre,0,1,"C",0);
-                     $CI->pdf->Cell(0,5,"CURSO: ".strtoupper($cursos->PROD_Nombre),0,1,"C",0);
+                     $CI->pdf->Cell(0,6,"CICLO: ".$ciclos->COMPC_Nombre,0,1,"C",0);
+                     $CI->pdf->Cell(0,6,"CURSO: ".strtoupper($cursos->PROD_Nombre),0,1,"C",0);
+                     $CI->pdf->Cell(0,5,"TIPO: ".strtoupper($tipotareas->TIPOTAREAC_Nombre),0,1,"C",0);
                      $CI->pdf->SetFont('Arial','B',7); 
                      /*Encabezado*/
                      $CI->pdf->Cell(7,5,"No",1,0,"C",0); 
