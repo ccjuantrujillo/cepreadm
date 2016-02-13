@@ -14,8 +14,8 @@
           <tr>
             <td width="20%" bgcolor="#d5e2f2">Ciclo:</td>
             <td class="formss" width="30%"><?php echo $selciclo;?></td>
-            <td width="20%" bgcolor="#d5e2f2">Tipo de estudio:</td>
-            <td class="formss" width="30%"><?php echo $seltipoe;?></td>                
+            <td width="20%" bgcolor="#d5e2f2">Modulo:</td>
+            <td class="formss" width="30%"><?php echo $selmodulo;?></td>                
           </tr>
           <tr>
             <td width="20%" bgcolor="#d5e2f2">Local:</td>
@@ -30,10 +30,13 @@
             <td class="formss"><?php echo $selestado;?></td>      
           </tr>   
           <tr>
-            <td bgcolor="#d5e2f2">Modulo:</td>
-            <td class="formss" width="30%"><?php echo $selmodulo;?></td> 
+            <td bgcolor="#d5e2f2">Tipo de estudio:</td>
+            <td class="formss" width="30%"><?php echo $seltipoe;?></td> 
             <td bgcolor="#d5e2f2">&nbsp;</td>
-            <td class="formss"><input id="agregar" name="ver_cliente" type="button" class="aceptarlog2" alt="Cargar cursos" title="Cargar cursos" value="Cargar cursos"/>
+            <td class="formss">
+                <?php if($accion=="n"):;?>
+                <input id="agregar" name="ver_cliente" type="button" class="aceptarlog2" alt="Cargar cursos" title="Cargar cursos" value="Cargar cursos"/>
+                <?php endif;?>
             </td>      
           </tr>            
         </table>

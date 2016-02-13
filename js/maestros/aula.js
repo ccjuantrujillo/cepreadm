@@ -65,13 +65,13 @@ function editar(codigo){
 }
 
 function eliminar(codigo){
-    if(confirm('Esta seguro desea eliminar este alumno?')){
+    if(confirm('Esta seguro desea eliminar esta aula?')){
         dataString = "codigo="+codigo;
-        url = base_url+"index.php/seguridad/usuario/eliminar";
+        url = base_url+"index.php/maestros/aula/eliminar";
         $.post(url,dataString,function(data){
 //            if(data=="true"){
-                alert("El alumno se borro correctamente");
-                url = base_url+"index.php/ventas/profesor/listar";
+                alert("El aula se borro correctamente");
+                url = base_url+"index.php/maestros/aula/listar";
                 location.href = url;
 //            }
 //            else{

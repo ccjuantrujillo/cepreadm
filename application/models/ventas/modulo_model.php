@@ -26,7 +26,7 @@ class Modulo_model extends CI_Model
         $this->db->join($this->table_turno.' as d','d.TURNOP_Codigo=c.TURNOP_Codigo','inner');
         $this->db->join($this->table_tipoestudio.' as e','e.TIPP_Codigo=c.TIPP_Codigo','inner');
         if(isset($filter->turno) && $filter->turno!='')    $this->db->where(array("c.TURNOP_Codigo"=>$filter->turno));
-        if(isset($filter->tipoestudio) && $filter->tipoestudio!='')    $this->db->where(array("c.TIPP_Codigo"=>$filter->tipoestudio));
+        if(isset($filter->tipoestudio))    $this->db->where(array("c.TIPP_Codigo"=>$filter->tipoestudio));
         if(isset($filter->modulo) && $filter->modulo!='')              $this->db->where(array("c.MODULOP_Codigo"=>$filter->modulo));         
         if(isset($filter->order_by) && count($filter->order_by)>0){
             foreach($filter->order_by as $indice=>$value){

@@ -102,7 +102,7 @@ class Aula extends CI_Controller
     }
     public function eliminar()
     {
-        $id = $this->input->post('fabricante');
+        $id = $this->input->post('codigo');
         $this->aula_model->eliminar($id);
     }
     public function ver($codigo)

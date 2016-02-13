@@ -136,62 +136,55 @@ class Apertura extends CI_Controller {
         $data['selestado']   = form_dropdown('estado',$arrEstado,$lista->estado,"id='estado' class='comboMedio'");
         $filter = new stdClass();
         $filter->turno       = $lista->turno;
-        $filter->tipoestudio = $lista->tipoestudio;        
+        $filter->tipoestudio = $lista->tipoestudio;      
         $data['selmodulo']   = form_dropdown('modulo',$this->modulo_model->seleccionar("0",$filter),$lista->modulo,"id='modulo' class='comboMedio' ");
         $filter              = new stdClass();
         $filter->ciclo       = $lista->ciclo;
         $data['seltipoe']    = form_dropdown('tipoestudiociclo',$this->tipoestudiociclo_model->seleccionar("0",$filter),$lista->tipoestudiociclo,"id='tipoestudiociclo' class='comboMedio' ".($accion == "e"?"disabled='disabled'":"")."");
-        $data['oculto']      = form_hidden(array("accion"=>$accion,"codigo"=>$codigo));
+        $data['oculto']      = form_hidden(array("accion"=>$accion,"codigo"=>$codigo,"flgCursos"=>""));
         $this->load->view("ventas/apertura_nuevo",$data);
     }
 
     public function grabar(){
         $accion = $this->input->get_post('accion');
         $codigo = $this->input->get_post('codigo');
+        $aula   = $this->input->post('aula');
+        $ciclo  = $this->input->post('ciclo');
+        $turno  = $this->input->post('turno');
+        $course_id = $this->input->get_post('course_id');
         $data   = array(
                         "TIPCICLOP_Codigo"    => $this->input->post('tipoestudiociclo'),
-			"AULAP_Codigo"        => $this->input->post('aula'),
-                        "CICLOP_Codigo"       => $this->input->post('ciclo'),
+			"AULAP_Codigo"        => $aula,
+                        "CICLOP_Codigo"       => $ciclo,
                         "APERTUC_Descripcion" => "",
-                        "TURNOP_Codigo"       => $this->input->post('turno'),
+                        "TURNOP_Codigo"       => $turno,
                         "APERTUC_FlagEstado"  => $this->input->post('estado'),
                         "APERTUC_Fecha"       => date_sql_ret($this->input->post('fecha')),
                         "MODULOP_Codigo"       => $this->input->post('modulo')
                        );
-        $resultado = false;
+        $resultado = 0; 
         if($accion == "n"){
-            $resultado = true;            
-            $codigo = $this->apertura_model->insertar($data); 
+            $filter = new stdClass();
+            $filter->ciclo = $ciclo;
+            $filter->aula  = $aula;
+            $filter->turno = $turno;
+            $aperturas = $this->apertura_model->listar($filter);
+            if(count($aperturas)==0 && count($course_id)>0){
+                $codigo = $this->apertura_model->insertar($data);     
+                $resultado = 1; 
+            }
         }
         elseif($accion == "e"){
-            $resultado = true;            
+            $resultado = 1;            
             $this->apertura_model->modificar($codigo,$data);
         }  
-        $arrVariable = array(
-                "email_alert_manager_on_new_doc","email_alert_on_new_doc_dropbox",
-                "allow_user_edit_agenda","allow_user_edit_announcement",
-                "email_alert_manager_on_new_quiz","allow_user_image_forum",
-                "course_theme","allow_learning_path_theme",
-                "allow_open_chat_window","email_alert_to_teacher_on_new_user_in_course",
-                "allow_user_view_user_list","display_info_advance_inside_homecourse",
-                "email_alert_students_on_new_homework","enable_lp_auto_launch",
-                "pdf_export_watermark_text","allow_public_certificates","documents_default_visibility"
-            );
-        $arrCategoria = array(
-                "work","dropbox","agenda",
-                "announcement", "quiz","forum",
-                "theme","theme","chat", 
-                "registration","user","thematic_advance",
-                "work","learning_path", "learning_path",
-                "certificates",""
-            );
         /*Grabar detalle*/
         $course_id = $this->input->get_post('course_id');
         $cciclo = $this->input->get_post('cursociclo');
         $code   = $this->input->get_post('code');
         $title = $this->input->get_post('title');
         $disk_quota = $this->input->get_post('disk_quota');
-        if(count($course_id)>0 && is_array($course_id)){
+        if(count($course_id)>0 && is_array($course_id) && count($aperturas)==0){
             foreach($course_id as $item=>$value){
                 $data = array(
                             "APERTUP_Codigo"  => $codigo,        
@@ -219,36 +212,6 @@ class Apertura extends CI_Controller {
                     $this->curso_id = $course_id[$item];
                     $this->course_model->modificar($course_id[$item],$data); 
                 }    
-                //Grabo en las tablas relacionadas de chamila course_rel_user
-//                $data = array(
-//                            "course_code" => $code[$item],
-//                            "user_id"     => 1,
-//                            "status"      => 1,
-//                            "role"        => "",
-//                            "sort"        => 1
-//                        );
-//                if($course_id[$item]==""){
-//                    $this->course_rel_user_model->insertar($data); 
-//                }              
-                //Grabo en las tablas relacionadas de chamila c_course_setting
-//                if($course_id[$item]==""){
-//                    for($i=0;$i<17;$i++){
-//                        $data = array("c_id"=>$this->curso_id,"id"=> $i+1,"variable"=>$arrVariable[$i],"category"=>$arrCategoria[$i],"value"=>0);
-//                        $this->c_course_setting_model->insertar($data); 
-//                    }                    
-//                }
-                //Grabo en las tablas relacionadas de chamila c_document
-//                if($course_id[$item]==""){
-//                    $data  = array("c_id"=>$this->curso_id,"id"=>1,"path"=>"/shared_folder","title" => "Carpetas de los usuarios","filetype"=>"folder");
-//                    $data2 = array("c_id"=>$this->curso_id,"id"=>2,"path"=>"/chat_files","title" => "Historial de conversaciones en el chat","filetype"=>"folder");
-//                    $this->c_document_model->insertar($data); 
-//                    $this->c_document_model->insertar($data2);                     
-//                }
-                //Grabo en las tablas relacionadas de chamila access_url_rel_course
-//                if($course_id[$item]==""){
-//                    $data = array("access_url_id"=>1,"course_code"=>$code[$item]);
-//                    $this->access_url_rel_course_model->insertar($data); 
-//                }
             }
         }                            
         echo json_encode($resultado);

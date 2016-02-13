@@ -54,6 +54,7 @@ jQuery(document).ready(function(){
                     $("#tabla_detalle").append(fila);
                 });
             },"json");
+            $("#agregar").hide();
         }
         else{
             alert("Debe seleccionar los campos requeridos.");
@@ -124,15 +125,21 @@ jQuery(document).ready(function(){
         $('#turno').removeAttr('disabled');
         $('#tipoestudiociclo').removeAttr('disabled');
         dataString = $('#frmPersona').serialize();
-        $.post(url,dataString,function(data){
-            if(data=="true"){
-                alert('Operacion realizada con exito');    
-                location.href = base_url+"index.php/ventas/apertura/listar";
-            }
-            else if(data=="false"){
-                alert('El usuario ya esta matriculado en el curso');
-            }
-        });            
+        filas = $('#tabla_detalle tr').length;
+        if(filas>1){
+            $.post(url,dataString,function(data){
+                if(data=="1"){
+                    alert('Operacion realizada con exito');    
+                    location.href = base_url+"index.php/ventas/apertura/listar";
+                }
+                else if(data=="0"){
+                    alert('Esta aula para este turno ya está aperturada');
+                }
+            });               
+        }
+        else{
+           alert("Debe crear los cursos para grabar."); 
+        }         
     }); 
     
    $("body").on("click",".eliminardetalle",function(){

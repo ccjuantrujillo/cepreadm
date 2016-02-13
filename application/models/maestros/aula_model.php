@@ -62,7 +62,7 @@ class Aula_model extends CI_Model{
     }    
     
     public function insertar(stdClass $filter = null){
-        $this->db->insert("cji_moneda",(array)$filter);
+        $this->db->insert($this->table,(array)$filter);
     }
     
     public function modificar($codigo,$data){
@@ -71,12 +71,7 @@ class Aula_model extends CI_Model{
     }
     
     public function eliminar($id){
-        $this->db->delete($this->table,array('MONED_Codigo' => $id));
-    }
-    
-    public function buscar($filter,$number_items='',$offset='')
-    {
-
+        $this->db->delete($this->table,array('AULAP_Codigo' => $id));
     }
 }
 ?>
