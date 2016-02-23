@@ -14,36 +14,66 @@
 <body>
 <div class="contenido"> 
     <?php echo $form_open;?>
-        <ul>
+        <ul id="frm_exposicion">
             <li>
                 <label>Archivo:</label>
                 <input id="fileupload" type="file" name="files[]" multiple value="hola">
             </li>
             <li>
                 <label>Profesor:</label>
-                <input id="fileupload" type="file" name="files[]" multiple value="hola">
+                <?php echo $form_profesor;?>
             </li>
             <li>
-                <label>Titulo:</label>
-                <input id="fileupload" type="text" name="tema" value="hola">
+                <label>Tema:</label>
+                <?php echo $form_tema;?>
             </li>
             <li>
                 <label>Descripcion:</label>
-                <input id="fileupload" type="text" name="tema" value="hola">
+                <?php echo $form_descripcion;?>
             </li>
             <li>
-                <input type="submit" value="Upload">
+                <label>Duracion:</label>
+                <?php echo $form_duracion;?>
+            </li>            
+            <li>
+                <input type="submit" value="Subir">
             </li>
         </ul>
+        <?php echo $oculto;?>      
     <?php echo $form_close;?>        
     <table width="100%" id="tabla_detalle">
         <tr>
             <th width="3%" align="center">No</th>
-            <th width="10%" align="center">Nombre</th>
-            <th width="50%" align="center">Descripcion</th>
+            <th width="30%" align="center">Tema</th>
+            <th width="20%" align="center">Descripcion</th>
+            <th width="10%" align="center">Duracion</th>
+            <th width="20%" align="center">Profesor</th>
             <th align="center">Acciones</th>
         </tr>
-    </table>  
+        <?php
+        if(count($lista)==0){
+            ?>
+            <tr>
+                <td colspan="5" align="center">::: No existen registros :::</td>
+            </tr>
+            <?php
+        }
+        else{
+            foreach($lista as $indice => $value){
+                ?>
+                <tr>
+                    <td align="center"><?php echo $indice+1;?></td>
+                    <td align="left"><?php echo $value->tema;?></td>
+                    <td align="left"><?php echo $value->descripcion;?></td>
+                    <td align="center"><?php echo $value->duracion;?></td>
+                    <td align="center"><?php echo $value->profesor;?></td>
+                    <td align="center">Editar&nbsp;&nbsp;Eliminar</th>
+                </tr>
+                <?php
+            }
+        }
+        ?>
+    </table>      
 </div>
 </body>
 </html>

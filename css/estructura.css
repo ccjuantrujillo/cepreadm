@@ -172,3 +172,8 @@ p#bot{padding-bottom: 5px;}
 #simplemodal-container a {color:#F00;}
 #simplemodal-container a.modalCloseImg {background:url(../img/x.png) no-repeat; width:25px; height:29px; display:inline; z-index:800; position:absolute; top:-15px; right:-16px; cursor:pointer;}
 /*#simplemodal-container h3 {color:#84b8d9;}*/
+
+#frm_exposicion{margin:0 auto;border: 1px solid #000;width: 50%;margin-bottom: 10px;padding: 5px;}
+#frm_exposicion li{padding: 3px;}
+#frm_exposicion li:last-child{text-align: center;}
+#frm_exposicion label{float:left;width: 25%}

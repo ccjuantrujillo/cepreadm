@@ -9,6 +9,8 @@ class Actaexposicion extends CI_Controller {
         $this->load->model(ventas.'actadetalle_model');
         $this->load->model(ventas.'profesor_model');
         $this->load->model(ventas.'actaprofesor_model');
+        $this->load->model(ventas.'actaexposicion_model');
+        $this->load->model(almacen.'tema_model');
         $this->load->helper('menu');
         $this->configuracion = $this->config->item('conf_pagina');
         $this->login   = $this->session->userdata('login');
@@ -18,28 +20,38 @@ class Actaexposicion extends CI_Controller {
         $filter     = new stdClass();
         $filter->acta  = $acta;
         $filter->order_by    = array("f.PERSC_ApellidoPaterno"=>"asc","f.PERSC_ApellidoMaterno"=>"asc","f.PERSC_Nombre"=>"asc");
-        $actaprofesores = $this->actaprofesor_model->listar($filter);
+        $actaexposiciones = $this->actaexposicion_model->listar($filter);
         $item       = 1;
         $lista      = array();
-        if(count($actaprofesores)>0){
-            foreach($actaprofesores as $indice => $value){
+        if(count($actaexposiciones)>0){
+            foreach($actaexposiciones as $indice => $value){
                 $lista[$indice]             = new stdClass();
-                $lista[$indice]->nombres  = $value->PERSC_Nombre;
-                $lista[$indice]->paterno  = $value->PERSC_ApellidoPaterno;
-                $lista[$indice]->materno  = $value->PERSC_ApellidoMaterno;
-                $lista[$indice]->codigo   = $value->ACTAPROFP_Codigo;
-                $lista[$indice]->profesor = $value->codprofesor;
-                $lista[$indice]->hingreso = $value->ACTAPROFC_Hingreso;
-                $lista[$indice]->hsalida  = $value->ACTAPROFC_Hsalida;
-                $lista[$indice]->observacion = $value->ACTAPROFC_Observacion;
+                $lista[$indice]->codigo   = $value->ACTAEXPOSP_Codigo;
+                $lista[$indice]->profesor = $value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno." ".$value->PERSC_Nombre;
                 $lista[$indice]->curso    = $value->PROD_Nombre;
+                $lista[$indice]->tema         = $value->TEMAC_Descripcion;
+                $lista[$indice]->descripcion  = $value->ACTAEXPOSC_Descripcion;
+                $lista[$indice]->duracion  = $value->ACTAEXPOSC_Duracion;
             }
         }
-        $data['titulo']       = "Asistencia de profesores"; 
-        $data['form_open']    = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));     
-        $data['form_close']   = form_close(); 
-        $data['lista']        = $lista;
-        $data['oculto']       = form_hidden(array("curso"=>$curso,"acta"=>$acta));
+        /*Cargo el formulario*/
+        
+        $data['titulo']         = "Asistencia de profesores"; 
+        $data['form_open']      = form_open(base_url()."index.php/ventas/actaexposicion/grabar",array("name"=>"frmPersona","id"=>"frmPersona","enctype"=>"multipart/form-data"));     
+        $data['form_profesor']    = form_input(array("name"=>"profesor","id"=>"profesor","value"=>"","class"=>"cajaMedia"));
+        $filter = new stdClass();
+        $filter->curso = $curso;
+        $filter->order_by = array("d.PERSC_ApellidoPaterno"=>"asc","d.PERSC_ApellidoMaterno"=>"asc","d.PERSC_Nombre"=>"asc");
+        $data['form_profesor']      = form_dropdown('profesor',$this->profesor_model->seleccionar("0",$filter),"","id='profesor' class='comboMedio'");        
+        $filter = new stdClass();
+        $filter->curso = $curso;
+        $filter->order_by = array("c.TEMAC_Descripcion"=>"asc");
+        $data['form_tema']        = form_dropdown('tema',$this->tema_model->seleccionar("0",$filter),"","id='tema' class='comboMedio'");        
+        $data['form_descripcion'] = form_input(array("name"=>"descripcion","id"=>"descripcion","value"=>"","class"=>"cajaMedia"));
+        $data['form_duracion'] = form_input(array("name"=>"duracion","id"=>"duracion","value"=>"","class"=>"cajaMinima","type"=>"time"));
+        $data['form_close']    = form_close(); 
+        $data['lista']         = $lista;
+        $data['oculto']        = form_hidden(array("curso"=>$curso,"acta"=>$acta));
         $this->load->view("ventas/actaexposicion_nuevo",$data);
     } 
     
@@ -48,34 +60,37 @@ class Actaexposicion extends CI_Controller {
     }
     
     public function grabar(){
-        $codigo    = $this->input->get_post('codigo');
-        $acta      = $this->input->get_post('acta');
-        $profesor  = $this->input->get_post('profesor');
-        $hingreso  = $this->input->get_post('hingreso');
-        $hsalida   = $this->input->get_post('hsalida');
-        $observacion = $this->input->get_post('observacion');
-        if(count($codigo)>0){
+        $codigo      = $this->input->get_post('codigo');
+        $curso       = $this->input->get_post('curso');
+        $acta        = $this->input->get_post('acta');
+        $profesor    = $this->input->get_post('profesor');
+        $tema        = $this->input->get_post('tema');
+        $descripcion = $this->input->get_post('descripcion');
+        $duracion    = $this->input->get_post('duracion');
+        if($curso!="" && $profesor!=""){
             $resultado = false;
-            foreach ($codigo as $item=>$value){
-                $data   = array(
-                                "ACTAPROFP_Codigo"      => $codigo[$item],
-                                "PROP_Codigo"           => $profesor[$item],
-                                "ACTAP_Codigo"          => $acta,
-                                "ACTAPROFC_Hingreso"    => $hingreso[$item],
-                                "ACTAPROFC_Hsalida"     => $hsalida[$item],
-                                "ACTAPROFC_Observacion" => $observacion[$item]
-                               );
-                if($codigo[$item]==""){//Nuevo
-                    $this->actaprofesor_model->insertar($data);    
-                    $resultado = true;
-                }
-                else{//Editar
-                    unset($data['ACTAPROFP_Codigo']);
-                    $this->actaprofesor_model->modificar($codigo[$item],$data);                                
-                    $resultado = true; 
-                }
+            $data   = array(
+                            "ACTAP_Codigo"            => $acta,
+                            "PROP_Codigo"             => $profesor,
+                            "PRODATRIBDET_Codigo"     => $tema,
+                            "ACTAEXPOSC_Archivo"      => "",
+                            "ACTAEXPOSC_Descripcion"  => $descripcion,
+                            "ACTAEXPOSC_Duracion"     => $duracion
+                           );
+            if($codigo==""){//Nuevo
+                $this->actaexposicion_model->insertar($data);    
+                $resultado = true;
             }
-            echo json_encode($resultado);
+            else{//Editar
+                unset($data['ACTAP_Codigo']);
+                $this->actapexposicion_model->modificar($codigo[$item],$data);                                
+                $resultado = true; 
+            }
+            //echo json_encode($resultado);
+            if($resultado){
+                echo "<script>alert('Operacion realizada con exito')</script>";
+                redirect('ventas/actaexposicion/editar/'.$acta.'/'.$curso);
+            }
         }
     }
 }

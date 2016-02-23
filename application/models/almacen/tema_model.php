@@ -14,13 +14,12 @@ class Tema_model extends CI_Model{
         $this->table_cursociclo  = "ant_cursociclo";
     }
 	
-    public function seleccionar($tipOt,$default=""){
-        $nombre_defecto = $default==""?":: Seleccione ::":$default;
-        $arreglo = array(''=>$nombre_defecto);
-        foreach($this->listar($tipOt) as $indice=>$valor)
+    public function seleccionar($default='',$filter='',$filter_not='',$number_items='',$offset=''){
+        if($default!="") $arreglo = array($default=>':: Seleccione ::');
+        foreach($this->listar($filter,$filter_not,$number_items,$offset) as $indice=>$valor)
         {
-            $indice1   = $valor->NroDoc;
-            $valor1    = $valor->NroDoc;
+            $indice1   = $valor->PRODATRIBDET_Codigo;
+            $valor1    = $valor->TEMAC_Descripcion;
             $arreglo[$indice1] = $valor1;
         }
         return $arreglo;
