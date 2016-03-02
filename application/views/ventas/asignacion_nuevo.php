@@ -36,8 +36,8 @@
                     <input name="modulo" id="modulo" type="text" value="<?php echo $lista->modulo;?>" class="cajaMinima" readonly="readonly" style="background-color: #E6E6E6"/>
                     <?php if($accion=='n'):;?>
                         <input id="ver_cursos" name="ver_cursos" type="button" class="aceptarlog2" alt="Buscar curso" title="Buscar curso" value="Buscar" />
-                    <?php endif;?>
-                    &nbsp;<a href="#" id="agregar">Agregar</a>   
+                        &nbsp;<a href="#" id="agregar">Agregar</a> 
+                    <?php endif;?>  
                 </td>               
               </tr>                    
             </table>

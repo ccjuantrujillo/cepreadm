@@ -125,7 +125,8 @@ class Asignacion extends CI_Controller {
             $lista->estado      = "1";
             $lista->ciclo       = $ciclo;
             $lista->asignaciondetalle = array();
-        } 
+        }
+        $flagdetalle = count($lista->asignaciondetalle)>0?1:0;
         $arrEstado          = array("0"=>"::Seleccione::","1"=>"ACTIVO","2"=>"INACTIVO");
         $data['titulo']     = $accion=="e"?"Editar Carga de Trabajo":"Nueva Carga de Trabajo"; 
         $data['form_open']  = form_open('',array("name"=>"frmPersona","id"=>"frmPersona"));     
@@ -136,7 +137,7 @@ class Asignacion extends CI_Controller {
         $data['semana']	    = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado");     
         $data['selciclo']   = form_dropdown('ciclo',$this->ciclo_model->seleccionar("0"),$lista->ciclo,"id='ciclo' class='comboMedio' ".($accion=="e"?"disabled":"")."");         
         $data['selestado']  = form_dropdown('estado',$arrEstado,$lista->estado,"id='estado' class='comboMedio' ".($accion=="e"?"disabled":"")."");
-        $data['oculto']     = form_hidden(array("accion"=>$accion,"codigo"=>$codigo,"codmodulo"=>$lista->codmodulo));
+        $data['oculto']     = form_hidden(array("accion"=>$accion,"codigo"=>$codigo,"codmodulo"=>$lista->codmodulo,"flagdetalle"=>$flagdetalle));
         $this->load->view("ventas/asignacion_nuevo",$data);
     }
 

@@ -62,7 +62,9 @@ jQuery(document).ready(function(){
         profesor  = $("#profesor").val();
         codmodulo = $("#codmodulo").val();
         curso     = $("#curso").val();
-        if(profesor!=""){
+        course_id = $("#course_id").val();
+        flagdetalle = $("#flagdetalle").val();
+        if(profesor!="" && course_id!="" && flagdetalle==0){
             url = base_url+"index.php/ventas/modulo/obtenerdetalle2";
             objMod = new Object();
             objMod.curso = curso;
@@ -73,8 +75,8 @@ jQuery(document).ready(function(){
             $.post(url,dataString,function(data){
                 $.each(data,function(item,value){
                    fila  = "<tr>";
-                   fila  += "<td align='center'><input type='hidden' id='codigodetalle["+n+"]' name='codigodetalle["+n+"]' value=''>"+(parseInt(n)+1)+"</td>";
-                   fila  += "<td align='center' valgin='top'><select class='comboMinimo' name='dia["+n+"]' id='dia["+n+"]'><option value=''>::Seleccione::</option></select></td>";
+                   fila  += "<td align='center'>"+(parseInt(n)+1)+"</td>";
+                   fila  += "<td align='center' valgin='top'><input type='hidden' id='codigodetalle["+n+"]' name='codigodetalle["+n+"]' value=''><select class='comboMinimo' name='dia["+n+"]' id='dia["+n+"]'><option value=''>::Seleccione::</option></select></td>";
                    fila  += "<td align='center'><input type='time' maxlength='5' class='cajaReducida' name='desde["+n+"]' id='desde["+n+"]' value='"+value.MODULODETC_Desde+"'></td>";
                    fila  += "<td align='center'><input type='time' maxlength='5' class='cajaReducida' name='hasta["+n+"]' id='hasta["+n+"]' value='"+value.MODULODETC_Hasta+"'></td>";        
                    fila  += "<td align='center'><a href='#' class='editardetalle'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>";                   
@@ -83,10 +85,17 @@ jQuery(document).ready(function(){
                    selectDia(n,value.MODULODETC_Dia); 
                    n++;
                 });
+                $("#flagdetalle").val(1);
             },"json");
         }
-        else{
+        else if(flagdetalle==1){
+            alert("Ya asigno una carga a este profesor");
+        }
+        else if(profesor==""){
             alert("Primero debe seleccionar a un profesor");
+        }
+        else{
+            alert("Primero debe seleccionar a un curso");
         }
     });
     
@@ -158,12 +167,12 @@ jQuery(document).ready(function(){
     });     
     
     $("body").on('click',"#grabar",function(){
-        url        = base_url+"index.php/ventas/asignacion/grabar";
-        clave      = $("#clave").val();
+        url         = base_url+"index.php/ventas/asignacion/grabar";
+        flagdetalle = $("#flagdetalle").val();
         $('#estado').removeAttr('disabled');
         $('#ciclo').removeAttr('disabled');
         dataString = $('#frmPersona').serialize();
-        if(clave != ""){
+        if(flagdetalle != 0){
             $.post(url,dataString,function(data){
                 if(data=="true"){
                     alert('Operacion realizada con exito');    
@@ -175,7 +184,7 @@ jQuery(document).ready(function(){
             });            
         }
         else{
-            alert("Debe escribir una clave");
+            alert("Debe agregar un detalle");
         }
     }); 
     
@@ -186,7 +195,7 @@ jQuery(document).ready(function(){
             url = base_url+"index.php/ventas/asignacion/eliminardetalle";
             $.post(url,dataString,function(data){
                 if(data=="true"){
-//                    alert('Operacion realizada con exito');  
+                   alert('Operacion realizada con exito');  
                     accion      = $("#accion").val();
                     codigo      = $("#codigo").val();
                     dataString  = $('#frmPersona').serialize();
@@ -204,7 +213,7 @@ jQuery(document).ready(function(){
     
     $("body").on("click",".editardetalle",function(){  
        tr = $(this).parent().parent();  
-       n  = tr.children("td")[0].innerHTML - 1;        
+       n  = tr.children("td")[0].innerHTML - 1;    
        codigodetalle = $(this).parent().parent().attr("id"); 
        url = base_url+"index.php/ventas/asignacion/obtenerdetalle";
        objRes = new Object();
@@ -213,15 +222,15 @@ jQuery(document).ready(function(){
        $.post(url,dataString,function(data){
             data = json = $.parseJSON(data); 
             tr.empty();
-            tr.append("<td align='center'><input type='hidden' id='codigodetalle["+n+"]' name='codigodetalle["+n+"]' value='"+codigodetalle+"'>"+(parseInt(n)+1)+"</td>");
-            tr.append("<td align='center' valgin='top'><select class='comboMinimo' name='dia["+n+"]' id='dia["+n+"]'><option value=''>::Seleccione::</option></select></td>");
+            tr.append("<td align='center'>"+(parseInt(n)+1)+"</td>");
+            tr.append("<td align='center' valgin='top'><input type='hidden' id='codigodetalle["+n+"]' name='codigodetalle["+n+"]' value='"+codigodetalle+"'><select class='comboMinimo' name='dia["+n+"]' id='dia["+n+"]'><option value=''>::Seleccione::</option></select></td>");
             tr.append("<td align='center'><input type='time' maxlength='5' class='cajaReducida' name='desde["+n+"]' id='desde["+n+"]' value='00:00'></td>");
             tr.append("<td align='center'><input type='time' maxlength='5' class='cajaReducida' name='hasta["+n+"]' id='hasta["+n+"]' value='00:00'></td>");
             tr.append("<td align='center'><a href='#' class='editardetalle'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>");       
             selectDia(n,data["ASIGDETC_Dia"]);
-            selectTipoEstudio(n,data["TIPCICLOP_Codigo"]);
-            selectLocal(n,data["LOCP_Codigo"]); 
-            selectAula(n,data["LOCP_Codigo"],data["AULAP_Codigo"]);
+//            selectTipoEstudio(n,data["TIPCICLOP_Codigo"]);
+//            selectLocal(n,data["LOCP_Codigo"]); 
+//            selectAula(n,data["LOCP_Codigo"],data["AULAP_Codigo"]);
             document.getElementById("desde["+n+"]").value=data["ASIGDETC_Desde"];
             document.getElementById("hasta["+n+"]").value=data["ASIGDETC_Hasta"];
        });

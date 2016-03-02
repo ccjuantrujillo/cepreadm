@@ -74,24 +74,34 @@ class Profesor extends Persona
     }
 
     public function editar($accion,$codigo=""){
-        $curso = $this->input->get_post('curso');
+        $curso     = $this->input->get_post('curso');
+        $paterno   = $this->input->get_post('paterno');
+        $materno   = $this->input->get_post('materno');
+        $nombres   = $this->input->get_post('nombres');
+        $telefono  = $this->input->get_post('telefono');
+        $sexo      = $this->input->get_post('sexo');
+        $numero    = $this->input->get_post('numero');
+        $movil     = $this->input->get_post('movil');
+        $email     = $this->input->get_post('email');
+        $direccion = $this->input->get_post('direccion');
+        $fnacimiento = $this->input->get_post('fnacimiento');
          $lista = new stdClass();
          if($accion == "e"){
              $filter            = new stdClass();
              $filter->profesor  = $codigo;
              $profesores        = $this->profesor_model->obtener($filter);
-             $lista->numerodoc  = $profesores->PERSC_NumeroDocIdentidad;
-             $lista->sexo       = $profesores->PERSC_Sexo;
-             $lista->direccion  = $profesores->PERSC_Direccion;
-             $lista->telefono   = $profesores->PERSC_Telefono;
-             $lista->email      = $profesores->PERSC_Email;
-             $lista->movil      = $profesores->PERSC_Movil;
+             $lista->numerodoc  = $numero!=""?$numero:$profesores->PERSC_NumeroDocIdentidad;
+             $lista->sexo       = $sexo!=""?$sexo:$profesores->PERSC_Sexo;
+             $lista->direccion  = $direccion!=""?$direccion:$profesores->PERSC_Direccion;
+             $lista->telefono   = $telefono!=""?$telefono:$profesores->PERSC_Telefono;
+             $lista->email      = $email!=""?$email:$profesores->PERSC_Email;
+             $lista->movil      = $movil!=""?$movil:$profesores->PERSC_Movil;
              $lista->fax        = $profesores->PERSC_Fax;
              $lista->web        = $profesores->PERSC_Web;
-             $lista->fnac       = date_sql($profesores->PERSC_FechaNacimiento);
-             $lista->paterno    = $profesores->PERSC_ApellidoPaterno;
-             $lista->materno    = $profesores->PERSC_ApellidoMaterno;
-             $lista->nombres    = $profesores->PERSC_Nombre;
+             $lista->fnac       = $fnacimiento!=""?$fnacimiento:date_sql($profesores->PERSC_FechaNacimiento);
+             $lista->paterno    = $paterno!=""?$paterno:$profesores->PERSC_ApellidoPaterno;
+             $lista->materno    = $materno!=""?$materno:$profesores->PERSC_ApellidoMaterno;
+             $lista->nombres    = $nombres!=""?$nombres:$profesores->PERSC_Nombre;
              $lista->codigo     = $codigo;
              $lista->codigo_padre = $profesores->PERSP_Codigo;
              $lista->estado     = $profesores->PROC_FlagEstado;
@@ -101,20 +111,20 @@ class Profesor extends Persona
              $lista->user_id    = $profesores->user_id;    
          }
          elseif($accion == "n"){
-             $lista->numerodoc  = "";
-             $lista->sexo       = "";
-             $lista->direccion  = "";
-             $lista->telefono   = "";
-             $lista->email      = "";
-             $lista->movil      = "";
+             $lista->numerodoc  = $numero;
+             $lista->sexo       = $sexo;
+             $lista->direccion  = $direccion;
+             $lista->telefono   = $telefono;
+             $lista->email      = $email;
+             $lista->movil      = $movil;
              $lista->fax        = "";
              $lista->web        = "";
              $lista->ecivil     = 0;
-             $lista->fnac       = "";
-             $lista->paterno    = "";
-             $lista->materno    = "";
-             $lista->nombres    = "";
-             $lista->sexo       = 0;
+             $lista->fnac       = $fnacimiento;
+             $lista->paterno    = $paterno;
+             $lista->materno    = $materno;
+             $lista->nombres    = $nombres;
+             $lista->sexo       = $sexo;
              $lista->codigo     = "";
              $lista->codigo_padre = "";
              $lista->estado     = 1;
@@ -134,7 +144,7 @@ class Profesor extends Persona
          $data['lista']	      = $lista;
          $data['selsexo']     = form_dropdown('sexo',$arrSexo,$lista->sexo,"id='sexo' class='comboMedio'");
          $data['selestado']   = form_dropdown('estado',$arrEstado,$lista->estado,"id='estado' class='comboMedio'");
-         $data['selcurso']    = form_dropdown('curso',$this->curso_model->seleccionar("00"),$lista->curso,"id='curso' class='comboMedio'");
+         $data['selcurso']    = form_dropdown('curso',$this->curso_model->seleccionar("0"),$lista->curso,"id='curso' class='comboMedio'");
          $filter = new stdClass();
          $filter->curso = $lista->curso;
          $data['selsubcurso'] = form_dropdown('subcurso',$this->subcurso_model->seleccionar("00",$filter),$lista->subcurso,"id='subcurso' class='comboMedio'");

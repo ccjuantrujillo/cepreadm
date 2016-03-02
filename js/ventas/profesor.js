@@ -150,12 +150,26 @@ jQuery(document).ready(function(){
     
     /*Grabaciones*/
     $("body").on('click',"#grabar",function(){
+        curso  = $("#curso").val();
+        sexo   = $("#sexo").val();
+        numero = $("#numero").val();
         url = base_url+"index.php/ventas/profesor/grabar";
         dataString  = $('#frmPersona').serialize();
-        $.post(url,dataString,function(data){
-            alert('Operacion realizada con exito');
-            location.href = base_url+"index.php/ventas/profesor/listar/";  
-        });
+        if(curso!=0 && sexo!=0 && numero!=0){
+            $.post(url,dataString,function(data){
+                alert('Operacion realizada con exito');
+                location.href = base_url+"index.php/ventas/profesor/listar/";  
+            });            
+        }
+        else if(curso==0){
+            alert("Debe ingresar un curso");
+        }
+        else if(sexo==0){
+            alert("Debe ingresar un sexo");
+        }
+        else{
+            alert("Debe ingresar un numero de DNI");
+        }
     });
 
     $("body").on('click',"#grabar_experiencia",function(){
