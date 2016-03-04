@@ -32,13 +32,14 @@ class Actaexposicion extends CI_Controller {
                 $lista[$indice]->tema         = $value->TEMAC_Descripcion;
                 $lista[$indice]->descripcion  = $value->ACTAEXPOSC_Descripcion;
                 $lista[$indice]->duracion  = $value->ACTAEXPOSC_Duracion;
+                $lista[$indice]->archivo   = $value->ACTAEXPOSC_Archivo;
             }
         }
         /*Cargo el formulario*/
-        
-        $data['titulo']         = "Asistencia de profesores"; 
-        $data['form_open']      = form_open(base_url()."index.php/ventas/actaexposicion/grabar",array("name"=>"frmPersona","id"=>"frmPersona","enctype"=>"multipart/form-data"));     
-        $data['form_profesor']    = form_input(array("name"=>"profesor","id"=>"profesor","value"=>"","class"=>"cajaMedia"));
+        $data['titulo']              = "Asistencia de profesores"; 
+        $data['upload_max_filesize'] = return_bytes(ini_get('upload_max_filesize'))/(1024*1024);
+        $data['form_open']           = form_open(base_url()."index.php/ventas/actaexposicion/grabar",array("name"=>"frmPersona","id"=>"frmPersona","enctype"=>"multipart/form-data","onsubmit"=>"return valida_frm_exposicion();"));     
+        $data['form_profesor']       = form_input(array("name"=>"profesor","id"=>"profesor","value"=>"","class"=>"cajaMedia"));
         $filter = new stdClass();
         $filter->curso = $curso;
         $filter->order_by = array("d.PERSC_ApellidoPaterno"=>"asc","d.PERSC_ApellidoMaterno"=>"asc","d.PERSC_Nombre"=>"asc");
@@ -51,7 +52,7 @@ class Actaexposicion extends CI_Controller {
         $data['form_duracion'] = form_input(array("name"=>"duracion","id"=>"duracion","value"=>"","class"=>"cajaMinima","type"=>"time"));
         $data['form_close']    = form_close(); 
         $data['lista']         = $lista;
-        $data['oculto']        = form_hidden(array("curso"=>$curso,"acta"=>$acta));
+        $data['oculto']        = form_hidden(array("curso"=>$curso,"acta"=>$acta,"max_filesize"=>$data['upload_max_filesize']));
         $this->load->view("ventas/actaexposicion_nuevo",$data);
     } 
     
@@ -60,36 +61,42 @@ class Actaexposicion extends CI_Controller {
     }
     
     public function grabar(){
-        $codigo      = $this->input->get_post('codigo');
-        $curso       = $this->input->get_post('curso');
-        $acta        = $this->input->get_post('acta');
-        $profesor    = $this->input->get_post('profesor');
-        $tema        = $this->input->get_post('tema');
-        $descripcion = $this->input->get_post('descripcion');
-        $duracion    = $this->input->get_post('duracion');
-        if($curso!="" && $profesor!=""){
-            $resultado = false;
-            $data   = array(
-                            "ACTAP_Codigo"            => $acta,
-                            "PROP_Codigo"             => $profesor,
-                            "PRODATRIBDET_Codigo"     => $tema,
-                            "ACTAEXPOSC_Archivo"      => "",
-                            "ACTAEXPOSC_Descripcion"  => $descripcion,
-                            "ACTAEXPOSC_Duracion"     => $duracion
-                           );
-            if($codigo==""){//Nuevo
-                $this->actaexposicion_model->insertar($data);    
-                $resultado = true;
+        $codigo       = $this->input->get_post('codigo');
+        $curso        = $this->input->get_post('curso');
+        $acta         = $this->input->get_post('acta');
+        $profesor     = $this->input->get_post('profesor');
+        $tema         = $this->input->get_post('tema');
+        $descripcion  = $this->input->get_post('descripcion');
+        $duracion     = $this->input->get_post('duracion');
+        $max_filesize = $this->input->get_post('max_filesize');
+        $fichero      = $_FILES['file_exposicion'];
+        $archivo      = rand(15,86).str_replace(" ","",strtolower($fichero['name']));
+        if($curso!="" && $profesor!=0){
+            if(($fichero["type"] == "application/pdf" || $fichero["type"] == "application/msword" || $fichero["type"] == "application/excel")
+                    && $fichero["size"] <= $max_filesize*1024*1024){
+                if(move_uploaded_file($fichero['tmp_name'],"files/".$archivo)){
+                    $data   = array(
+                                    "ACTAP_Codigo"            => $acta,
+                                    "PROP_Codigo"             => $profesor,
+                                    "PRODATRIBDET_Codigo"     => $tema,
+                                    "ACTAEXPOSC_Archivo"      => $archivo,
+                                    "ACTAEXPOSC_Descripcion"  => $descripcion,
+                                    "ACTAEXPOSC_Duracion"     => $duracion
+                                   );
+                    if($codigo==""){//Nuevo
+                        $this->actaexposicion_model->insertar($data);    
+                        $resultado = true;
+                    }
+                    else{//Editar
+                        unset($data['ACTAP_Codigo']);
+                        $this->actapexposicion_model->modificar($codigo[$item],$data);                                
+                        $resultado = true; 
+                    }
+                    redirect('ventas/actaexposicion/editar/'.$acta.'/'.$curso); 
+                }  
             }
-            else{//Editar
-                unset($data['ACTAP_Codigo']);
-                $this->actapexposicion_model->modificar($codigo[$item],$data);                                
-                $resultado = true; 
-            }
-            //echo json_encode($resultado);
-            if($resultado){
-                echo "<script>alert('Operacion realizada con exito')</script>";
-                redirect('ventas/actaexposicion/editar/'.$acta.'/'.$curso);
+            else{
+                die("<script>alert('Error en la subida de archivos, verifique el tamaño del archivo o la extension'); window.location.href='editar/".$acta."/".$curso."';</script>");
             }
         }
     }

@@ -55,4 +55,20 @@ function get_header(){
     $filaheader .= "<span><img src='".img."unknown.jpg' id='icono'><a href='#'>".$nombre."</a>&#x25BC;&nbsp;&nbsp;<a href='#' id='cerrar'>Salir</a></span>";
     return $filaheader;        
 }
+
+function return_bytes($val) {
+    $val = trim($val);
+    $last = strtolower($val[strlen($val)-1]);
+    switch($last) {
+        // El modificador 'G' está disponble desde PHP 5.1.0
+        case 'g':
+            $val *= 1024;
+        case 'm':
+            $val *= 1024;
+        case 'k':
+            $val *= 1024;
+    }
+
+    return $val;
+}
 ?>

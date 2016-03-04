@@ -17,7 +17,8 @@
         <ul id="frm_exposicion">
             <li>
                 <label>Archivo:</label>
-                <input id="fileupload" type="file" name="files[]" multiple value="hola">
+                <input type="file" name="file_exposicion" id="file_exposicion" multiple value="Cargar archivos">
+                Max. Tamaño(<?php echo $upload_max_filesize;?>&nbsp;MB)
             </li>
             <li>
                 <label>Profesor:</label>
@@ -48,13 +49,14 @@
             <th width="20%" align="center">Descripcion</th>
             <th width="10%" align="center">Duracion</th>
             <th width="20%" align="center">Profesor</th>
+            <th width="5%" align="center">File</th>
             <th align="center">Acciones</th>
         </tr>
         <?php
         if(count($lista)==0){
             ?>
             <tr>
-                <td colspan="5" align="center">::: No existen registros :::</td>
+                <td colspan="6" align="center">::: No existen registros :::</td>
             </tr>
             <?php
         }
@@ -67,6 +69,7 @@
                     <td align="left"><?php echo $value->descripcion;?></td>
                     <td align="center"><?php echo $value->duracion;?></td>
                     <td align="center"><?php echo $value->profesor;?></td>
+                    <td align="center"><a href="<?php echo base_url()."files/".$value->archivo;?>" target="blank"><img src="<?php echo img."adjunto.jpg";?>" width="20px" height="20px"/></a></td>
                     <td align="center">Editar&nbsp;&nbsp;Eliminar</th>
                 </tr>
                 <?php
