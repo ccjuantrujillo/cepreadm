@@ -14,16 +14,34 @@ jQuery(document).ready(function(){
     
    $("body").on("click","#pdf",function(){
         url = base_url+"index.php/ventas/asignacion/export_pdf/rpt_asignacion_aulas";
-        $("#frmReporte").attr("action",url);
-        $("#frmReporte").attr("target","framereporte");
-        $("#frmReporte").submit();
+        ciclo = $("#ciclo_rpt").val();
+        curso = $("#curso_rpt").val();
+        if(ciclo == 0){
+            alert("Seleccione un ciclo.");
+        }
+        else if(curso == 0){
+            alert("Seleccione un curso.");
+        }
+        else{
+            $("#frmReporte").attr("action",url);
+            $("#frmReporte").attr("target","framereporte");
+            $("#frmReporte").submit();            
+        }
     });  
     
    $("body").on("click","#pdf_horario",function(){
+       if($("#ciclo_rpt").val()==0){
+           alert("Seleccione el ciclo.");
+       }
+       else if($("#curso_rpt").val()==0){
+           alert("Seleccione el curso");
+       }
+       else{
         url = base_url+"index.php/ventas/asignacion/export_pdf/rpt_horario_curso";
         $("#frmReporte").attr("action",url);
         $("#frmReporte").attr("target","framereporte");
-        $("#frmReporte").submit();
+        $("#frmReporte").submit();           
+       }
     });      
     
     $("body").on('click',"#generar",function(){
@@ -35,28 +53,7 @@ jQuery(document).ready(function(){
            ascii += ""+usuario.charCodeAt(i);
        }
        $("#clave").val(curso+ascii);
-    });    
-    
-//    $("body").on('click',"#agregar",function(){
-//        profesor = $("#profesor").val();
-//        if(profesor!=""){
-//            n      = $("#tabla_detalle tr").length - 1;
-//            fila   = "<tr>";
-//            fila  += "<td align='center'><input type='hidden' id='codigodetalle["+n+"]' name='codigodetalle["+n+"]' value=''>"+(parseInt(n)+1)+"</td>";
-//            fila  += "<td align='center' valgin='top'><select class='comboMinimo' name='dia["+n+"]' id='dia["+n+"]'><option value=''>::Seleccione::</option></select></td>";
-//            fila  += "<td align='center'><input type='time' maxlength='5' class='cajaReducida' name='desde["+n+"]' id='desde["+n+"]' value='00:00'></td>";
-//            fila  += "<td align='center'><input type='time' maxlength='5' class='cajaReducida' name='hasta["+n+"]' id='hasta["+n+"]' value='00:00'></td>";        
-//            fila  += "<td align='center'><a href='#' class='editardetalle'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>";
-//            fila  += "</tr>";
-//            $("#tabla_detalle").append(fila);
-//            selectDia(n);
-//            selectTipoEstudio(n);
-//            selectLocal(n);   
-//        }
-//        else{
-//            alert("Primero debe seleccionar un profesor.");
-//        }
-//    });    
+    });      
 
     $("body").on("click","#agregar",function(){
         profesor  = $("#profesor").val();

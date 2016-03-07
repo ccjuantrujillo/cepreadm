@@ -26,9 +26,10 @@ class Modulodetalle_model extends CI_Model
         $this->db->from($this->table_modelodetalle." as c",$number_items,$offset);
         $this->db->join($this->table_modelo.' as d','d.MODULOP_Codigo=c.MODULOP_Codigo','inner');
         $this->db->join($this->table_curso.' as e','e.PROD_Codigo=c.PROD_Codigo','inner');
-        if(isset($filter->modulo) && $filter->modulo!='')                 $this->db->where(array("c.MODULOP_Codigo"=>$filter->modulo));
-        if(isset($filter->dia) && $filter->dia!='')                       $this->db->where(array("c.MODULODETC_Dia"=>$filter->dia));
-        if(isset($filter->curso) && $filter->curso!='')                   $this->db->where(array("c.PROD_Codigo"=>$filter->curso));
+        if(isset($filter->modulo))                 $this->db->where(array("c.MODULOP_Codigo"=>$filter->modulo));
+        if(isset($filter->dia))                    $this->db->where(array("c.MODULODETC_Dia"=>$filter->dia));
+        if(isset($filter->curso))                  $this->db->where(array("c.PROD_Codigo"=>$filter->curso));
+        if(isset($filter->turno))                  $this->db->where(array("d.TURNOP_Codigo"=>$filter->turno));
         if(isset($filter->modulodetalle) && $filter->modulodetalle!='')   $this->db->where(array("c.MODULODETP_Codigo"=>$filter->modulodetalle));
         if(isset($filter->order_by) && count($filter->order_by)>0){
             foreach($filter->order_by as $indice=>$value){

@@ -24,15 +24,15 @@
                 <div>
                     <label>Ciclo:</label>
                     <?php echo $selciclo;?>
-                    <label>Turno:</label>
-                    <?php echo $selturno;?>                      
                     <label>Curso:</label>
                     <?php echo $selcurso;?>
+                    <label>Turno:</label>
+                    <?php echo $selturno;?>                      
                 </div>
             <?php echo $form_close;?>
 	</div>         
 	<div class="case_botones">       
-            <ul class="lista_botones"><li id="pdf_horario">Ver Pdf</li></ul>
+            <ul class="lista_botones" id="pdf_horario"><li>Ver Pdf</li></ul>
 	</div> 	          
     </div>         
     <iframe width="100%" height="500" id="framereporte" name="framereporte" frameborder="1"></iframe>

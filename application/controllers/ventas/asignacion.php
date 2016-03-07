@@ -63,7 +63,7 @@ class Asignacion extends CI_Controller {
             }
         }
         $configuracion = $this->configuracion;
-        $configuracion['base_url']    = base_url()."index.php/ventas/orden/listar";
+        $configuracion['base_url']    = base_url()."index.php/ventas/asignacion/listar";
         $configuracion['total_rows']  = $registros;
         $this->pagination->initialize($configuracion);
         /*Enviamos los datos a la vista*/
@@ -397,6 +397,9 @@ class Asignacion extends CI_Controller {
                     $filter = new stdClass();
                     $filter->ciclo = $ciclo;
                     $ciclos = $this->ciclo_model->obtener($filter);
+                    $filter = new stdClass();
+                    $filter->curso = $curso;
+                    $cursos = $this->curso_model->obtener($filter);
                     $this->load->library("fpdf/pdf");
                     $CI = & get_instance();
                     $CI->pdf->FPDF('L');
@@ -406,7 +409,7 @@ class Asignacion extends CI_Controller {
                     $CI->pdf->SetFillColor(216,216,216);
                     $CI->pdf->SetFont('Arial','B',11);
                     $CI->pdf->Image('img/uni.gif',10,8,10);
-                    $CI->pdf->Cell(0,5,"ASIGNACION DE AULAS",0,1,"C",0);
+                    $CI->pdf->Cell(0,5,"ASIGNACION DE AULAS - ".strtoupper($cursos->PROD_Nombre),0,1,"C",0);
                     $CI->pdf->Cell(0,10,$ciclos->COMPC_Nombre,0,1,"C",0);
                     $CI->pdf->SetFont('Arial','B',6);   
                     /*Fila de turnos*/
@@ -492,7 +495,7 @@ class Asignacion extends CI_Controller {
                 }
                 break;
             case 'rpt_horario_curso':
-               $curso    = $this->input->get_post('curso_rpt');
+                $curso    = $this->input->get_post('curso_rpt');
                 $ciclo = $this->input->get_post('ciclo_rpt');
                 $turno = $this->input->get_post('turno_rpt');
                 $filter = new stdClass();
@@ -500,8 +503,11 @@ class Asignacion extends CI_Controller {
                 $ciclos = $this->ciclo_model->obtener($filter);
                 $filter = new stdClass();
                 $filter->turno = $turno;
-                $turnos = $this->turno_model->obtener($filter);                
-                if($ciclo!=0){                    
+                $turnos = $this->turno_model->obtener($filter);      
+                $filter = new stdClass();
+                $filter->curso = $curso;
+                $cursos = $this->curso_model->obtener($filter);                   
+                if($ciclo!=0 && $curso!=0){                    
                     $this->load->library("fpdf/pdf");
                     $CI = & get_instance();
                     $CI->pdf->FPDF('P');
@@ -511,10 +517,11 @@ class Asignacion extends CI_Controller {
                     $CI->pdf->SetFillColor(216,216,216);
                     $CI->pdf->SetFont('Arial','B',11);
                     $CI->pdf->Image('img/uni.gif',10,8,10);
-                    $CI->pdf->Cell(0,5,"HORARIO POR AULA",0,1,"C",0);                    
+                    $CI->pdf->Cell(0,5,"HORARIO POR AULA - ".$cursos->PROD_Nombre,0,1,"C",0);                    
                     $CI->pdf->Cell(0,10,$ciclos->COMPC_Nombre,0,1,"C",0);
                     if($turno!=0)  $CI->pdf->Cell(0,5,"TURNO:".strtoupper($turnos->TURNOC_Descripcion),0,1,"C",0);
                     $CI->pdf->SetFont('Arial','B',8);  
+                    /*Construimos la cabecera de dias*/
                     $arrDias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado");
                     foreach($arrDias as $item => $value){
                         if($item>0){
@@ -527,52 +534,37 @@ class Asignacion extends CI_Controller {
                     $CI->pdf->Cell(1,4,"",0,1,"C",0);
                     $filter = new stdClass();
                     $filter->ciclo = $ciclo;
-                    if($turno!=0)  $filter->turno = $turno;
+                    if($turno!=0)    $filter->turno = $turno;
                     $filter->order_by = array("c.TURNOP_Codigo"=>"asc","f.AULAC_Nombre"=>"asc");
                     $aulas = $this->apertura_model->listar($filter);
+                    /*Listamos las aulas duplicadas*/
                     foreach($aulas as $item => $value){
-                        $nom_curso = "";
-                        $id_aula   = $value->AULAP_Codigo;
-                        $id_modulo = $value->MODULOP_Codigo;
-                        $nom_turno = substr($value->TURNOC_Descripcion,0,1);
-                        $nom_aula  = $value->AULAC_Nombre." - ".$nom_turno; 
-                        /*Obetngo array de cursos aperturados por dia de la tabla modelodetalle*/
-                        for($id_dia=1;$id_dia<7;$id_dia++){
-                            $filter = new stdClass();
-                            $filter->dia   = $id_dia;
-                            $filter->modulo = $id_modulo;
-                            if($curso!=0)  $filter->curso = $curso;
-                            $filter->order_by = array("c.MODULODETC_Desde"=>"asc");
-                            $cursos     = $this->modulodetalle_model->listar($filter);
-                            $j = 0;
-                            foreach($cursos as $item2=>$value2){
-                                $arrCursos[$j][$id_dia] = $value2->PROD_Nombre;
-                                $arrCursos[$j+1][$id_dia] = $value2->PROD_Nombre;
-                                $j=$j+2;
-                            }
-                        }
-                        for($i=0;$i<count($arrCursos);$i++){
+                        for($z=0;$z<2;$z++){
+                            $id_aula   = $value->AULAP_Codigo;
+                            $id_modulo = $value->MODULOP_Codigo;
+                            $nom_turno = substr($value->TURNOC_Descripcion,0,1);
+                            $nom_aula  = $value->AULAC_Nombre." - ".$nom_turno; 
                             $CI->pdf->Cell(18,4,$nom_aula,1,0,"C",0);
+                            /*ubicamos el curso y el profesor*/
                             for($id_dia=1;$id_dia<7;$id_dia++){
-                                $filter = new stdClass();
-                                $filter->ciclo = $ciclo;
-                                $filter->dia   = $id_dia;
-                                $filter->aula  = $id_aula;
-                                if($curso!=0)  $filter->curso = $curso;
-                                $asignacion = $this->asignaciondetalle_model->rpt_horario_curso($filter);
-                                $nom_curso  = isset($arrCursos[$i][$id_dia])?$arrCursos[$i][$id_dia]:"";
-                                if(isset($asignacion->PERSC_ApellidoPaterno)){
-                                    $nom_profesor = $asignacion->PERSC_ApellidoPaterno;
-                                }
-                                else{
-                                    $nom_profesor = $nom_curso!=""?"No Asignado":"";
-                                }
-                                if($i%2==0)
+                                 $filter = new stdClass();
+                                 $filter->dia    = $id_dia;
+                                 $filter->modulo = $id_modulo;
+                                 $filter->aula   = $id_aula;
+                                 if($curso!=0) $filter->curso  = $curso;
+                                 if($turno!=0) $filter->turno  = $turno;
+                                 //$filter->order_by = array("c.MODULODETC_Desde"=>"asc");
+                                 $objCursos       = $this->asignaciondetalle_model->rpt_horario_curso($filter);
+                                 $nom_curso    = isset($objCursos->PROD_Nombre)?$objCursos->PROD_Nombre:"";
+                                 $nom_profesor = isset($objCursos->PERSC_ApellidoPaterno)?$objCursos->PERSC_ApellidoPaterno:"";
+                                 if($z==0){
                                     $CI->pdf->Cell(28,4,$nom_curso,1,0,"C",0);    
-                                else
-                                    $CI->pdf->Cell(28,4,$nom_profesor,1,0,"C",0);    
+                                 }
+                                 else{
+                                    $CI->pdf->Cell(28,4,$nom_profesor,1,0,"C",0);     
+                                 }
                             }
-                            $CI->pdf->Cell(5,4,"",0,1,"C",0);    
+                            $CI->pdf->Cell(5,4,"",0,1,"C",0);                         
                         }
                     }
                     $CI->pdf->Output();

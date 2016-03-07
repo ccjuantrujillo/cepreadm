@@ -33,7 +33,7 @@
             <ul class="lista_botones"><li id="pdf">Ver Pdf</li></ul>
 	</div> 	          
     </div>         
-    <iframe width="100%" height="500" id="framereporte" name="framereporte" frameborder="1"></iframe>
+    <iframe width="100%" height="600" id="framereporte" name="framereporte" frameborder="1"></iframe>
     <div id="reporte"></div>
     </div>
 </body>

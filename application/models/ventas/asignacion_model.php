@@ -75,7 +75,7 @@ class Asignacion_model extends CI_Model
         if(isset($filter->asignacion) && $filter->asignacion!='')    $this->db->where(array("c.ASIGP_Codigo"=>$filter->asignacion));
         if(isset($filter->profesor) && $filter->profesor!='')        $this->db->where(array("c.PROP_Codigo"=>$filter->profesor));  
         if(isset($filter->tipoestudio) && $filter->tipoestudio!='')  $this->db->where(array("m.TIPP_Codigo"=>$filter->tipoestudio));  
-        if(isset($filter->modulo) && $filter->modulo!='')            $this->db->where(array("k.MODULOP_Codigo"=>$filter->modulo));  
+        if(isset($filter->modulo))            $this->db->where(array("k.MODULOP_Codigo"=>$filter->modulo));  
         if(isset($filter->turno) && $filter->turno!='')              $this->db->where(array("k.TURNOP_Codigo"=>$filter->turno));  
         if(isset($filter_not->persona) && $filter_not->persona!=''){
             if(is_array($filter_not->persona) && count($filter_not->persona)>0){

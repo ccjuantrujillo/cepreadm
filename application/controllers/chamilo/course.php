@@ -11,7 +11,7 @@ class Course extends CI_Controller
         $this->load->model('chamilo/course_model');
         $this->load->model('seguridad/permiso_model');
         $this->load->helper('menu');
-        $this->somevar['compania'] = $this->session->userdata('compania');
+        $this->configuracion = $this->config->item('conf_pagina');
     }
     public function listar($j=0){
         $filter           = new stdClass();
@@ -125,17 +125,18 @@ class Course extends CI_Controller
         $this->load->view('almacen/fabricante_ver',$data);
     }
 
-    public function buscar($j=""){
-        if(isset($_SESSION["rolusu"]) && $_SESSION["rolusu"]!=4)  $filter->curso = $_SESSION["codcurso"];
+    public function buscar($j=0){
         $filter = new stdClass();
         $filter_not = new stdClass();
         $filter->ciclo = $this->input->get_post('ciclo'); 
         $filter->curso = $this->input->get_post('curso'); 
+        if(isset($_SESSION["rolusu"]) && $_SESSION["rolusu"]!=4)  $filter->curso = $_SESSION["codcurso"];
         $filter->estado   = 1;
         $filter->asignado = 0;
         $filter->order_by = array("a.title"=>"asc");
         $registros = count($this->course_model->listar($filter,$filter_not));
-        $cursos  = $this->course_model->listar($filter,$filter_not,$this->configuracion['per_page'],$j);
+        //$cursos  = $this->course_model->listar($filter,$filter_not,$this->configuracion['per_page'],$j);
+        $cursos  = $this->course_model->listar($filter,$filter_not);
         $lista      = array();
         if(count($cursos)>0){
             foreach($cursos as $indice => $value){
@@ -151,7 +152,7 @@ class Course extends CI_Controller
             }
         }
         $configuracion = $this->configuracion;
-        $configuracion['base_url']    = base_url()."index.php/ventas/profesor/buscar";
+        $configuracion['base_url']    = base_url()."index.php/chamilo/course/buscar";
         $configuracion['total_rows']  = $registros;
         $this->pagination->initialize($configuracion);
         /*Enviamos los datos a la vista*/
@@ -159,7 +160,8 @@ class Course extends CI_Controller
         $data['titulo']     = "Buscar aulas";
         $data['j']          = $j;
         $data['registros']  = $registros;
-        $data['paginacion'] = $this->pagination->create_links();
+        //$data['paginacion'] = $this->pagination->create_links();
+        $data['paginacion'] = "";
         $this->load->view("chamilo/course_buscar",$data);
     }
 }

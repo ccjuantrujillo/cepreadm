@@ -68,10 +68,12 @@ class Asignaciondetalle_model extends CI_Model
         $this->db->join($this->table_per.' as j','j.PERSP_Codigo=i.PERSP_Codigo','inner');
         if(isset($filter->asignacion) && $filter->asignacion!='')   $this->db->where(array("c.ASIGP_Codigo"=>$filter->asignacion));
         if(isset($filter->asignaciondetalle) && $filter->asignaciondetalle!='')   $this->db->where(array("c.ASIGDETP_Codigo"=>$filter->asignaciondetalle));  
-        if(isset($filter->aula) && $filter->aula!='')   $this->db->where(array("f.AULAP_Codigo"=>$filter->aula));  
-        if(isset($filter->dia) && $filter->dia!='')     $this->db->where(array("c.ASIGDETC_Dia"=>$filter->dia));  
-        if(isset($filter->ciclo) && $filter->ciclo!='') $this->db->where(array("d.CICLOP_Codigo"=>$filter->ciclo)); 
+        if(isset($filter->aula))   $this->db->where(array("f.AULAP_Codigo"=>$filter->aula));  
+        if(isset($filter->dia))    $this->db->where(array("c.ASIGDETC_Dia"=>$filter->dia));  
+        if(isset($filter->ciclo))  $this->db->where(array("d.CICLOP_Codigo"=>$filter->ciclo)); 
         if(isset($filter->curso))  $this->db->where(array("h.PROD_Codigo"=>$filter->curso)); 
+        if(isset($filter->modulo)) $this->db->where(array("f.MODULOP_Codigo"=>$filter->modulo)); 
+        if(isset($filter->turno)) $this->db->where(array("f.TURNOP_Codigo"=>$filter->turno)); 
         if(isset($filter->order_by) && count($filter->order_by)>0){
             foreach($filter->order_by as $indice=>$value){
                 $this->db->order_by($indice,$value);
@@ -84,6 +86,37 @@ class Asignaciondetalle_model extends CI_Model
         }
         return $resultado; 
     }
+    
+    public function rpt_horario_curso2($filter,$filter_not='',$number_items='',$offset=''){
+        $this->db->select('*,DATE_FORMAT(c.ASIGDETC_FechaRegistro,"%d/%m/%Y") AS fechareg',FALSE);
+        $this->db->from($this->table." as c",$number_items,$offset);
+        $this->db->join($this->table_det.' as d','d.ASIGP_Codigo=c.ASIGP_Codigo','inner');
+        $this->db->join($this->table_course.' as e','e.id=d.course_id','inner');
+        $this->db->join($this->table_apertura.' as f','f.APERTUP_Codigo=e.APERTUP_Codigo','inner');
+        $this->db->join($this->table_cursociclo.' as g','g.CURSOCIP_Codigo=e.CURSOCIP_Codigo','inner');
+        $this->db->join($this->table_curso.' as h','h.PROD_Codigo=g.PROD_Codigo','inner');
+        $this->db->join($this->table_prof.' as i','i.PROP_Codigo=d.PROP_Codigo','inner');
+        $this->db->join($this->table_per.' as j','j.PERSP_Codigo=i.PERSP_Codigo','inner');
+        if(isset($filter->asignacion) && $filter->asignacion!='')   $this->db->where(array("c.ASIGP_Codigo"=>$filter->asignacion));
+        if(isset($filter->asignaciondetalle) && $filter->asignaciondetalle!='')   $this->db->where(array("c.ASIGDETP_Codigo"=>$filter->asignaciondetalle));  
+        if(isset($filter->aula))   $this->db->where(array("f.AULAP_Codigo"=>$filter->aula));  
+        if(isset($filter->dia))    $this->db->where(array("c.ASIGDETC_Dia"=>$filter->dia));  
+        if(isset($filter->ciclo))  $this->db->where(array("d.CICLOP_Codigo"=>$filter->ciclo)); 
+        if(isset($filter->curso))  $this->db->where(array("h.PROD_Codigo"=>$filter->curso)); 
+        if(isset($filter->modulo)) $this->db->where(array("f.MODULOP_Codigo"=>$filter->modulo)); 
+        if(isset($filter->turno)) $this->db->where(array("f.TURNOP_Codigo"=>$filter->turno)); 
+        if(isset($filter->order_by) && count($filter->order_by)>0){
+            foreach($filter->order_by as $indice=>$value){
+                $this->db->order_by($indice,$value);
+            }
+        }                 
+        $query = $this->db->get();
+        $resultado = array();
+        if($query->num_rows > 0){
+            $resultado = $query->result();
+        }
+        return $resultado; 
+    }    
     
     public function obtener($filter,$filter_not='',$number_items='',$offset=''){
         $listado = $this->listar($filter,$filter_not='',$number_items='',$offset='');

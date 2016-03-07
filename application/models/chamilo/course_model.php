@@ -27,7 +27,7 @@ class Course_model extends CI_Model{
         return $arreglo;
     }
     
-    public function listar($filter="",$filter_not='',$number_items='',$offset=''){
+    public function listar($filter="",$filter_not="",$number_items="",$offset=""){
         $this->db->select('*');
         $this->db->from($this->table." as a",$number_items,$offset);
         $this->db->join($this->table_cursociclo.' as b','b.CURSOCIP_Codigo=a.CURSOCIP_Codigo','inner');
@@ -46,6 +46,7 @@ class Course_model extends CI_Model{
                 $this->db->order_by($indice,$value);
             }
         }   
+        $this->db->limit($number_items, $offset); 
         $query = $this->db->get();
         $resultado = array();
         if($query->num_rows > 0){
