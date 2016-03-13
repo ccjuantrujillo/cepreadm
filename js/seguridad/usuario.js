@@ -18,9 +18,14 @@ jQuery(document).ready(function(){
         url = base_url+"index.php/seguridad/usuario/grabar";
         dataString  = $('#form1').serialize();
         $.post(url,dataString,function(data){
-            alert('Operacion realizada con exito');
-            location.href = base_url+"index.php/seguridad/usuario/listar";
-        });          
+            if(data[0]){
+                alert('Operacion realizada con exito');
+                location.href = base_url+"index.php/seguridad/usuario/listar";
+            }
+            else{
+                alert(data[1]);
+            }
+        },"json");          
     });    
     
     $("#limpiar").click(function(){
@@ -100,6 +105,8 @@ function selecciona_profesor(codigo){
             $("#materno").val(value.PERSC_ApellidoMaterno);
             $("#nombres").val(value.PERSC_Nombre);            
             $("#codigo_padre").val(value.PERSP_Codigo); 
+            $("#curso").val(value.PROD_Codigo); 
+            $("#profesor").val(value.PROP_Codigo); 
             $("#login").val('');  
             $("#clave").val('');  
             $("#rol").val(6); 

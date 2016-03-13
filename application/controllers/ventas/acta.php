@@ -7,6 +7,7 @@ class Acta extends CI_Controller {
         if(!isset($_SESSION['login'])) die("Sesion terminada. <a href='".  base_url()."'>Registrarse e ingresar.</a> ");           
         $this->load->model(ventas.'acta_model');
         $this->load->model(ventas.'actaprofesor_model');
+        $this->load->model(ventas.'actaexposicion_model');
         $this->load->model(ventas.'actadetalle_model');
         $this->load->model(ventas.'alumno_model');
         $this->load->model(ventas.'actividad_model');
@@ -139,8 +140,12 @@ class Acta extends CI_Controller {
         $filter->curso = $lista->curso;
         $filter->order_by = array("d.PERSC_ApellidoPaterno"=>"asc","d.PERSC_ApellidoMaterno"=>"asc");
         $data['responsable']  = $this->profesor_model->seleccionar('0',$filter);
+        $filter = new stdClass();
+        $filter->curso = $lista->curso;
+        $filter->flgcoordinador = 1;
+        $filter->order_by = array("d.PERSC_ApellidoPaterno"=>"asc","d.PERSC_ApellidoMaterno"=>"asc");
         $data['selprofesor']  = form_dropdown('profesor',$this->profesor_model->seleccionar('0',$filter),$lista->profesor,"id='profesor' class='comboGrande' ".($accion=="e"?"disabled":"").""); 
-        $data['oculto']       = form_hidden(array("accion"=>$accion,"codigo"=>$codigo));
+        $data['oculto']       = form_hidden(array("accion"=>$accion,"codigo"=>$codigo,"flgdetalle"=>count($lista->actadetalle)));
         $this->load->view("ventas/acta_nuevo",$data);
     }
 
@@ -193,6 +198,7 @@ class Acta extends CI_Controller {
         $filter = new stdClass();
         $filter->acta = $codigo;
         $this->actaprofesor_model->eliminar($filter);
+        $this->actaexposicion_model->eliminar($filter);        
         $this->actadetalle_model->eliminar($filter);
         $this->acta_model->eliminar($filter);
         $resultado = true;
@@ -223,6 +229,7 @@ class Acta extends CI_Controller {
         $actas            = $this->acta_model->obtener($filter);
         $actasdetalle     = $this->actadetalle_model->listar($filter);
         $asistencia       = $this->actaprofesor_model->listar($filter);
+        $exposicones      = $this->actaexposicion_model->listar($filter);
         $codigo           = $actas->ACTAP_Codigo;
         $codcurso         = $actas->PROD_Codigo;
         $filter           = new stdClass();
@@ -240,16 +247,16 @@ class Acta extends CI_Controller {
         $CI->pdf->Cell(0,7,"Reunion de plana Nro: ".$codigo,0,1,"C",0);
         $CI->pdf->Cell(0,7,"Curso: ".$cursos->PROD_Nombre,0,1,"C",0);
         $CI->pdf->Cell(0,7,"Tipo de estudio: ".$actas->TIPC_Nombre,0,1,"C",0);
-         $CI->pdf->SetFont('Arial','B',7);
+        $CI->pdf->SetFont('Arial','B',7);
         $CI->pdf->Cell(120,5, "" ,0,1,"L",0);
         $CI->pdf->Cell(0,5, "GENERALES:",0,1,"L",0);
-		$CI->pdf->Cell(20,5, "Fecha:" ,0,0,"L",0);
-		$CI->pdf->Cell(0,5,date_sql($actas->ACTAC_Fecha),0,1,"L",0);		
-		$CI->pdf->Cell(20,5, "Nombre:" ,0,0,"L",0);
-		$CI->pdf->Cell(0,5,$actas->ACTAC_Titulo,0,1,"L",0);
-		$CI->pdf->Cell(20,5, "Descripcion:" ,0,0,"L",0);
-		$CI->pdf->Cell(0,5, $actas->ACTAC_Agenda ,0,1,"L",0);		
-		$CI->pdf->Cell(0,5, "ACUERDOS:",0,1,"L",0);
+        $CI->pdf->Cell(20,5, "Fecha:" ,0,0,"L",0);
+        $CI->pdf->Cell(0,5,date_sql($actas->ACTAC_Fecha),0,1,"L",0);		
+        $CI->pdf->Cell(20,5, "Nombre:" ,0,0,"L",0);
+        $CI->pdf->Cell(0,5,$actas->ACTAC_Titulo,0,1,"L",0);
+        $CI->pdf->Cell(20,5, "Descripcion:" ,0,0,"L",0);
+        $CI->pdf->Cell(0,5, $actas->ACTAC_Agenda ,0,1,"L",0);		
+        $CI->pdf->Cell(0,5, "ACUERDOS:",0,1,"L",0);
         foreach($actasdetalle as $item => $value){
             $CI->pdf->Cell(4,5, ($item+1).")" ,0,0,"L",0);
             $CI->pdf->Cell(15,5, $value->ACTADETC_Nombre.":" ,0,0,"L",0);
@@ -261,21 +268,36 @@ class Acta extends CI_Controller {
         $CI->pdf->Cell(60,5, "PROFESOR" ,1,0,"C",0);
         $CI->pdf->Cell(20,5, "H.INGRESO" ,1,0,"C",0);
         $CI->pdf->Cell(20,5, "H.SALIDA" ,1,0,"C",0);  
-		$CI->pdf->Cell(0,5, "JUSTIFICACION" ,1,1,"C",0);  
-		if(count($asistencia)>0){
-			foreach($asistencia as $item => $value){
-				$CI->pdf->Cell(60,5, $value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno.",".$value->PERSC_Nombre ,1,0,"L",0);
-				$CI->pdf->Cell(20,5, $value->ACTAPROFC_Hingreso,1,0,"C",0);
-				$CI->pdf->Cell(20,5, $value->ACTAPROFC_Hsalida ,1,0,"C",0);         
-				$CI->pdf->Cell(0,5, $value->ACTAPROFC_Observacion ,1,1,"L",0); 
-			}
-		}
-		else{
-			$CI->pdf->Cell(180,5,"::NO EXISTEN REGISTROS::",1,1,"C",0);
-		}
-         $CI->pdf->Cell(90,1, "" ,0,1,"L",0);         
+        $CI->pdf->Cell(0,5, "JUSTIFICACION" ,1,1,"C",0);  
+        if(count($asistencia)>0){
+            foreach($asistencia as $item => $value){
+                $CI->pdf->Cell(60,5, $value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno.",".$value->PERSC_Nombre ,1,0,"L",0);
+                $CI->pdf->Cell(20,5, $value->ACTAPROFC_Hingreso,1,0,"C",0);
+                $CI->pdf->Cell(20,5, $value->ACTAPROFC_Hsalida ,1,0,"C",0);         
+                $CI->pdf->Cell(0,5, $value->ACTAPROFC_Observacion ,1,1,"L",0); 
+            }
+        }
+        else{
+            $CI->pdf->Cell(180,5,"::NO EXISTEN REGISTROS::",1,1,"C",0);
+        }
+        $CI->pdf->Cell(90,1, "" ,0,1,"L",0);         
         $CI->pdf->Cell(0,5, "EXPOSICION: " ,0,1,"L",0); 
-         $CI->pdf->Cell(90,1, "" ,0,1,"L",0);
+        $CI->pdf->Cell(90,1, "" ,0,1,"L",0); 
+        $CI->pdf->Cell(40,5, "TEMA" ,1,0,"C",0);
+        $CI->pdf->Cell(70,5, "DESCRIPCION" ,1,0,"C",0);
+        $CI->pdf->Cell(20,5, "DURACION" ,1,0,"C",0);  
+        $CI->pdf->Cell(60,5, "PROFESOR" ,1,1,"C",0);  
+        if(count($exposicones)>0){
+            foreach($exposicones as $item => $value){
+                $CI->pdf->Cell(40,5, $value->TEMAC_Descripcion,1,0,"L",0);
+                $CI->pdf->Cell(70,5, $value->ACTAEXPOSC_Descripcion,1,0,"L",0);
+                $CI->pdf->Cell(20,5, $value->ACTAEXPOSC_Duracion ,1,0,"C",0);         
+                $CI->pdf->Cell(60,5, $value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno.", ".$value->PERSC_Nombre,1,1,"L",0); 
+            }
+        }
+        else{
+            $CI->pdf->Cell(180,5,"::NO EXISTEN REGISTROS::",1,1,"C",0);
+        }
         $CI->pdf->Output();
     }
     

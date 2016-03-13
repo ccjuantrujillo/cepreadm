@@ -8,6 +8,7 @@ class Usuario_model extends CI_Model{
         $this->table     = "ant_usuario";
         $this->table_cab = "ant_persona";
         $this->table_rol = "ant_rol";
+        $this->table_profesor = "ant_profesor";
     }
 
     public function ingresar($user,$clave)
@@ -43,7 +44,9 @@ class Usuario_model extends CI_Model{
         $this->db->from($this->table." as c");
         $this->db->join($this->table_cab.' as d','d.PERSP_Codigo=c.PERSP_Codigo','inner');
         $this->db->join($this->table_rol.' as e','e.ROL_Codigo=c.ROL_Codigo','inner');
-        if(isset($filter->usuario) && $filter->usuario!='')            $this->db->where(array("c.USUA_Codigo"=>$filter->usuario));  
+        if(isset($filter->usuario))            $this->db->where(array("c.USUA_Codigo"=>$filter->usuario));  
+        if(isset($filter->persona))            $this->db->where(array("c.PERSP_Codigo"=>$filter->persona));  
+        if(isset($filter->rol))                $this->db->where(array("c.ROL_Codigo"=>$filter->rol));  
         if(isset($filter_not->persona) && $filter_not->persona!=''){
             if(is_array($filter_not->persona) && count($filter_not->persona)>0){
                 $this->db->where_not_in('c.PERSP_Codigo',$filter_not->persona);
@@ -66,6 +69,39 @@ class Usuario_model extends CI_Model{
         return $resultado; 
     }
 
+    public function listar_usuarioprofesor($filter='',$filter_not='',$number_items='',$offset=''){
+        $this->db->select('*');
+        $this->db->from($this->table." as c");
+        $this->db->join($this->table_cab.' as d','d.PERSP_Codigo=c.PERSP_Codigo','inner');
+        $this->db->join($this->table_rol.' as e','e.ROL_Codigo=c.ROL_Codigo','inner');
+        $this->db->join($this->table_profesor.' as f','f.PERSP_Codigo=d.PERSP_Codigo','inner');
+        if(isset($filter->usuario) && $filter->usuario!='')            $this->db->where(array("c.USUA_Codigo"=>$filter->usuario));  
+        if(isset($filter->persona) && $filter->persona!='')            $this->db->where(array("c.PERSP_Codigo"=>$filter->persona));  
+        if(isset($filter->profesor) && $filter->profesor!='')          $this->db->where(array("f.PROP_Codigo"=>$filter->profesor));  
+        if(isset($filter->curso) && $filter->curso!='')                $this->db->where(array("f.PROD_Codigo"=>$filter->curso));  
+        if(isset($filter->rol) && $filter->rol!='')                    $this->db->where(array("c.ROL_Codigo"=>$filter->rol));  
+        if(isset($filter_not->persona) && $filter_not->persona!=''){
+            if(is_array($filter_not->persona) && count($filter_not->persona)>0){
+                $this->db->where_not_in('c.PERSP_Codigo',$filter_not->persona);
+            }
+            else{
+                $this->db->where('c.PERSP_Codigo !=',$filter_not->persona);
+            }            
+        }            
+        if(isset($filter->order_by) && count($filter->order_by)>0){
+            foreach($filter->order_by as $indice=>$value){
+                $this->db->order_by($indice,$value);
+            }
+        }           
+        $this->db->limit($number_items, $offset);         
+        $query = $this->db->get();
+        $resultado = array();
+        if($query->num_rows > 0){
+            $resultado = $query->result();
+        }
+        return $resultado; 
+    }    
+    
     public function obtener($filter,$filter_not='',$number_items='',$offset=''){
         $listado = $this->listar($filter,$filter_not='',$number_items='',$offset='');
         if(count($listado)>1)

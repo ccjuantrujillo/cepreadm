@@ -79,6 +79,11 @@ class Usuario extends Persona{
             $lista->estado      = $usuario->USUA_FlagEstado;
             $lista->usuario     = $usuario->USUA_Codigo;
             $lista->rol         = $usuario->ROL_Codigo;
+            $filter             = new stdClass();
+            $filter->persona    = $usuario->PERSP_Codigo;
+            $profesor           = $this->profesor_model->obtener($filter);
+            $lista->profesor    = $profesor->PROP_Codigo;
+            $lista->curso       = isset($profesor->PROD_Codigo)?$profesor->PROD_Codigo:"";
         }    
         elseif($accion == "n"){
             $lista->login     = "";
@@ -91,6 +96,8 @@ class Usuario extends Persona{
             $lista->estado    = 1;
             $lista->usuario   = "";
             $lista->rol       = "";
+            $lista->profesor  = "";
+            $lista->curso     = "";
         }
         $arrEstado          = array("0"=>"::Seleccione::","1"=>"ACTIVO","2"=>"INACTIVO");
         $data['titulo']     = "EDITAR USUARIO";        
@@ -103,38 +110,70 @@ class Usuario extends Persona{
         $data['selrol']     = form_dropdown('rol',$this->rol_model->seleccionar("0"),$lista->rol,"id='rol' class='comboMedio'");
         $filter             = new stdClass();
         $filter->order_by   = array("p.PROD_Nombre"=>"asc");
-        $data['oculto']     = form_hidden(array('accion'=>$accion,'codigo'=>$codigo,'codigo_padre'=>$lista->persona,'flgcoordinador'=>1));
+        $data['oculto']     = form_hidden(array('accion'=>$accion,'codigo'=>$codigo,'codigo_padre'=>$lista->persona,'profesor'=>$lista->profesor,"curso"=>$lista->curso));
         $this->load->view('seguridad/usuario_nuevo',$data);
     }
 
     public function grabar(){
-//        parent::grabar();
-        $accion = $this->input->get_post('accion');
-        $codigo  = $this->input->get_post('codigo');
-        $clave  = trim($this->input->post('clave'));
+        $accion    = $this->input->get_post('accion');
+        $codigo    = $this->input->get_post('codigo');
+        $clave     = trim($this->input->post('clave'));
+        $persona   = trim($this->input->post('codigo_padre'));
+        $curso     = trim($this->input->post('curso'));
+        $profesor  = trim($this->input->post('profesor'));
+        $rol       = $this->input->post('rol');
         $data   = array(
-                        "PERSP_Codigo"    => $this->input->post('codigo_padre'),
+                        "PERSP_Codigo"    => $persona,
                         "USUA_usuario"    => $this->input->post('login'),
                         "USUA_FlagEstado" => $this->input->post('estado'),
-                        "ROL_Codigo"      => $this->input->post('rol'),
+                        "ROL_Codigo"      => $rol,
                         "USUA_Password"   => $clave!=""?md5($clave):""
-                       );
-        if($accion == "n")
-            $this->usuario_model->insertar($data);            
-        elseif($accion == "e")
-            $this->usuario_model->modificar($codigo,$data);            
-        echo json_encode(true);
+                       ); 
+        /*Verificamos si existe el usuario*/
+        $resultado = false;
+        $filter = new stdClass();
+        $filter->persona = ($accion!="e")?$persona:0;
+        $usuarios  = $this->usuario_model->listar($filter);
+        if(count($usuarios)>=1){
+            $mensaje = "Esta persona ya se encuentra registrada";                    
+        }
+        elseif(count($usuarios)==0){
+            $filter = new stdClass();
+            $filter->rol = 6;//Coordinador de plana
+            $filter->curso = $curso;
+            $objUsuarioprofesor = $this->usuario_model->listar_usuarioprofesor($filter);
+            if(count($objUsuarioprofesor)>0 && $rol==6){
+                 $mensaje = "Ya designo un coordinador de plana";    
+            }
+            else{
+                if($accion == "n")
+                    $this->usuario_model->insertar($data);            
+                elseif($accion == "e")
+                    $this->usuario_model->modificar($codigo,$data);
+                /*ACtualizo el flgCoordinador en la tabla profesor*/
+                $flgCoordinador = ($rol==6)?1:0;
+                $data = array("PROC_FlagCoordinador"=>$flgCoordinador);
+                $this->profesor_model->modificar($profesor,$data);
+                /*Mensaje de salida*/
+                $resultado = true;
+                $mensaje = "Se grabo exitosamente";  
+            }
+        }
+        echo json_encode(array($resultado,$mensaje));
     }
 
     public function eliminar(){
         $codigo = $this->input->post('codigo');
+        /*Cambio el flgCoordinador en la tabla profesor*/
         $filter = new stdClass();
         $filter->usuario = $codigo;
-        $usuarios = $this->usuario_model->obtener($filter);
-        $filter = new stdClass();
-        $filter->rol = $usuarios->ROL_Codigo;
+        $usuarioprofesor = $this->usuario_model->listar_usuarioprofesor($filter);
+        $profesor = $usuarioprofesor[0]->PROP_Codigo;
+        $data = array("PROC_FlagCoordinador"=>0);
+        $this->profesor_model->modificar($profesor,$data);    
+        /*Elimino el registro de la tabla usuario*/
         $resultado   = true;
-        $this->usuario_model->eliminar($codigo);
+        $this->usuario_model->eliminar($codigo);    
         echo json_encode($resultado);
     }
 

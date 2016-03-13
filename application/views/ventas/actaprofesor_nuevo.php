@@ -59,7 +59,7 @@
     </div>
     <div class="frmboton">
         <input id="cancelar" class="botones" type="button" alt="Cancelar" title="Cancelar" value="Cancelar"/>
-        <input id="imprimir" class="botones" type="button" value="Imprimir" alt="Imprimir" title="Imprimir"/>                        
+<!--        <input id="imprimir" class="botones" type="button" value="Imprimir" alt="Imprimir" title="Imprimir"/>                        -->
         <input id="grabar" class="botones" type="button" alt="Grabar" title="Grabar" value="Grabar"/>
     </div> 
     <?php echo $oculto;?>

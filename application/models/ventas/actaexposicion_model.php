@@ -71,7 +71,7 @@ class Actaexposicion_model extends CI_Model{
 	
     public function eliminar($filter){
         if(isset($filter->acta) && $filter->acta!='')                   $this->db->where(array("ACTAP_Codigo"=>$filter->acta));
-        if(isset($filter->actaprofesor) && $filter->actaprofesor!='')   $this->db->where(array("ACTAPROFP_Codigo"=>$filter->actaprofesor));
+        if(isset($filter->actaexposicion) && $filter->actaexposicion!='')   $this->db->where(array("ACTAEXPOSP_Codigo"=>$filter->actaexposicion));
         $this->db->delete($this->table_actaexposicion);        
     }
 }

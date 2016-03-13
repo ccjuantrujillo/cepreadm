@@ -36,7 +36,7 @@ class Actaexposicion extends CI_Controller {
             }
         }
         /*Cargo el formulario*/
-        $data['titulo']              = "Asistencia de profesores"; 
+        $data['titulo']              = "Listado de exposiciones"; 
         $data['upload_max_filesize'] = return_bytes(ini_get('upload_max_filesize'))/(1024*1024);
         $data['form_open']           = form_open(base_url()."index.php/ventas/actaexposicion/grabar",array("name"=>"frmPersona","id"=>"frmPersona","enctype"=>"multipart/form-data","onsubmit"=>"return valida_frm_exposicion();"));     
         $data['form_profesor']       = form_input(array("name"=>"profesor","id"=>"profesor","value"=>"","class"=>"cajaMedia"));
