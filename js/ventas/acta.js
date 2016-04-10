@@ -40,7 +40,6 @@ jQuery(document).ready(function(){
     
     $("body").on('click',"#grabar",function(){
         url        = base_url+"index.php/ventas/acta/grabar";
-        clave      = $("#clave").val();
         $('#profesor').removeAttr('disabled');
         $('#tipoestudio').removeAttr('disabled');
         dataString = $('#frmPersona').serialize();

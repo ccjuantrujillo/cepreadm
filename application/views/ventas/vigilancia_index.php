@@ -30,7 +30,7 @@
             <td width="60">Curso</td>
             <td width="160">Elaborado por</td>
             <td width="50">Numero</td>
-            <!--td width="50">Ver</td-->
+            <td width="50">Ver</td>
             <td width="50">Editar</td>
             <td width="50">Eliminar</td>
           </tr>
@@ -46,7 +46,7 @@
                 <td><?php echo $value->curso;?></td>
                 <td><?php echo $value->coordinador;?></td>             
                 <td><?php echo $value->numero;?></td>
-                <!--td><a href="#" onclick='ver("< ?php echo $value->codigo;?>")'><img src="< ?php echo img;?>ver.png"/></a></td-->
+                <td><a href="#" class="ver"><img src="<?php echo img;?>pdf.gif"/></a></td>
                 <td><a href="#" class="editar"><img src="<?php echo img;?>editar.jpg"/></a></td>
                 <td><a href="#" class="eliminar"><img src="<?php echo img;?>eliminar.jpg"/></a></td>
               </tr>  

@@ -217,9 +217,9 @@ class Tarea extends CI_Controller {
     public function eliminardetalle(){
         $codigo = $this->input->post('codigo');
         $filter = new stdClass();
-        $filter->actadetalle = $codigo;
+        $filter->tareadetalle = $codigo;
         $resultado = false;
-        $this->actadetalle_model->eliminar($filter);
+        $this->tareadetalle_model->eliminar($filter);
         $resultado = true;
         echo json_encode($resultado);
     }    
@@ -395,22 +395,23 @@ class Tarea extends CI_Controller {
                              $CI->pdf->Cell(0,3,"",0,1,"L",0);
                              $CI->pdf->Cell(120,3,"Curso: ".$value->PROD_Nombre,0,1,"L",0);
                              $CI->pdf->Cell(120,4,"Profesor: ".$value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno.", ".$value->PERSC_Nombre,0,1,"L",0);   
+                             $CI->pdf->Cell(0,1,"",0,1,"L",0);
                              $CI->pdf->Cell(20,5,"T.Estudio",1,0,"C",0);  
                              $CI->pdf->Cell(33,5,"Tipo Tarea",1,0,"C",0);
                              $CI->pdf->Cell(12,5,"Numero",1,0,"C",0);                    
-                             $CI->pdf->Cell(14,5,"Cantidad",1,0,"C",0);  
                              $CI->pdf->Cell(60,5,"Tema",1,0,"C",0); 
-                             $CI->pdf->Cell(20,5,"F.Compromiso",1,0,"C",0); 
-                             $CI->pdf->Cell(18,5,"F.Entrega",1,0,"C",0); 
+                             $CI->pdf->Cell(14,5,"Cantidad",1,0,"C",0);  
+                             $CI->pdf->Cell(18,5,"F.Entrega",1,0,"C",0);
+                             $CI->pdf->Cell(20,5,"F.Compromiso",1,0,"C",0);  
                              $CI->pdf->Cell(17,5,"Situacion",1,1,"C",0); 
                          }
-                         $CI->pdf->Cell(20,5,$value->TIPC_Nombre,1,0,"L",0);  
+                         $CI->pdf->Cell(20,5,$value->TIPC_Nombre,1,0,"C",0);  
                          $CI->pdf->Cell(33,5,$value->TIPOTAREAC_Nombre,1,0,"L",0);
-                         $CI->pdf->Cell(12,5,$value->TAREAC_Numero,1,0,"R",0);                    
-                         $CI->pdf->Cell(14,5,$value->TAREADETC_Cantidad,1,0,"R",0);  
+                         $CI->pdf->Cell(12,5,$value->TAREAC_Numero,1,0,"R",0);  
                          $CI->pdf->Cell(60,5,$value->TEMAC_Descripcion,1,0,"L",0); 
-                         $CI->pdf->Cell(20,5,$value->TAREAC_FechaEntrega,1,0,"C",0); 
-                         $CI->pdf->Cell(18,5,$value->TAREADETC_FechaEntrega,1,0,"C",0); 
+                         $CI->pdf->Cell(14,5,$value->TAREADETC_Cantidad,1,0,"R",0);  
+                         $CI->pdf->Cell(18,5,date_sql($value->TAREADETC_FechaEntrega),1,0,"C",0); 
+                         $CI->pdf->Cell(20,5,date_sql($value->TAREAC_FechaEntrega),1,0,"C",0); 
                          switch ($value->TAREADETC_Situacion){
                              case 1:
                                  $msgsituacion = "Pendiente";
@@ -429,7 +430,7 @@ class Tarea extends CI_Controller {
                                  $msgsituacion = "Retraso";
                                  break;  
                          }
-                         $CI->pdf->Cell(17,5,$msgsituacion,1,1,"C",0); 
+                         $CI->pdf->Cell(17,5,strtoupper($msgsituacion),1,1,"C",0); 
                          $CI->pdf->SetTextColor(0,0,0);
                          $profe_ant = $value->PROP_Codigo;
                          $curso_ant = $value->PROD_Codigo;
@@ -492,14 +493,15 @@ class Tarea extends CI_Controller {
                      /*Detalle*/
                      $id_profesor = "";
                      if(count($profesores)>0){
+                         $j=0;
                         foreach($profesores as $item=>$value){
                            if($id_profesor!=$value->PROP_Codigo){
                               $CI->pdf->Cell(7,5,"",1,0,"C",0); 
-                              $CI->pdf->Cell(40,5,$value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno." ".$value->PERSC_Nombre,1,0,"L",0);  
-                              $CI->pdf->Cell(140,5,"",1,1,"C",0); 
+                              $CI->pdf->Cell(180,5,$value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno." ".$value->PERSC_Nombre,1,1,"L",0);  
+                              $j = 0;
                            }
-                           $CI->pdf->Cell(7,5,$item+1,1,0,"C",0);    
-                           $CI->pdf->Cell(40,5,$value->TEMAC_Descripcion,1,0,"L",0);   
+                           $CI->pdf->Cell(7,5,$j+1,1,0,"C",0);    
+                           $CI->pdf->Cell(40,5,substr($value->TEMAC_Descripcion,0,33),1,0,"L",0);   
                            foreach($tipoestudiociclo as $item2=>$value2){
                                $id_tipoestudiociclo = $value2->TIPCICLOP_Codigo;
                                if($id_tipoestudiociclo==$value->TIPCICLOP_Codigo){

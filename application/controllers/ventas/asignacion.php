@@ -557,8 +557,15 @@ class Asignacion extends CI_Controller {
                                  $objCursos       = $this->asignaciondetalle_model->rpt_horario_curso($filter);
                                  $nom_curso    = isset($objCursos->PROD_Nombre)?$objCursos->PROD_Nombre:"";
                                  $nom_profesor = isset($objCursos->PERSC_ApellidoPaterno)?$objCursos->PERSC_ApellidoPaterno:"";
+                                 $nom_tipoestudio = "";
+                                 if(isset($objCursos->TIPCICLOP_Codigo)){
+                                    $filter = new stdClass();
+                                    $filter->tipoestudiociclo = $objCursos->TIPCICLOP_Codigo;
+                                    $tipoestudiociclo = $this->tipoestudiociclo_model->obtener($filter);
+                                    $nom_tipoestudio  = strtoupper($tipoestudiociclo->TIPC_Iniciales);   
+                                 }
                                  if($z==0){
-                                    $CI->pdf->Cell(28,4,$nom_curso,1,0,"C",0);    
+                                    $CI->pdf->Cell(28,4,$nom_curso." ".$nom_tipoestudio,1,0,"C",0);    
                                  }
                                  else{
                                     $CI->pdf->Cell(28,4,$nom_profesor,1,0,"C",0);     

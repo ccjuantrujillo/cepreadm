@@ -12,9 +12,20 @@ jQuery(document).ready(function(){
     
    $("body").on("click",".rpt_problemas_seminarios",function(){
         url = base_url+"index.php/ventas/tarea/export_pdf/rpt_problemas_seminarios";
-        $("#frmReporte").attr("action",url);
-        $("#frmReporte").attr("target","framereporte");
-        $("#frmReporte").submit();
+        if($("#ciclo_rpt").val()==0){
+            alert("Ingrese el ciclo");
+        }
+        else if($("#curso_rpt").val()==0){
+            alert("Ingrese el curso");
+        }
+        else if($("#tipotarea").val()==0){
+            alert("Ingrese el tipo de tarea");
+        }
+        else{
+            $("#frmReporte").attr("action",url);
+            $("#frmReporte").attr("target","framereporte");
+            $("#frmReporte").submit();            
+        }
     });        
     
     $("body").on("click","#nuevo",function(){

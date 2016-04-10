@@ -33,7 +33,7 @@
              <td width="85">Modulo</td>
              <td width="80">Fecha</td>
              <!--td width="63">Estado</td-->
-             <!--td width="50">Ver</td-->                    
+             <td width="50">Ver</td>                    
              <td width="50">Editar</td>
              <td width="50">Eliminar</td>
            </tr>
@@ -54,7 +54,7 @@
                  <td><?php echo $value->modulo;?></td>
                  <td><?php echo $value->fecha;?></td>
                  <!--td><img src="< ?php echo img.($flgestado==1?"check.jpg":"uncheck.jpg");?>" height="20px" width="20px"/>< ?php echo $estado;?></td-->
-                 <!--td><a href="#" onclick='ver("< ?php echo $value->codigo;?>")'><img src="< ?php echo img;?>ver.png"/></a></td-->
+                 <td><a href="#" onclick='ver("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>pdf.gif"/></a></td>
                  <td><a href="#" class="editar"><img src="<?php echo img;?>editar.jpg"/></a></td>
                  <td><a href="#" class="eliminar"><img src="<?php echo img;?>eliminar.jpg"/></a></td>
                </tr>  
@@ -63,7 +63,7 @@
            }
            else{
                ?>
-             <tr class="list_a"><td colspan='9'>::NO EXISTEN REGISTROS::</td></tr>
+             <tr class="list_a"><td colspan='10'>::NO EXISTEN REGISTROS::</td></tr>
                <?php
            }
            ?>

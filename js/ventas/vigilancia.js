@@ -41,6 +41,12 @@ jQuery(document).ready(function(){
        },"json");             
    });        
     
+   $("body").on("click",".ver",function(){
+        codigo = $(this).parent().parent().attr("id");
+        url = base_url+"index.php/ventas/vigilancia/ver/"+codigo;
+        window.open(url,"_blank","width=800,height=400,top=150,left=200");
+    }); 
+    
     $("body").on('click',"#imprimir",function(){
         codigo   = $("#codigo").val();
         url = base_url+"index.php/ventas/vigilancia/ver/"+codigo;
@@ -53,47 +59,57 @@ jQuery(document).ready(function(){
     });      
     
     $("body").on('click',"#grabar",function(){
-        url        = base_url+"index.php/ventas/vigilancia/grabar";
-        clave      = $("#clave").val();
+        url         = base_url+"index.php/ventas/vigilancia/grabar";
         $('#responsable').removeAttr('disabled');
         $('#tipoestudiociclo').removeAttr('disabled');
         dataString = $('#frmPersona').serialize();
-        if(clave != ""){
+        if($("#numero").val()==""){
+            alert("Debe ingresar un Nro de Practica.");
+        }
+        else if($("#ciclo").val()==0){
+            alert("Debe ingresar un ciclo.");
+        }
+        else if($("#tipoestudiociclo").val()==0){
+            alert("Debe ingresar un tipo de estudio.");
+        }
+        else if($("#curso").val()==0){
+            alert("Debe ingresar un curso");
+        }
+        else if($("#responsable").val()==0){
+            alert("Debe ingresar un responsable");
+        }
+        else{
             $.post(url,dataString,function(data){
-                if(data=="true"){
+                if(data==true){
                     alert('Operacion realizada con exito');    
                     location.href = base_url+"index.php/ventas/vigilancia/listar";
                 }
-                else if(data=="false"){
+                else if(data==false){
                     alert('El usuario ya esta vigilanciado en el curso');
                 }
-            });            
-        }
-        else{
-            alert("Debe escribir una clave");
+            },"json"); 
         }
     }); 
     
    $("body").on("click",".eliminardetalle",function(){
         if(confirm('Esta seguro desea eliminar este registro?')){
+            tr = $(this).parent().parent();
             coddetalle = $(this).parent().parent().attr("id");
             dataString = "codigo="+coddetalle;
             url = base_url+"index.php/ventas/vigilancia/eliminardetalle";
-            $.post(url,dataString,function(data){
-                if(data=="true"){
-//                    alert('Operacion realizada con exito');  
-                    accion      = $("#accion").val();
-                    codigo      = $("#codigo").val();
-                    dataString  = $('#frmPersona').serialize();
-                    url = base_url+"index.php/ventas/vigilancia/editar/"+accion+"/"+codigo;
-                    $.post(url,dataString,function(data2){
-                        $('#mensaje').html(data2);
-                    });                                          
-                }
-                else if(data=="false"){
-                    alert("No se puede eliminar el registro,\nel usuario ha visualizado los videos");
-                }
-            });
+            if(coddetalle!=""){
+                $.post(url,dataString,function(data){
+                    if(data==true){
+                        tr.remove();                                         
+                    }
+                    else if(data==false){
+                        alert("No se puede eliminar el registro,\nel usuario ha visualizado los videos");
+                    }
+                },"json");
+            }
+            else{
+                $(this).parent().parent().remove();
+            }
         }        
     });    
     

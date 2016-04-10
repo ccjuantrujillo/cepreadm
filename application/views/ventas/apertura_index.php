@@ -53,7 +53,7 @@
                 <td align="center"><?php echo $value->modulo;?></td>  
                 <td align="center"><?php echo $value->fecha;?></td>
                 <td align="center"><img src="<?php echo img.($flgestado==1?"check.jpg":"uncheck.jpg");?>" height="20px" width="20px"/><?php echo $estado;?></td>
-                <td><a href="#" class="ver"><img src="<?php echo img;?>ver.png"/></a></td>                        
+                <td><a href="#" class="ver"><img src="<?php echo img;?>pdf.gif"/></a></td>                        
                 <td><a href="#" class="editar"><img src="<?php echo img;?>editar.jpg"/></a></td>
                 <td><a href="#" class="eliminar"><img src="<?php echo img;?>eliminar.jpg"/></a></td>
               </tr>  

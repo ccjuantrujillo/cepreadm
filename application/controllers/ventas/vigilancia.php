@@ -143,7 +143,7 @@ class Vigilancia extends CI_Controller {
                 }
                 else{//Editar
                    $this->vigilanciadetalle_model->modificar($codigodetalle[$item],$data); 
-                }  
+                }                      
             }          
         }
         echo json_encode($resultado);
@@ -179,17 +179,25 @@ class Vigilancia extends CI_Controller {
     } 
     
     public function ver($codigo){
+        $filter             = new stdClass();
+        $filter->vigilancia = $codigo;
+        $vigilancia         = $this->vigilancia_model->obtener($filter);
+        $vigilanciadetalle  = $this->vigilanciadetalle_model->listar($filter);
+        $codcurso           = $vigilancia->PROD_Codigo;
+        $codprofesor        = $vigilancia->PROP_Codigo;
+        $codciclo           = $vigilancia->CICLOP_Codigo;
+        $filter             = new stdClass();
+        $filter->profesor   = $codprofesor; 
+        $profesores         = $this->profesor_model->obtener($filter);
+        $filter             = new stdClass();
+        $filter->curso      = $codcurso; 
+        $productos          = $this->curso_model->obtener($filter);      
+        $filter             = new stdClass();
+        $filter->tipoestudiociclo = $vigilancia->TIPCICLOP_Codigo;
+        $tipoestudiociclo = $this->tipoestudiociclo_model->obtener($filter);
         $filter           = new stdClass();
-        $filter->orden    = $codigo;
-        $ordenes          = $this->acta_model->obtener($filter);
-        $codproducto      = $ordenes->PROD_Codigo;
-        $codcliente       = $ordenes->CLIP_Codigo;
-        $filter           = new stdClass();
-        $filter->cliente  = $codcliente; 
-        $clientes         = $this->alumno_model->obtener($filter);
-        $filter           = new stdClass();
-        $filter->curso = $codproducto; 
-        $productos        = $this->curso_model->obtener($filter);        
+        $filter->ciclo    = $codciclo;
+        $ciclo            = $this->ciclo_model->obtener($filter);
         $this->load->library("fpdf/pdf");
         $CI = & get_instance();
         $CI->pdf->FPDF('P');
@@ -198,34 +206,43 @@ class Vigilancia extends CI_Controller {
         $CI->pdf->SetTextColor(0,0,0);
         $CI->pdf->SetFillColor(216,216,216);
         $CI->pdf->SetFont('Arial','B',11);
-        $CI->pdf->Image('img/puertosaber.jpg',10,8,10);
-        $CI->pdf->Cell(0,13,"MATRICULA Nro ".$ordenes->ORDENC_Numero,0,1,"C",0);
-         $CI->pdf->SetFont('Arial','B',7);
-        $CI->pdf->Cell(120,10, "" ,0,1,"L",0);
-        $CI->pdf->Cell(90,5, "CURSO : " ,1,0,"L",0);
+        //$CI->pdf->Image('img/puertosaber.jpg',10,8,10);
+        $CI->pdf->Cell(0,6,"VIGILANCIA Nro ".$vigilancia->VIGILAC_Numero,0,1,"C",0);
+        $CI->pdf->Cell(0,6,"CURSO ".$productos->PROD_Nombre,0,1,"C",0);
+        $CI->pdf->Cell(0,6,"TIPO ESTUDIO ".$tipoestudiociclo->TIPC_Nombre,0,1,"C",0);
+        $CI->pdf->SetFont('Arial','B',7);
+        $CI->pdf->Cell(120,8, "" ,0,1,"L",0);
+        $CI->pdf->Cell(90,5, "FECHA : " ,1,0,"L",0);
         $CI->pdf->Cell(1,1, "" ,0,0,"L",0);
-        $CI->pdf->Cell(90,5,$productos->PROD_Nombre,1,1,"L",0);
+        $CI->pdf->Cell(90,5,date_sql($vigilancia->VIGILAC_Fecha),1,1,"L",0);
         $CI->pdf->Cell(90,1, "" ,0,1,"L",0);
-        $CI->pdf->Cell(90,5, "APELLIDOS Y NOMBRES: " ,1,0,"L",0);
+        $CI->pdf->Cell(90,5, "CICLO : " ,1,0,"L",0);
         $CI->pdf->Cell(1,1, "" ,0,0,"L",0);
-        $CI->pdf->Cell(90,5,$clientes->PERSC_ApellidoPaterno." ".$clientes->PERSC_ApellidoMaterno.", ".$clientes->PERSC_Nombre,1,1,"L",0); 
+        $CI->pdf->Cell(90,5,$ciclo->COMPC_Nombre,1,1,"L",0);
         $CI->pdf->Cell(90,1, "" ,0,1,"L",0);
-        $CI->pdf->Cell(90,5, "USUARIO: " ,1,0,"L",0);
+        $CI->pdf->Cell(90,5, "ELABORADO POR: " ,1,0,"L",0);
         $CI->pdf->Cell(1,1, "" ,0,0,"L",0);
-        $CI->pdf->Cell(90,5,$ordenes->ORDENC_Usuario ,1,1,"L",0);
-         $CI->pdf->Cell(90,1, "" ,0,1,"L",0);
-        $CI->pdf->Cell(90,5, "CLAVE: " ,1,0,"L",0);
-        $CI->pdf->Cell(1,1,$ordenes->ORDENC_Password,0,0,"L",0);
-        $CI->pdf->Cell(90,5, "" ,1,1,"L",0);
-         $CI->pdf->Cell(90,1, "" ,0,1,"L",0);         
-        $CI->pdf->Cell(90,5, "RESPONSABLE: " ,1,0,"L",0);
-        $CI->pdf->Cell(1,1, "" ,0,0,"L",0);
-        $CI->pdf->Cell(90,5, "" ,1,1,"L",0);   
-         $CI->pdf->Cell(90,1, "" ,0,1,"L",0);
+        $CI->pdf->Cell(90,5,$profesores->PERSC_ApellidoPaterno." ".$profesores->PERSC_ApellidoMaterno.", ".$profesores->PERSC_Nombre,1,1,"L",0); 
+        $CI->pdf->Cell(90,1, "" ,0,1,"L",0);
         $CI->pdf->SetTextColor(0,0,0);
         $CI->pdf->SetFillColor(255,255,255);
-        $CI->pdf->Cell(181,5, "OBSERVACION : " ,0,1,"L",1);
-        $CI->pdf->Cell(181,5,$ordenes->ORDENC_Observacion,1,1,"L",1);
+        $CI->pdf->Cell(181,5, "DETALLE : " ,0,1,"L",1);
+        $CI->pdf->Cell(1,1, "" ,0,0,"L",0);
+        $CI->pdf->Cell(10,5, "Nro" ,1,0,"C",0);
+        $CI->pdf->Cell(85,5, "PLANA" ,1,0,"C",0);
+        $CI->pdf->Cell(85,5, "PROFESOR" ,1,1,"C",0);
+        if(count($vigilanciadetalle)>0){
+            foreach($vigilanciadetalle as $item => $value){
+                $CI->pdf->Cell(1,5,"",0,0,"L",0);
+                $CI->pdf->Cell(10,5, ($item+1),1,0,"C",0);
+                $CI->pdf->Cell(85,5, $value->PROD_Nombre.":" ,1,0,"L",0);
+                $CI->pdf->Cell(85,5,$value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno." ".$value->PERSC_Nombre,1,1,"L",0);             
+            }            
+        }
+        $CI->pdf->SetTextColor(0,0,0);
+        $CI->pdf->SetFillColor(255,255,255);
+        $CI->pdf->Cell(181,5, "DESCRIPCION : " ,0,1,"L",1);
+        $CI->pdf->Cell(181,5,$vigilancia->VIGILAC_Descripcion,1,1,"L",1);
         $CI->pdf->Output();
     }
     
