@@ -46,7 +46,7 @@ jQuery(document).ready(function(){
             fila  += "<td align='center'><select class='comboGrande' name='tema["+n+"]' id='tema["+n+"]'><option value='0'>::Seleccione::</option></select></td>";
             fila  += "<td align='center'><select class='comboGrande' name='responsable["+n+"]' id='responsable["+n+"]'><option value='0'>::Seleccione::</option></select></td>";
             fila  += "<td align='center'><input type='text' class='cajaMinima' name='cantidad["+n+"]' id='cantidad["+n+"]' value=''></td>";
-            fila  += "<td align='center'><input type='text' class='cajaMinima' name='fentrega["+n+"]' id='fentrega["+n+"]' value='__/__/__' onblur='getCalendario(this);'></td>";
+            fila  += "<td align='center'><input type='text' class='cajaMinima rowfecha' name='fentrega["+n+"]' id='fentrega["+n+"]' value='__/__/__' readonly='readonly'></td>";
             fila  += "<td align='center'><a href='#'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>";
             fila  += "</tr>";
             $("#tabla_detalle").append(fila);
@@ -134,24 +134,18 @@ jQuery(document).ready(function(){
     
    $("body").on("click",".eliminardetalle",function(){
         if(confirm('Esta seguro desea eliminar este registro?')){
-            coddetalle = $(this).parent().parent().attr("id");
+            tr = $(this).parent().parent();
+            coddetalle = tr.attr("id");
             dataString = "codigo="+coddetalle;
             url = base_url+"index.php/ventas/tarea/eliminardetalle";
             $.post(url,dataString,function(data){
-                if(data=="true"){
-//                    alert('Operacion realizada con exito');  
-                    accion      = $("#accion").val();
-                    codigo      = $("#codigo").val();
-                    dataString  = $('#frmPersona').serialize();
-                    url = base_url+"index.php/ventas/tarea/editar/"+accion+"/"+codigo;
-                    $.post(url,dataString,function(data2){
-                        $('#mensaje').html(data2);
-                    });                                          
+                if(data==true){
+                    tr.remove();                                       
                 }
-                else if(data=="false"){
+                else if(data==false){
                     alert("No se puede eliminar el registro,\nel usuario ha visualizado los videos");
                 }
-            });
+            },"json");
         }        
     });    
     
@@ -170,7 +164,7 @@ jQuery(document).ready(function(){
         tr.append("<td align='center'><select class='comboGrande' name='tema["+n+"]' id='tema["+n+"]'><option value='0'>::Seleccione::</option></select></td>");
         tr.append("<td align='center'><select class='comboGrande' name='responsable["+n+"]' id='responsable["+n+"]'><option value='0'>::Seleccione::</option></select></td>");        
         tr.append("<td align='left'><input type='text' class='cajaMinima' name='cantidad["+n+"]' id='cantidad["+n+"]' value='"+data["TAREADETC_Cantidad"]+"'></td>");                
-        tr.append("<td align='left'><input type='text' class='cajaMinima' name='fentrega["+n+"]' id='fentrega["+n+"]' value='"+data["fentrega"]+"' onblur='getCalendario(this);'></td>");                        
+        tr.append("<td align='left'><input type='text' class='cajaMinima rowfecha' name='fentrega["+n+"]' id='fentrega["+n+"]' value='"+data["fentrega"]+"' readonly='readonly'></td>");                        
         tr.append("<td align='center'><a href='#' class='editardetalle'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>");
         selectTipoestudiociclo(n,data["TIPCICLOP_Codigo"]);  
         selectTema(n,data["TIPCICLOP_Codigo"],data["PRODATRIBDET_Codigo"]);  
@@ -207,6 +201,14 @@ jQuery(document).ready(function(){
     });        
     
   $("body").on('focus',"#fecha",function(){
+       $(this).datepicker({
+        dateFormat: "dd/mm/yy",
+        changeYear: true,
+        yearRange: "1945:2025"
+       });
+  });
+
+  $("body").on('focus',".rowfecha",function(){
        $(this).datepicker({
         dateFormat: "dd/mm/yy",
         changeYear: true,
@@ -287,12 +289,4 @@ function selectResponsable(n,valor){
             document.getElementById(c).appendChild(opt);
         });
     },"json");
-}
-
-function getCalendario(obj){
-       $(obj).datepicker({
-        dateFormat: "dd/mm/yy",
-        changeYear: true,
-        yearRange: "1945:2025"
-       });
 }

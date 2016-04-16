@@ -485,9 +485,9 @@ class Tarea extends CI_Controller {
                      $CI->pdf->SetFont('Arial','B',7); 
                      /*Encabezado*/
                      $CI->pdf->Cell(7,5,"No",1,0,"C",0); 
-                     $CI->pdf->Cell(40,5,"Tema del problema a elaborar",1,0,"C",0); 
+                     $CI->pdf->Cell(75,5,"Tema del problema a elaborar",1,0,"C",0); 
                      foreach($tipoestudiociclo as $item=>$value){
-                         $CI->pdf->Cell(20,5,strtoupper($value->TIPC_Nombre),1,0,"C",0);
+                         $CI->pdf->Cell(15,5,strtoupper($value->TIPC_Iniciales),1,0,"C",0);
                      }
                      $CI->pdf->Cell(0,5,"",0,1,"C",0); 
                      /*Detalle*/
@@ -497,18 +497,18 @@ class Tarea extends CI_Controller {
                         foreach($profesores as $item=>$value){
                            if($id_profesor!=$value->PROP_Codigo){
                               $CI->pdf->Cell(7,5,"",1,0,"C",0); 
-                              $CI->pdf->Cell(180,5,$value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno." ".$value->PERSC_Nombre,1,1,"L",0);  
+                              $CI->pdf->Cell(180,5,strtoupper($value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno." ".$value->PERSC_Nombre),1,1,"L",0);  
                               $j = 0;
                            }
                            $CI->pdf->Cell(7,5,$j+1,1,0,"C",0);    
-                           $CI->pdf->Cell(40,5,substr($value->TEMAC_Descripcion,0,33),1,0,"L",0);   
+                           $CI->pdf->Cell(75,5,$value->TEMAC_Descripcion,1,0,"L",0);   
                            foreach($tipoestudiociclo as $item2=>$value2){
                                $id_tipoestudiociclo = $value2->TIPCICLOP_Codigo;
                                if($id_tipoestudiociclo==$value->TIPCICLOP_Codigo){
-                                   $CI->pdf->Cell(20,5,$value->TAREADETC_Cantidad,1,0,"C",0); 
+                                   $CI->pdf->Cell(15,5,$value->TAREADETC_Cantidad,1,0,"C",0); 
                                }
                                else{
-                                   $CI->pdf->Cell(20,5,"",1,0,"C",0); 
+                                   $CI->pdf->Cell(15,5,"",1,0,"C",0); 
                                }
                            }
                            $CI->pdf->Cell(0,5,"",0,1,"C",0);   

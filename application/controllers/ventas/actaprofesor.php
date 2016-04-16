@@ -19,6 +19,7 @@ class Actaprofesor extends CI_Controller {
         $filter->acta  = $acta;
         $filter->order_by    = array("f.PERSC_ApellidoPaterno"=>"asc","f.PERSC_ApellidoMaterno"=>"asc","f.PERSC_Nombre"=>"asc");
         $actaprofesores = $this->actaprofesor_model->listar($filter);
+        $flgDetalle = 0;
         $item       = 1;
         $lista      = array();
         if(count($actaprofesores)>0){
@@ -34,12 +35,14 @@ class Actaprofesor extends CI_Controller {
                 $lista[$indice]->observacion = $value->ACTAPROFC_Observacion;
                 $lista[$indice]->curso    = $value->PROD_Nombre;
             }
+            $flgDetalle=1;
         }
         $data['titulo']       = "Asistencia de profesores"; 
         $data['form_open']    = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));     
         $data['form_close']   = form_close(); 
         $data['lista']        = $lista;
-        $data['oculto']       = form_hidden(array("curso"=>$curso,"acta"=>$acta));
+        $data['flgDetalle']   = $flgDetalle;
+        $data['oculto']       = form_hidden(array("curso"=>$curso,"acta"=>$acta,"flgDetalle"=>$flgDetalle));
         $this->load->view("ventas/actaprofesor_nuevo",$data);
     } 
     
@@ -53,24 +56,27 @@ class Actaprofesor extends CI_Controller {
         if(count($codigo)>0){
             $resultado = false;
             foreach ($codigo as $item=>$value){
-                $data   = array(
-                                "ACTAPROFP_Codigo"      => $codigo[$item],
-                                "PROP_Codigo"           => $profesor[$item],
-                                "ACTAP_Codigo"          => $acta,
-                                "ACTAPROFC_Hingreso"    => $hingreso[$item],
-                                "ACTAPROFC_Hsalida"     => $hsalida[$item],
-                                "ACTAPROFC_Observacion" => $observacion[$item]
-                               );
-                if($codigo[$item]==""){//Nuevo
-                    $this->actaprofesor_model->insertar($data);    
-                    $resultado = true;
+                    if($profesor[$item]!=0){
+                    $data   = array(
+                                    "ACTAPROFP_Codigo"      => $codigo[$item],
+                                    "PROP_Codigo"           => $profesor[$item],
+                                    "ACTAP_Codigo"          => $acta,
+                                    "ACTAPROFC_Hingreso"    => $hingreso[$item],
+                                    "ACTAPROFC_Hsalida"     => $hsalida[$item],
+                                    "ACTAPROFC_Observacion" => $observacion[$item]
+                                   );
+                    if($codigo[$item]==""){//Nuevo
+                        unset($data["ACTAPROFP_Codigo"]);
+                        $this->actaprofesor_model->insertar($data);    
+                        $resultado = true;
+                    }
+                    else{//Editar
+                        unset($data['ACTAPROFP_Codigo']);
+                        $this->actaprofesor_model->modificar($codigo[$item],$data);                                
+                        $resultado = true; 
+                    }                    
                 }
-                else{//Editar
-                    unset($data['ACTAPROFP_Codigo']);
-                    $this->actaprofesor_model->modificar($codigo[$item],$data);                                
-                    $resultado = true; 
-                }
-            }
+            }                
             echo json_encode($resultado);
         }
     }

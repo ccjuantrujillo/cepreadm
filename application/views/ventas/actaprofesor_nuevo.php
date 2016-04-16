@@ -14,7 +14,11 @@
 <div class="contenido">  
     <div class="titulo">
         <h1><?php echo $titulo;?></h1>
-        <span><input id="importar" class="botones" type="button" value="Importar" alt="Importar" title="Importar"/> </span>
+        <?php if($flgDetalle==0):;?>
+            <span class="clsimportar"><input id="importar" class="botones" type="button" value="Importar" alt="Importar" title="Importar"/> </span>
+        <?php else:;?>
+            <span class="clsagregar"><a href='#'>Agregar profesor&nbsp;&nbsp;<img src="<?php echo img;?>/botonnuevo.png"></a></span>        
+        <?php endif;?>
     </div>
     <?php echo $form_open;?>
     <div class="tabla"  style="width:100%;font-size: 11px;">
