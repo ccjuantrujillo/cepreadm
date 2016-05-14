@@ -68,14 +68,17 @@
             else{
                 foreach($lista as $indice => $value){
                     ?>
-                    <tr>
+                    <tr id="<?php echo $value->codigo;?>">
                         <td align="center"><?php echo $indice+1;?></td>
                         <td align="left"><?php echo $value->tema;?></td>
                         <td align="left"><?php echo $value->descripcion;?></td>
                         <td align="center"><?php echo $value->duracion;?></td>
                         <td align="center"><?php echo $value->profesor;?></td>
                         <td align="center"><a href="<?php echo base_url()."files/".$value->archivo;?>" target="blank"><img src="<?php echo img."adjunto.jpg";?>" width="20px" height="20px"/></a></td>
-                        <td align="center">Editar&nbsp;&nbsp;Eliminar</th>
+                        <td align="center">
+                            <a href="#" class="editar">Editar</a>&nbsp;&nbsp;
+                            <a href="#" class="eliminar">Eliminar</a>
+                        </td>
                     </tr>
                     <?php
                 }
@@ -84,7 +87,7 @@
         </table>           
     </div>  
     <div class="frmboton">
-        <input id="cancelar" class="botones" type="button" alt="Cancelar" title="Cancelar" value="Cancelar"/>
+        <input id="cancelar" class="botones" type="button" alt="Salir" title="Salir" value="Salir"/>
     </div>    
 </div>
 </body>

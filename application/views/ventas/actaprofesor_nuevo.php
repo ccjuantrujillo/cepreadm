@@ -19,6 +19,7 @@
         <?php else:;?>
             <span class="clsagregar"><a href='#'>Agregar profesor&nbsp;&nbsp;<img src="<?php echo img;?>/botonnuevo.png"></a></span>        
         <?php endif;?>
+            <span style="float:right;margin-right: 0px;">Cantidad: <?php echo count($lista);?></span>
     </div>
     <?php echo $form_open;?>
     <div class="tabla"  style="width:100%;font-size: 11px;">
@@ -62,7 +63,7 @@
         </table>
     </div>
     <div class="frmboton">
-        <input id="cancelar" class="botones" type="button" alt="Cancelar" title="Cancelar" value="Cancelar"/>
+        <input id="cancelar" class="botones" type="button" alt="Salir" title="Salir" value="Salir"/>
 <!--        <input id="imprimir" class="botones" type="button" value="Imprimir" alt="Imprimir" title="Imprimir"/>                        -->
         <input id="grabar" class="botones" type="button" alt="Grabar" title="Grabar" value="Grabar"/>
     </div> 

@@ -10,7 +10,9 @@ jQuery(document).ready(function(){
     });    
     
     $("body").on('click',"#cancelar",function(){
-        window.close();
+        if(confirm("¡Una vez salga perdera los cambios que no ha guardado!\nAsegúrese de guardar los cambios.")){
+            window.close();    
+        }
     });      
     
     $("body").on('click',"#importar",function(){
@@ -41,12 +43,15 @@ jQuery(document).ready(function(){
     });     
     
     $("body").on('click',"#grabar",function(){
-        url        = base_url+"index.php/ventas/actaprofesor/grabar";
+        acta  = $("#acta").val();
+        curso = $("#curso").val();
+        url   = base_url+"index.php/ventas/actaprofesor/grabar";
         dataString = $('#frmPersona').serialize();
         $.post(url,dataString,function(data){
             if(data=="true"){
-                alert('Operacion realizada con exito');    
-                window.close();
+                alert('Operacion realizada con exito');   
+                url2  = base_url+"index.php/ventas/actaprofesor/editar/"+acta+"/"+curso;
+                location.href = url2;
             }
             else if(data=="false"){
                 alert('Hubo problemas con la grabación, vuelva a intentarlo.');
@@ -56,15 +61,19 @@ jQuery(document).ready(function(){
     
     $("body").on("click",".eliminar",function(){
        if(confirm('Esta seguro desea eliminar este registro?')){
-            coddetalle = $(this).parent().parent().attr("id");
-            $(this).parent().parent().remove();
-            dataString = "codigo="+coddetalle;
-            url = base_url+"index.php/ventas/actaprofesor/eliminar";
-            $.post(url,dataString,function(data){
-               
-            });
+           acta  = $("#acta").val();
+           curso = $("#curso").val();
+           coddetalle = $(this).parent().parent().attr("id");
+           $(this).parent().parent().remove();
+           dataString = "codigo="+coddetalle;
+           url = base_url+"index.php/ventas/actaprofesor/eliminar";
+           $.post(url,dataString,function(data){
+               url2 = base_url+"index.php/ventas/actaprofesor/editar/"+acta+"/"+curso;   
+               location.href = url2;
+           });
        }        
-    });      
+    });  
+    
    $("body").on("click",".editar",function(){
         codigo = $(this).parent().parent().attr("id");
         dataString = "";    
@@ -97,6 +106,7 @@ function selectCurso(n){
     url    = base_url+"index.php/almacen/curso/obtener";
     select_b = document.getElementById(b);
     objRes = new Object();
+    objRes.curso = $("#curso").val();
     dataString   = {objeto: JSON.stringify(objRes)};
     $.post(url,dataString,function(data){
         $.each(data, function(item,value){

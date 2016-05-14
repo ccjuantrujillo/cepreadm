@@ -60,7 +60,7 @@ blockquote, q {quotes: "" "";}
 .frmcamp{padding:5px;}
 .frmcamp span{float: left;margin-right:5px;text-align:right;width: 70px;margin-bottom: 15px;}
 
-.frmboton{float:left;padding-top:5px;width:100%;text-align: center;}
+.frmboton{float:left;padding-top:5px;width:100%;text-align: center;padding-bottom: 5px;}
 .frmboton h2 a,.frmboton h2{font-size: 12px;text-align: center;text-decoration: none;padding-bottom: 5px;}
 .frmboton_login{margin: 0 auto;width: 158px;}
 .frmboton_matricula{margin: 0 auto;width: 300px;}

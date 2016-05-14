@@ -61,6 +61,8 @@ class Actaexposicion extends CI_Controller {
     }
     
     public function grabar(){
+        $originales   = 'ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûýýþÿŔŕ';
+        $modificadas  = 'aaaaaaaceeeeiiiidnoooooouuuuybsaaaaaaaceeeeiiiidnoooooouuuyybyRr';
         $codigo       = $this->input->get_post('codigo');
         $curso        = $this->input->get_post('curso');
         $acta         = $this->input->get_post('acta');
@@ -70,9 +72,22 @@ class Actaexposicion extends CI_Controller {
         $duracion     = $this->input->get_post('duracion');
         $max_filesize = $this->input->get_post('max_filesize');
         $fichero      = $_FILES['file_exposicion'];
-        $archivo      = rand(15,86).str_replace(" ","",strtolower($fichero['name']));
+        $cadena       = utf8_decode($fichero['name']);
+        $cadena       = strtr($cadena, utf8_decode($originales), $modificadas);
+        $cadena       = strtolower($cadena);
+        $cadena       = str_replace(" ","",$cadena);
+        $cadena       = utf8_encode($cadena);
+        $archivo      = rand(15,86).$cadena;
         if($curso!="" && $profesor!=0){
-            if(($fichero["type"] == "application/pdf" || $fichero["type"] == "application/msword" || $fichero["type"] == "application/excel")
+            if(($fichero["type"] == "application/pdf" 
+                    || $fichero["type"] == "application/msword"  
+                    || $fichero["type"] == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" 
+                    || $fichero["type"] == "application/vnd.ms-excel" 
+                    || $fichero["type"] == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" 
+                    || $fichero["type"] == "application/vnd.ms-powerpoint" 
+                    || $fichero["type"] == "application/vnd.openxmlformats-officedocument.presentationml.presentation" 
+                    || $fichero["type"] == "application/vnd.openxmlformats-officedocument.presentationml.slideshow"
+                    )
                     && $fichero["size"] <= $max_filesize*1024*1024){
                 if(move_uploaded_file($fichero['tmp_name'],"files/".$archivo)){
                     $data   = array(
@@ -99,6 +114,24 @@ class Actaexposicion extends CI_Controller {
                 die("<script>alert('Error en la subida de archivos, verifique el tamaño del archivo o la extension'); window.location.href='editar/".$acta."/".$curso."';</script>");
             }
         }
+    }
+    
+    public function eliminar(){
+        $codigo = $this->input->post('codigo');
+        $resultado = false;
+        $filter = new stdClass();
+        $filter->actaexposicion = $codigo;
+        $this->actaexposicion_model->eliminar($filter);
+        $resultado = true;
+        echo json_encode($resultado);
+    }    
+    
+    public function obtener(){
+        $obj    = $this->input->post('objeto');
+        $filter = json_decode($obj);
+        $cursos  = $this->actaexposicion_model->listar($filter);
+        $resultado = json_encode($cursos);
+        echo $resultado;
     }
 }
 ?>

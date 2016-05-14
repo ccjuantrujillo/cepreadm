@@ -11,6 +11,48 @@ jQuery(document).ready(function(){
                 $this.remove();
             });
         });
+        
+    $("body").on('click',"#cancelar",function(){
+        window.close();    
+    }); 
+    
+    $("body").on("click",".eliminar",function(){
+       var acta  = $("#acta").val();
+       var curso = $("#curso").val();
+       if(confirm('Esta seguro desea eliminar este registro?')){
+           var coddetalle = $(this).parent().parent().attr("id");
+           $(this).parent().parent().remove();
+           var dataString = "codigo="+coddetalle;
+           url = base_url+"index.php/ventas/actaexposicion/eliminar";
+           $.post(url,dataString,function(data){
+               var url2 = base_url+"index.php/ventas/actaexposicion/editar/"+acta+"/"+curso;   
+               location.href = url2;
+           });
+       }        
+    });   
+    
+    $("body").on("click",".editar",function(){  
+       var acta  = $("#acta").val();
+       var curso = $("#curso").val();
+       var tr    = $(this).parent().parent();
+       var n     = tr.children("td")[0].innerHTML-1;   
+       var actaexposicion = $(this).parent().parent().attr("id"); 
+       var url = base_url+"index.php/ventas/actaexposicion/obtener";
+       var objRes = new Object();
+       objRes.actaexposicion = actaexposicion;
+       var dataString   = {objeto: JSON.stringify(objRes)};       
+       $.post(url,dataString,function(data){
+            tr.empty();
+            tr.append("<td align='center'>"+(parseInt(n)+1)+"</td>");
+            tr.append("<td align='center'><select name='tema["+n+"]' class='comboMedio' id='tema["+n+"]'><option>::Seleccione::</option></select></td> ");
+            tr.append("<td align='center'><input type='text' class='cajaMedia' name='descripcion["+n+"]' id='descripcion["+n+"]' value='"+data.ACTAEXPOSC_Descripcion+"' readonly='readonly'></td>");
+            tr.append("<td align='center'><input type='text' class='cajaMinima' name='duracion["+n+"]' id='duracion["+n+"]' value='"+data.ACTAEXPOSC_Duracion+"'></td> ");
+            tr.append("<td align='center'><select name='profesor["+n+"]' id='profesor["+n+"]' class='comboMedio'><option>::Seleccione::</option></select></td>");
+            tr.append("<td align='center'><img src='"+base_url+"img/adjunto.jpg' width='20px' height='20px'/></td>");
+            tr.append("<td align='center'><a href='#' class='editardetalle'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>");       
+       },"json");
+     });      
+    
 //    $('#fileupload').fileupload({
 //        url: url,
 //        dataType: 'json',

@@ -35,7 +35,8 @@ class Actaexposicion_model extends CI_Model{
         $this->db->where(array("d.PROC_FlagBorrado"=>1));		
         if(isset($filter->profesor) && $filter->profesor!='') $this->db->where(array("d.PROP_Codigo"=>$filter->profesor));
         if(isset($filter->curso))                             $this->db->where(array("g.PROD_Codigo"=>$filter->curso));
-        if(isset($filter->acta))                              $this->db->where(array("e.ACTAP_Codigo"=>$filter->acta));        
+        if(isset($filter->acta))                              $this->db->where(array("e.ACTAP_Codigo"=>$filter->acta));  
+        if(isset($filter->actaexposicion))                    $this->db->where(array("c.ACTAEXPOSP_Codigo"=>$filter->actaexposicion));  
         if(isset($filter->order_by) && count($filter->order_by)>0){
             foreach($filter->order_by as $indice=>$value){
                 $this->db->order_by($indice,$value);
