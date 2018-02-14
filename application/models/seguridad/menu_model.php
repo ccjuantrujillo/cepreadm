@@ -22,17 +22,17 @@ class Menu_model extends CI_Model{
         }  
         $query = $this->db->get();
         $resultado = array();
-        if($query->num_rows>0){
+        //if($query->num_rows>0){
             $resultado = $query->result();
-        }
+        //}
         return $resultado;
     }
     
     public function obtener($filter,$filter_not='',$number_items='',$offset=''){
         $listado = $this->listar($filter,$filter_not='',$number_items='',$offset='');
-        if(count($listado)>1)
-            $resultado = "Existe mas de un resultado";
-        else
+        //if(count($listado)>1)
+        //    $resultado = "Existe mas de un resultado";
+       // else
             $resultado = (object)$listado;
         return $resultado;
     }
@@ -42,9 +42,9 @@ class Menu_model extends CI_Model{
         $cadena = "SELECT MENU_Codigo,MENU_Codigo_Padre, MENU_Descripcion, MENU_Url FROM menu WHERE MENU_Codigo_Padre<=0 AND MENU_Codigo IN(select p.MENU_Codigo from permiso as p where p.ROL_Codigo='".$codres."' AND p.PERM_FlagEstado='Activo') order by MENU_Codigo_Padre";
         $query = $this->db->query($cadena);
         $resultado = array();
-        if($query->num_rows>0){
+        //if($query->num_rows>0){
                 $resultado = $query->result();
-        }
+        //}
         return $resultado;   
     }
 	
@@ -52,9 +52,9 @@ class Menu_model extends CI_Model{
         $cadena = "SELECT CodSubmenu, SubmenuDesc, SubmenuURL FROM Menu2 WHERE CodPadre='".$codPadre."' AND CodSubmenu IN(select p.CodSubmenu from permiso2 as p where p.CodRes='".$codres."' AND p.Estado='Activo') order by orden";
         $query = $this->db->query($cadena);
         $resultado = array();
-        if($query->num_rows>0){
+        //if($query->num_rows>0){
                 $resultado = $query->result();
-        }
+       //}
         return $resultado; 
     }
     

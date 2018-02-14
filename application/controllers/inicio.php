@@ -32,7 +32,8 @@ class Inicio extends CI_Controller {
             $txtUsuario = $this->input->post('txtUsuario');
             $txtClave   = $this->input->post('txtClave');
             $usuarios   = $this->usuario_model->ingresar(trim($txtUsuario),md5(trim($txtClave)));
-            if(count((array)$usuarios)>0){
+            print_r($usuarios);
+			if(count((array)$usuarios)>0){
                 $data = array(
                             'nomper'   => $usuarios->PERSC_Nombre." ".$usuarios->PERSC_ApellidoPaterno,
                             'login'    => $usuarios->USUA_usuario,

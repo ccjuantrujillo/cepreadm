@@ -21,10 +21,10 @@ class Usuario_model extends CI_Model{
         $this->db->where($where);
         $query = $this->db->get();
         $resultado = new stdClass();
-        if($query->num_rows>1) exit('Existe . mas de 1 resultado');
-        if($query->num_rows==1){
+        //if($query->num_rows>1) exit('Existe . mas de 1 resultado');
+        //if($query->num_rows==1){
             $resultado = $query->row();
-        }
+        //}
         return $resultado; 
     }
 
@@ -63,9 +63,9 @@ class Usuario_model extends CI_Model{
         $this->db->limit($number_items, $offset);         
         $query = $this->db->get();
         $resultado = array();
-        if($query->num_rows > 0){
+        //if($query->num_rows > 0){
             $resultado = $query->result();
-        }
+        //}
         return $resultado; 
     }
 
