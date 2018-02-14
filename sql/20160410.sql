@@ -1,3 +1,6 @@
+CREATE DATABASE cepreadm;
+
+USE cepreadm;
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
 -- Versión del servidor:         5.6.24 - MySQL Community Server (GPL)
@@ -12,11 +15,11 @@
 
 -- Volcando estructura para tabla cepreadm.access_url
 CREATE TABLE IF NOT EXISTS `access_url` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `url` varchar(255) NOT NULL,
-  `description` text,
-  `active` int(10) unsigned NOT NULL DEFAULT '0',
-  `created_by` int(11) NOT NULL,
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `url` VARCHAR(255) NOT NULL,
+  `description` TEXT,
+  `active` INT(10) UNSIGNED NOT NULL DEFAULT '0',
+  `created_by` INT(11) NOT NULL,
   `tms` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
