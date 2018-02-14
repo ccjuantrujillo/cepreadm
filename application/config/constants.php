@@ -85,7 +85,7 @@ defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automat
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
 define('titulo','::: Sistema Cepre-Administrativo :::');
-define('pie','2018 Administrador del sistema Administrativo');
+define('pie','2016 Administrador del sistema Administrativo');
 define('css',"http://localhost:81/cepreadm/css/");
 define('img',"http://localhost:81/cepreadm/img/");
 define('files',"http://localhost:81/cepreadm/files/");
