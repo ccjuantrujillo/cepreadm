@@ -15,6 +15,7 @@
 </head>
 <body>
 <div class="contenido" > 
+  <?php echo js;?>
     <div class="header"><?php echo $header;?></div>
     <div class="menu"><ul id="nav"><?php echo $menu;?></ul></div>
     <div class="titulotabla">
