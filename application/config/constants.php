@@ -86,10 +86,10 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 
 define('titulo','::: Sistema Cepre-Administrativo :::');
 define('pie','2016 Administrador del sistema Administrativo');
-define('css',"http://localhost:81/cepreadm/css/");
-define('img',"http://localhost:81/cepreadm/img/");
-define('files',"http://localhost:81/cepreadm/files/");
-define('js',"http://localhost:81/cepreadm/js/");
+define('css',"http://localhost/cepreadm/css/");
+define('img',"http://localhost/cepreadm/img/");
+define('files',"http://localhost/cepreadm/files/");
+define('js',"http://localhost/cepreadm/js/");
 define('almacen',"almacen/");
 define('compras',"compras/");
 define('finanzas',"finanzas/");
