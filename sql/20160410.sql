@@ -9,6 +9,7 @@ USE cepreadm;
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8mb4 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
@@ -25,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `access_url` (
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.access_url: 1 rows
-DELETE FROM `access_url`;
+-- DELETE FROM `access_url`;
 /*!40000 ALTER TABLE `access_url` DISABLE KEYS */;
 INSERT INTO `access_url` (`id`, `url`, `description`, `active`, `created_by`, `tms`) VALUES
 	(1, 'http://localhost/', ' ', 1, 1, '0000-00-00 00:00:00');
@@ -41,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `admin` (
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.admin: 1 rows
-DELETE FROM `admin`;
+-- DELETE FROM `admin`;
 /*!40000 ALTER TABLE `admin` DISABLE KEYS */;
 INSERT INTO `admin` (`id`, `user_id`) VALUES
 	(1, 1);
@@ -59,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `ant_acceso` (
 ) ENGINE=InnoDB AUTO_INCREMENT=107 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_acceso: ~101 rows (aproximadamente)
-DELETE FROM `ant_acceso`;
+-- DELETE FROM `ant_acceso`;
 /*!40000 ALTER TABLE `ant_acceso` DISABLE KEYS */;
 INSERT INTO `ant_acceso` (`ACCESOP_Codigo`, `PERSP_Codigo`, `ACCESOC_Fecha`) VALUES
 	(1, 1, '2015-11-23 09:15:37'),
@@ -193,7 +194,7 @@ CREATE TABLE IF NOT EXISTS `ant_acta` (
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_acta: ~3 rows (aproximadamente)
-DELETE FROM `ant_acta`;
+-- DELETE FROM `ant_acta`;
 /*!40000 ALTER TABLE `ant_acta` DISABLE KEYS */;
 INSERT INTO `ant_acta` (`ACTAP_Codigo`, `USUA_Codigo`, `PROP_Codigo`, `TIPCICLOP_Codigo`, `ACTAC_Tipo`, `ACTAC_Fecha`, `ACTAC_Titulo`, `ACTAC_Agenda`, `ACTAC_Detalle`, `ACTAC_Hinicio`, `ACTAC_Hfin`, `ACTAC_FechaModificacion`, `ACTAC_FechaRegistro`) VALUES
 	(5, 7, 109, 1, '', '2016-03-06', 'Reunion X', 'Reunion X', '', '14:00:00', '17:00:00', NULL, '2016-03-05 23:14:11'),
@@ -216,7 +217,7 @@ CREATE TABLE IF NOT EXISTS `ant_actadetalle` (
 ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_actadetalle: ~3 rows (aproximadamente)
-DELETE FROM `ant_actadetalle`;
+-- DELETE FROM `ant_actadetalle`;
 /*!40000 ALTER TABLE `ant_actadetalle` DISABLE KEYS */;
 INSERT INTO `ant_actadetalle` (`ACTADETP_Codigo`, `ACTAP_Codigo`, `ACTADETC_Nombre`, `ACTADETC_Observacion`, `ACTADETC_FechaModificacion`, `ACTADETC_FechaRegistro`) VALUES
 	(15, 12, 'qwerqw', 'wqrqwrqwrqwr', NULL, '2016-03-13 01:30:25'),
@@ -246,7 +247,7 @@ CREATE TABLE IF NOT EXISTS `ant_actaexposicion` (
 ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_actaexposicion: ~3 rows (aproximadamente)
-DELETE FROM `ant_actaexposicion`;
+-- DELETE FROM `ant_actaexposicion`;
 /*!40000 ALTER TABLE `ant_actaexposicion` DISABLE KEYS */;
 INSERT INTO `ant_actaexposicion` (`ACTAEXPOSP_Codigo`, `ACTAP_Codigo`, `PROP_Codigo`, `PRODATRIBDET_Codigo`, `ACTAEXPOSC_Archivo`, `ACTAEXPOSC_Descripcion`, `ACTAEXPOSC_Duracion`, `ACTAEXPOSC_FechaModificacion`, `ACTAEXPOSC_FechaRegistro`) VALUES
 	(16, 5, 108, 18, '79areas_regiones_planas[1].pdf', 'Areas', 45, NULL, '2016-03-05 23:19:58'),
@@ -272,7 +273,7 @@ CREATE TABLE IF NOT EXISTS `ant_actaprofesor` (
 ) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_actaprofesor: ~6 rows (aproximadamente)
-DELETE FROM `ant_actaprofesor`;
+-- DELETE FROM `ant_actaprofesor`;
 /*!40000 ALTER TABLE `ant_actaprofesor` DISABLE KEYS */;
 INSERT INTO `ant_actaprofesor` (`ACTAPROFP_Codigo`, `ACTAP_Codigo`, `PROP_Codigo`, `ACTAPROFC_Hingreso`, `ACTAPROFC_Hsalida`, `ACTAPROFC_Observacion`, `ACTAPROFC_FechaRegistro`) VALUES
 	(50, 9, 109, '14:00:00', '17:00:00', '', '2016-03-10 23:19:12'),
@@ -298,7 +299,7 @@ CREATE TABLE IF NOT EXISTS `ant_actividad` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_actividad: ~0 rows (aproximadamente)
-DELETE FROM `ant_actividad`;
+-- DELETE FROM `ant_actividad`;
 /*!40000 ALTER TABLE `ant_actividad` DISABLE KEYS */;
 /*!40000 ALTER TABLE `ant_actividad` ENABLE KEYS */;
 
@@ -319,7 +320,7 @@ CREATE TABLE IF NOT EXISTS `ant_afiliacion` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_afiliacion: ~0 rows (aproximadamente)
-DELETE FROM `ant_afiliacion`;
+-- DELETE FROM `ant_afiliacion`;
 /*!40000 ALTER TABLE `ant_afiliacion` DISABLE KEYS */;
 /*!40000 ALTER TABLE `ant_afiliacion` ENABLE KEYS */;
 
@@ -341,7 +342,7 @@ CREATE TABLE IF NOT EXISTS `ant_alumno` (
 ) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_alumno: ~45 rows (aproximadamente)
-DELETE FROM `ant_alumno`;
+-- DELETE FROM `ant_alumno`;
 /*!40000 ALTER TABLE `ant_alumno` DISABLE KEYS */;
 INSERT INTO `ant_alumno` (`ALUMP_Codigo`, `PERSP_Codigo`, `CICLOP_Codigo`, `user_id`, `ALUMC_FlagEstado`, `ALUMC_FechaModificacion`, `ALUMC_FechaRegistro`) VALUES
 	(20, 179, 1, 0, '1', '2015-11-06 16:21:20', '2015-11-06 10:21:20'),
@@ -420,7 +421,7 @@ CREATE TABLE IF NOT EXISTS `ant_apertura` (
 ) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_apertura: ~51 rows (aproximadamente)
-DELETE FROM `ant_apertura`;
+-- DELETE FROM `ant_apertura`;
 /*!40000 ALTER TABLE `ant_apertura` DISABLE KEYS */;
 INSERT INTO `ant_apertura` (`APERTUP_Codigo`, `CICLOP_Codigo`, `TIPCICLOP_Codigo`, `AULAP_Codigo`, `TURNOP_Codigo`, `MODULOP_Codigo`, `APERTUC_Descripcion`, `APERTUC_Observacion`, `APERTUC_FlagEstado`, `APERTUC_Fecha`, `APERTUC_FechaModificacion`, `APERTUC_FechaRegistro`) VALUES
 	(4, 1, 3, 43, 1, 1, '', NULL, '1', '2016-02-19', NULL, '2016-02-18 23:59:43'),
@@ -500,7 +501,7 @@ CREATE TABLE IF NOT EXISTS `ant_asignacion` (
 ) ENGINE=InnoDB AUTO_INCREMENT=104 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_asignacion: ~58 rows (aproximadamente)
-DELETE FROM `ant_asignacion`;
+-- DELETE FROM `ant_asignacion`;
 /*!40000 ALTER TABLE `ant_asignacion` DISABLE KEYS */;
 INSERT INTO `ant_asignacion` (`ASIGP_Codigo`, `PROP_Codigo`, `CICLOP_Codigo`, `course_id`, `SUBCURSOP_Codigo`, `ASIGC_Grupo`, `ASIGC_Descripcion`, `ASIGC_Fecha`, `ASIGC_FlagEstado`, `ASIGC_FechaModificacion`, `ASIGC_FechaRegistro`) VALUES
 	(43, 148, 1, 149, 0, '0', '0', '2015-12-24 00:00:00', '1', NULL, '2015-12-24 14:26:27'),
@@ -579,7 +580,7 @@ CREATE TABLE IF NOT EXISTS `ant_asignaciondetalle` (
 ) ENGINE=InnoDB AUTO_INCREMENT=187 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_asignaciondetalle: ~116 rows (aproximadamente)
-DELETE FROM `ant_asignaciondetalle`;
+-- DELETE FROM `ant_asignaciondetalle`;
 /*!40000 ALTER TABLE `ant_asignaciondetalle` DISABLE KEYS */;
 INSERT INTO `ant_asignaciondetalle` (`ASIGDETP_Codigo`, `ASIGP_Codigo`, `ASIGDETC_Dia`, `ASIGDETC_Desde`, `ASIGDETC_Hasta`, `ASIGDETC_FechaModificacion`, `ASIGDETC_FechaRegistro`) VALUES
 	(67, 43, 1, '10:20:00', '12:10:00', NULL, '2016-01-21 22:09:42'),
@@ -714,7 +715,7 @@ CREATE TABLE IF NOT EXISTS `ant_aula` (
 ) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_aula: ~37 rows (aproximadamente)
-DELETE FROM `ant_aula`;
+-- DELETE FROM `ant_aula`;
 /*!40000 ALTER TABLE `ant_aula` DISABLE KEYS */;
 INSERT INTO `ant_aula` (`AULAP_Codigo`, `LOCP_Codigo`, `AULAC_Nombre`, `AULAC_FechaRegistro`) VALUES
 	(1, 1, 'D101', '2015-05-16 12:46:43'),
@@ -772,7 +773,7 @@ CREATE TABLE IF NOT EXISTS `ant_ciclo` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- Volcando datos para la tabla cepreadm.ant_ciclo: ~3 rows (aproximadamente)
-DELETE FROM `ant_ciclo`;
+-- DELETE FROM `ant_ciclo`;
 /*!40000 ALTER TABLE `ant_ciclo` DISABLE KEYS */;
 INSERT INTO `ant_ciclo` (`CICLOP_Codigo`, `TIPOCICLOP_Codigo`, `COMPC_Nombre`, `CICC_FECHA_INICIO`, `CICC_FECHA_FIN`, `CICC_DESCRIPCION`, `COMPC_FlagEstado`) VALUES
 	(1, 1, 'ADMISION 2016-1', '0000-00-00', '1990-05-11', 'CICLO DE INICIO DEL AÃ±O', 1),
@@ -796,7 +797,7 @@ CREATE TABLE IF NOT EXISTS `ant_conferencia` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_conferencia: ~0 rows (aproximadamente)
-DELETE FROM `ant_conferencia`;
+-- DELETE FROM `ant_conferencia`;
 /*!40000 ALTER TABLE `ant_conferencia` DISABLE KEYS */;
 /*!40000 ALTER TABLE `ant_conferencia` ENABLE KEYS */;
 
@@ -825,7 +826,7 @@ CREATE TABLE IF NOT EXISTS `ant_curso` (
 ) ENGINE=InnoDB AUTO_INCREMENT=99 DEFAULT CHARSET=utf8;
 
 -- Volcando datos para la tabla cepreadm.ant_curso: ~7 rows (aproximadamente)
-DELETE FROM `ant_curso`;
+-- DELETE FROM `ant_curso`;
 /*!40000 ALTER TABLE `ant_curso` DISABLE KEYS */;
 INSERT INTO `ant_curso` (`PROD_Codigo`, `TIPPROD_Codigo`, `PROD_Nombre`, `PROD_DescripcionBreve`, `PROD_EspecificacionPDF`, `PROD_Comentario`, `PROD_Cantidad`, `PROD_Intentos`, `PROD_Tiempo`, `PROD_TiempoExamen`, `PROD_Puntaje`, `PROD_Imagen`, `PROD_Silabus`, `PROD_FlagEstado`, `PROD_FechaModificacion`, `PROD_FechaRegistro`) VALUES
 	(5, 1, 'Trigonometria', '', '0', '0', 88, 3, 2, 5, 14, 'erp.png', 'capitulo06.pdf', '1', '2015-10-16 16:24:21', '2011-01-18 07:20:19'),
@@ -854,7 +855,7 @@ CREATE TABLE IF NOT EXISTS `ant_cursociclo` (
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_cursociclo: ~9 rows (aproximadamente)
-DELETE FROM `ant_cursociclo`;
+-- DELETE FROM `ant_cursociclo`;
 /*!40000 ALTER TABLE `ant_cursociclo` DISABLE KEYS */;
 INSERT INTO `ant_cursociclo` (`CURSOCIP_Codigo`, `PROD_Codigo`, `CICLOP_Codigo`, `CURSOCIC_FlagEstado`, `CURSOCIC_FechaModificacion`, `CURSOCIC_FechaRegistro`) VALUES
 	(4, 93, 1, '1', NULL, '2015-08-12 12:08:18'),
@@ -885,7 +886,7 @@ CREATE TABLE IF NOT EXISTS `ant_cursotipoestudio` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_cursotipoestudio: ~0 rows (aproximadamente)
-DELETE FROM `ant_cursotipoestudio`;
+-- DELETE FROM `ant_cursotipoestudio`;
 /*!40000 ALTER TABLE `ant_cursotipoestudio` DISABLE KEYS */;
 INSERT INTO `ant_cursotipoestudio` (`CURSOTIPOP_Codigo`, `CURSOCIP_Codigo`, `TIPP_Codigo`, `CURSOTIPOC_FlagEstado`, `CURSOTIPOC_FechaModificacion`, `CURSOTIPOC_FechaRegistro`) VALUES
 	(1, 7, 5, '1', NULL, '2015-12-26 08:22:56');
@@ -913,7 +914,7 @@ CREATE TABLE IF NOT EXISTS `ant_empresa` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_empresa: ~2 rows (aproximadamente)
-DELETE FROM `ant_empresa`;
+-- DELETE FROM `ant_empresa`;
 /*!40000 ALTER TABLE `ant_empresa` DISABLE KEYS */;
 INSERT INTO `ant_empresa` (`EMPRP_Codigo`, `SECTORP_Codigo`, `EMPRC_Ruc`, `EMPRC_RazonSocial`, `EMPRC_Telefono`, `EMPRC_Movil`, `EMPRC_Fax`, `EMPRC_Web`, `EMPRC_Email`, `EMPRC_Direccion`, `EMPRC_FlagEstado`, `EMPRC_FechaModificacion`, `EMPRC_FechaRegistro`) VALUES
 	(1, 1, '43242342342', 'Ferreteria de los olvisos', '567567', '3424', '234234', '234234', '234', '4234234234', '1', NULL, '2011-01-09 15:30:59'),
@@ -968,7 +969,7 @@ CREATE TABLE IF NOT EXISTS `ant_estudiosidiomas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_estudiosidiomas: ~0 rows (aproximadamente)
-DELETE FROM `ant_estudiosidiomas`;
+-- DELETE FROM `ant_estudiosidiomas`;
 /*!40000 ALTER TABLE `ant_estudiosidiomas` DISABLE KEYS */;
 /*!40000 ALTER TABLE `ant_estudiosidiomas` ENABLE KEYS */;
 
@@ -993,7 +994,7 @@ CREATE TABLE IF NOT EXISTS `ant_experiencia` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_experiencia: ~0 rows (aproximadamente)
-DELETE FROM `ant_experiencia`;
+-- DELETE FROM `ant_experiencia`;
 /*!40000 ALTER TABLE `ant_experiencia` DISABLE KEYS */;
 /*!40000 ALTER TABLE `ant_experiencia` ENABLE KEYS */;
 
@@ -1008,7 +1009,7 @@ CREATE TABLE IF NOT EXISTS `ant_grado` (
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_grado: ~5 rows (aproximadamente)
-DELETE FROM `ant_grado`;
+-- DELETE FROM `ant_grado`;
 /*!40000 ALTER TABLE `ant_grado` DISABLE KEYS */;
 INSERT INTO `ant_grado` (`GRADOP_Codigo`, `GRADOC_Descripcion`, `GRADOC_FechaModificacion`, `GRADOC_FechaRegistro`) VALUES
 	(1, 'Bachiller', NULL, '2015-10-26 07:29:06'),
@@ -1028,7 +1029,7 @@ CREATE TABLE IF NOT EXISTS `ant_idiomas` (
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_idiomas: ~6 rows (aproximadamente)
-DELETE FROM `ant_idiomas`;
+-- DELETE FROM `ant_idiomas`;
 /*!40000 ALTER TABLE `ant_idiomas` DISABLE KEYS */;
 INSERT INTO `ant_idiomas` (`IDIOMP_Codigo`, `IDIOMC_Descripcion`, `IDIOMC_FechaRegistro`) VALUES
 	(1, 'Ingles', '2015-10-29 07:57:58'),
@@ -1051,7 +1052,7 @@ CREATE TABLE IF NOT EXISTS `ant_local` (
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_local: ~3 rows (aproximadamente)
-DELETE FROM `ant_local`;
+-- DELETE FROM `ant_local`;
 /*!40000 ALTER TABLE `ant_local` DISABLE KEYS */;
 INSERT INTO `ant_local` (`LOCP_Codigo`, `LOCC_Nombre`, `LOCC_Direccion`, `LOCC_Telefono`, `LOCC_FechaRegistro`) VALUES
 	(1, 'Sede Sucre', 'AVENIDA SUCRE 1239', '4543278', '2015-05-16 12:45:22'),
@@ -1085,7 +1086,7 @@ CREATE TABLE IF NOT EXISTS `ant_matricula` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Volcando datos para la tabla cepreadm.ant_matricula: ~0 rows (aproximadamente)
-DELETE FROM `ant_matricula`;
+-- DELETE FROM `ant_matricula`;
 /*!40000 ALTER TABLE `ant_matricula` DISABLE KEYS */;
 /*!40000 ALTER TABLE `ant_matricula` ENABLE KEYS */;
 
@@ -1106,7 +1107,7 @@ CREATE TABLE IF NOT EXISTS `ant_menu` (
 ) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8;
 
 -- Volcando datos para la tabla cepreadm.ant_menu: ~40 rows (aproximadamente)
-DELETE FROM `ant_menu`;
+-- DELETE FROM `ant_menu`;
 /*!40000 ALTER TABLE `ant_menu` DISABLE KEYS */;
 INSERT INTO `ant_menu` (`MENU_Codigo`, `MENU_Codigo_Padre`, `MENU_Descripcion`, `MENU_Comentario`, `MENU_Url`, `MENU_Orden`, `MENU_Imagen`, `MENU_FlagEstado`, `MENU_FechaModificacion`, `MENU_FechaRegistro`) VALUES
 	(2, 58, 'Maestro de Alumnos', 'Aquí se podrán subir las imágenes o aniamciones que serán contenidas en la marquesina', 'index.php/ventas/alumno/listar', 1, 'alumno.jpg', '1', NULL, '2015-08-03 20:06:30'),
@@ -1168,7 +1169,7 @@ CREATE TABLE IF NOT EXISTS `ant_modulo` (
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_modulo: ~15 rows (aproximadamente)
-DELETE FROM `ant_modulo`;
+-- DELETE FROM `ant_modulo`;
 /*!40000 ALTER TABLE `ant_modulo` DISABLE KEYS */;
 INSERT INTO `ant_modulo` (`MODULOP_Codigo`, `TURNOP_Codigo`, `TIPP_Codigo`, `MODULOC_Descripcion`, `MODULOC_FechaModificacion`, `MODULOC_FechaRegistro`) VALUES
 	(1, 1, 3, 'Modulo I', NULL, '2016-01-15 18:17:12'),
@@ -1207,7 +1208,7 @@ CREATE TABLE IF NOT EXISTS `ant_modulodetalle` (
 ) ENGINE=InnoDB AUTO_INCREMENT=202 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_modulodetalle: ~198 rows (aproximadamente)
-DELETE FROM `ant_modulodetalle`;
+-- DELETE FROM `ant_modulodetalle`;
 /*!40000 ALTER TABLE `ant_modulodetalle` DISABLE KEYS */;
 INSERT INTO `ant_modulodetalle` (`MODULODETP_Codigo`, `MODULOP_Codigo`, `PROD_Codigo`, `MODULODETC_Dia`, `MODULODETC_Desde`, `MODULODETC_Hasta`, `MODULODETC_FechaModificacion`, `MODULODETC_FechaRegistro`) VALUES
 	(4, 5, 96, 1, '08:10:00', '10:00:00', NULL, '2016-01-16 00:14:46'),
@@ -1421,7 +1422,7 @@ CREATE TABLE IF NOT EXISTS `ant_nacionalidad` (
 ) ENGINE=InnoDB AUTO_INCREMENT=275 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_nacionalidad: ~274 rows (aproximadamente)
-DELETE FROM `ant_nacionalidad`;
+-- DELETE FROM `ant_nacionalidad`;
 /*!40000 ALTER TABLE `ant_nacionalidad` DISABLE KEYS */;
 INSERT INTO `ant_nacionalidad` (`NACP_Codigo`, `COMPP_Codigo`, `NACC_Descripcion`, `NACC_FechaRegistro`) VALUES
 	(1, 1, 'BOUVET ISLAND', '2010-12-13 17:54:36'),
@@ -1715,7 +1716,7 @@ CREATE TABLE IF NOT EXISTS `ant_permiso` (
 ) ENGINE=InnoDB AUTO_INCREMENT=107 DEFAULT CHARSET=utf8;
 
 -- Volcando datos para la tabla cepreadm.ant_permiso: ~60 rows (aproximadamente)
-DELETE FROM `ant_permiso`;
+-- DELETE FROM `ant_permiso`;
 /*!40000 ALTER TABLE `ant_permiso` DISABLE KEYS */;
 INSERT INTO `ant_permiso` (`PERM_Codigo`, `ROL_Codigo`, `MENU_Codigo`, `PERM_FlagEstado`) VALUES
 	(4, 4, 3, '1'),
@@ -1807,7 +1808,7 @@ CREATE TABLE IF NOT EXISTS `ant_persona` (
 ) ENGINE=InnoDB AUTO_INCREMENT=434 DEFAULT CHARSET=utf8;
 
 -- Volcando datos para la tabla cepreadm.ant_persona: ~152 rows (aproximadamente)
-DELETE FROM `ant_persona`;
+-- DELETE FROM `ant_persona`;
 /*!40000 ALTER TABLE `ant_persona` DISABLE KEYS */;
 INSERT INTO `ant_persona` (`PERSP_Codigo`, `TIPDOCP_Codigo`, `PERSC_ApellidoPaterno`, `PERSC_ApellidoMaterno`, `PERSC_Nombre`, `PERSC_NumeroDocIdentidad`, `PERSC_Direccion`, `PERSC_Telefono`, `PERSC_Movil`, `PERSC_Fax`, `PERSC_Email`, `PERSC_Domicilio`, `PERSC_Web`, `PERSC_Sexo`, `PERSC_FechaNacimiento`, `PERSC_FlagEstado`, `PERSC_FechaModificacion`, `PERSC_FechaRegistro`) VALUES
 	(1, 1, 'Administrador', 'General', 'Adm. General', '0', '0', '0', '0', '0', '', '0', '0', '1', '2015-12-03', '1', '2015-08-05 11:53:24', '2010-12-29 20:15:19'),
@@ -1977,7 +1978,7 @@ CREATE TABLE IF NOT EXISTS `ant_productoatributo2` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_productoatributo2: ~0 rows (aproximadamente)
-DELETE FROM `ant_productoatributo2`;
+-- DELETE FROM `ant_productoatributo2`;
 /*!40000 ALTER TABLE `ant_productoatributo2` DISABLE KEYS */;
 /*!40000 ALTER TABLE `ant_productoatributo2` ENABLE KEYS */;
 
@@ -1996,7 +1997,7 @@ CREATE TABLE IF NOT EXISTS `ant_productoprecio` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Volcando datos para la tabla cepreadm.ant_productoprecio: ~0 rows (aproximadamente)
-DELETE FROM `ant_productoprecio`;
+-- DELETE FROM `ant_productoprecio`;
 /*!40000 ALTER TABLE `ant_productoprecio` DISABLE KEYS */;
 /*!40000 ALTER TABLE `ant_productoprecio` ENABLE KEYS */;
 
@@ -2021,7 +2022,7 @@ CREATE TABLE IF NOT EXISTS `ant_profesor` (
 ) ENGINE=InnoDB AUTO_INCREMENT=194 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_profesor: ~94 rows (aproximadamente)
-DELETE FROM `ant_profesor`;
+-- DELETE FROM `ant_profesor`;
 /*!40000 ALTER TABLE `ant_profesor` DISABLE KEYS */;
 INSERT INTO `ant_profesor` (`PROP_Codigo`, `PROD_Codigo`, `SUBCURSOP_Codigo`, `PERSP_Codigo`, `user_id`, `PROC_FlagEstado`, `PROC_FlagBorrado`, `PROC_FlagCoordinador`, `PROC_FechaModificacion`, `PROC_FechaRegistro`) VALUES
 	(95, 0, 0, 1, 0, '1', '1', '0', '2016-01-05 14:05:43', '2015-12-18 21:29:29'),
@@ -2137,7 +2138,7 @@ CREATE TABLE IF NOT EXISTS `ant_profesorsociedad` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_profesorsociedad: ~0 rows (aproximadamente)
-DELETE FROM `ant_profesorsociedad`;
+-- DELETE FROM `ant_profesorsociedad`;
 /*!40000 ALTER TABLE `ant_profesorsociedad` DISABLE KEYS */;
 /*!40000 ALTER TABLE `ant_profesorsociedad` ENABLE KEYS */;
 
@@ -2157,7 +2158,7 @@ CREATE TABLE IF NOT EXISTS `ant_puntaje` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_puntaje: ~0 rows (aproximadamente)
-DELETE FROM `ant_puntaje`;
+-- DELETE FROM `ant_puntaje`;
 /*!40000 ALTER TABLE `ant_puntaje` DISABLE KEYS */;
 /*!40000 ALTER TABLE `ant_puntaje` ENABLE KEYS */;
 
@@ -2174,7 +2175,7 @@ CREATE TABLE IF NOT EXISTS `ant_rol` (
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- Volcando datos para la tabla cepreadm.ant_rol: ~4 rows (aproximadamente)
-DELETE FROM `ant_rol`;
+-- DELETE FROM `ant_rol`;
 /*!40000 ALTER TABLE `ant_rol` DISABLE KEYS */;
 INSERT INTO `ant_rol` (`ROL_Codigo`, `ROL_Descripcion`, `ROL_FlagEstado`, `ROL_FlagAcceso`, `ROL_FechaModificacion`, `ROL_FechaRegistro`) VALUES
 	(4, 'Coordinador general', '1', '1', NULL, '2015-10-16 08:53:26'),
@@ -2194,7 +2195,7 @@ CREATE TABLE IF NOT EXISTS `ant_sector` (
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_sector: ~6 rows (aproximadamente)
-DELETE FROM `ant_sector`;
+-- DELETE FROM `ant_sector`;
 /*!40000 ALTER TABLE `ant_sector` DISABLE KEYS */;
 INSERT INTO `ant_sector` (`SECTORP_Codigo`, `SECTORC_Descripcion`, `SECTORC_FechaModificacion`, `SECTORC_FechaRegistro`) VALUES
 	(1, 'Educacion', '0000-00-00 00:00:00', '2015-11-16 11:32:23'),
@@ -2225,7 +2226,7 @@ CREATE TABLE IF NOT EXISTS `ant_semana` (
 ) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8;
 
 -- Volcando datos para la tabla cepreadm.ant_semana: ~64 rows (aproximadamente)
-DELETE FROM `ant_semana`;
+-- DELETE FROM `ant_semana`;
 /*!40000 ALTER TABLE `ant_semana` DISABLE KEYS */;
 INSERT INTO `ant_semana` (`PRODATRIB_Codigo`, `CICLOP_Codigo`, `TIPCICLOP_Codigo`, `PRODATRIB_Nombre`, `PRODATRIB_Descripcion`, `PRODATRIB_FechaInicio`, `PRODATRIB_FechaFin`, `PRODATRIB_FechaModificacion`, `PRODATRIB_FechaRegistro`) VALUES
 	(1, 1, 1, 'Semana 01', 'erty sdfsff fdassdf ', '2015-09-02', '2015-09-04', '2015-09-21 10:27:04', '2015-09-21 09:57:19'),
@@ -2306,7 +2307,7 @@ CREATE TABLE IF NOT EXISTS `ant_sociedad` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_sociedad: ~2 rows (aproximadamente)
-DELETE FROM `ant_sociedad`;
+-- DELETE FROM `ant_sociedad`;
 /*!40000 ALTER TABLE `ant_sociedad` DISABLE KEYS */;
 INSERT INTO `ant_sociedad` (`SOCIEDP_Codigo`, `SOCIEDC_Nombre`, `SOCIEDC_Descripcion`, `SOCIEDC_FechaModificacion`, `SOCIEDC_FechaRegistro`) VALUES
 	(1, 'IEE', 'Instituto de Ingeniero Electricos Electricisas', NULL, '2015-11-06 12:30:09'),
@@ -2327,7 +2328,7 @@ CREATE TABLE IF NOT EXISTS `ant_subcurso` (
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_subcurso: ~6 rows (aproximadamente)
-DELETE FROM `ant_subcurso`;
+-- DELETE FROM `ant_subcurso`;
 /*!40000 ALTER TABLE `ant_subcurso` DISABLE KEYS */;
 INSERT INTO `ant_subcurso` (`SUBCURSOP_Codigo`, `PROD_Codigo`, `SUBCURSOC_Nombre`, `SUBCURSOC_FechaModificacion`, `SUBCURSOC_FechaRegistro`) VALUES
 	(1, 98, 'Historia', '0000-00-00 00:00:00', '2016-01-09 09:51:54'),
@@ -2365,7 +2366,7 @@ CREATE TABLE IF NOT EXISTS `ant_tarea` (
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_tarea: ~0 rows (aproximadamente)
-DELETE FROM `ant_tarea`;
+-- DELETE FROM `ant_tarea`;
 /*!40000 ALTER TABLE `ant_tarea` DISABLE KEYS */;
 INSERT INTO `ant_tarea` (`TAREAP_Codigo`, `USUA_Codigo`, `PROP_Codigo`, `CICLOP_Codigo`, `TIPOTAREAP_Codigo`, `TAREAC_Nombre`, `TAREAC_Descripcion`, `TAREAC_Numero`, `TAREAC_Fecha`, `TAREAC_FechaEntrega`, `TAREAC_FechaModificacion`, `TAREAC_FechaRegistro`) VALUES
 	(10, 7, 104, 1, 2, 'Problemas para el seminario 5', 'Problemas para el seminario 5', 5, '2016-03-24', '2016-04-09', NULL, '2016-03-24 01:46:07'),
@@ -2394,7 +2395,7 @@ CREATE TABLE IF NOT EXISTS `ant_tareadetalle` (
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_tareadetalle: ~6 rows (aproximadamente)
-DELETE FROM `ant_tareadetalle`;
+-- DELETE FROM `ant_tareadetalle`;
 /*!40000 ALTER TABLE `ant_tareadetalle` DISABLE KEYS */;
 INSERT INTO `ant_tareadetalle` (`TAREADETP_Codigo`, `TAREAP_Codigo`, `TIPCICLOP_Codigo`, `PROP_Codigo`, `PRODATRIBDET_Codigo`, `TAREADETC_Cantidad`, `TAREADETC_CantidadEntregada`, `TAREADETC_Situacion`, `TAREADETC_FechaEntrega`, `TAREADETC_FechaModificacion`, `TAREADETC_FechaRegistro`) VALUES
 	(12, 10, 1, 102, 12, '7', NULL, '2', '2016-04-09', NULL, '2016-03-24 01:46:07'),
@@ -2432,7 +2433,7 @@ CREATE TABLE IF NOT EXISTS `ant_tareo` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_tareo: ~0 rows (aproximadamente)
-DELETE FROM `ant_tareo`;
+-- DELETE FROM `ant_tareo`;
 /*!40000 ALTER TABLE `ant_tareo` DISABLE KEYS */;
 INSERT INTO `ant_tareo` (`TAREOP_Codigo`, `PROP_Codigo`, `AULAP_Codigo`, `TAREOC_Tipo`, `USUA_Codigo`, `TAREOC_ProfesorReemplazado`, `TAREOC_Fecha`, `TAREOC_Hinicio`, `TAREOC_Hfin`, `TAREOC_Costo`, `TAREOC_FechaModificacion`, `TAREOC_FechaRegistro`) VALUES
 	(1, 109, 1, 1, 7, 0, '2016-03-12', '08:30:00', '10:00:00', 0, NULL, '2016-03-11 22:59:31');
@@ -2457,7 +2458,7 @@ CREATE TABLE IF NOT EXISTS `ant_tema` (
 ) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
 
 -- Volcando datos para la tabla cepreadm.ant_tema: ~37 rows (aproximadamente)
-DELETE FROM `ant_tema`;
+-- DELETE FROM `ant_tema`;
 /*!40000 ALTER TABLE `ant_tema` DISABLE KEYS */;
 INSERT INTO `ant_tema` (`PRODATRIBDET_Codigo`, `PRODATRIB_Codigo`, `CURSOCIP_Codigo`, `TIPCICLOP_Codigo`, `TEMAC_Descripcion`, `TEMAC_FechaModificacion`, `TEMAC_FechaRegistro`) VALUES
 	(2, 0, 4, 1, 'Nociones basicas 2', '2015-09-21 11:46:35', '2015-09-21 11:45:31'),
@@ -2508,7 +2509,7 @@ CREATE TABLE IF NOT EXISTS `ant_tipoasistencia` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_tipoasistencia: ~2 rows (aproximadamente)
-DELETE FROM `ant_tipoasistencia`;
+-- DELETE FROM `ant_tipoasistencia`;
 /*!40000 ALTER TABLE `ant_tipoasistencia` DISABLE KEYS */;
 INSERT INTO `ant_tipoasistencia` (`TIPOASISP_Codigo`, `TIPOASISC_Nombre`) VALUES
 	(1, 'Tardanza'),
@@ -2526,7 +2527,7 @@ CREATE TABLE IF NOT EXISTS `ant_tipociclo` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_tipociclo: ~2 rows (aproximadamente)
-DELETE FROM `ant_tipociclo`;
+-- DELETE FROM `ant_tipociclo`;
 /*!40000 ALTER TABLE `ant_tipociclo` DISABLE KEYS */;
 INSERT INTO `ant_tipociclo` (`TIPOCICLOP_Codigo`, `TIPOCICLOC_Descripcion`, `TIPOCICLOC_Comentario`, `TIPOCICLOC_FechaRegistro`) VALUES
 	(1, 'Ciclo 1', 'Ciclo de inicio de año', '2015-08-10 18:14:14'),
@@ -2545,7 +2546,7 @@ CREATE TABLE IF NOT EXISTS `ant_tipodocumento` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- Volcando datos para la tabla cepreadm.ant_tipodocumento: ~3 rows (aproximadamente)
-DELETE FROM `ant_tipodocumento`;
+-- DELETE FROM `ant_tipodocumento`;
 /*!40000 ALTER TABLE `ant_tipodocumento` DISABLE KEYS */;
 INSERT INTO `ant_tipodocumento` (`TIPDOCP_Codigo`, `TIPDOCC_Descripcion`, `TIPOCC_Inciales`, `TIPOCC_FlagEstado`, `TIPOCC_FechaRegistro`) VALUES
 	(1, 'Documento Nacional de Identidad', 'D.N.I.', '1', '2010-12-16 12:50:42'),
@@ -2566,7 +2567,7 @@ CREATE TABLE IF NOT EXISTS `ant_tipoestudio` (
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_tipoestudio: ~7 rows (aproximadamente)
-DELETE FROM `ant_tipoestudio`;
+-- DELETE FROM `ant_tipoestudio`;
 /*!40000 ALTER TABLE `ant_tipoestudio` DISABLE KEYS */;
 INSERT INTO `ant_tipoestudio` (`TIPP_Codigo`, `TIPC_Nombre`, `TIPC_Descripcion`, `TIPC_Iniciales`, `TIPC_FlagEstado`, `TIPC_FechaRegistro`) VALUES
 	(3, 'Pre', 'Tipo de Estudio para los alumnos que van a postular a la UNI', 'Pre', '1', '2015-05-15 04:19:44'),
@@ -2595,7 +2596,7 @@ CREATE TABLE IF NOT EXISTS `ant_tipoestudiociclo` (
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_tipoestudiociclo: ~9 rows (aproximadamente)
-DELETE FROM `ant_tipoestudiociclo`;
+-- DELETE FROM `ant_tipoestudiociclo`;
 /*!40000 ALTER TABLE `ant_tipoestudiociclo` DISABLE KEYS */;
 INSERT INTO `ant_tipoestudiociclo` (`TIPCICLOP_Codigo`, `TIPP_Codigo`, `CICLOP_Codigo`, `TIPCICLOC_Observacion`, `TIPCICLOC_FlagEstado`, `TIPCICLOC_FechaRegistro`) VALUES
 	(1, 5, 1, 'gfgdfgdfg', '1', '2015-09-19 22:47:46'),
@@ -2624,7 +2625,7 @@ CREATE TABLE IF NOT EXISTS `ant_tipoproducto` (
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- Volcando datos para la tabla cepreadm.ant_tipoproducto: ~3 rows (aproximadamente)
-DELETE FROM `ant_tipoproducto`;
+-- DELETE FROM `ant_tipoproducto`;
 /*!40000 ALTER TABLE `ant_tipoproducto` DISABLE KEYS */;
 INSERT INTO `ant_tipoproducto` (`TIPPROD_Codigo`, `CICLOP_Codigo`, `TIPPROD_Descripcion`, `TIPPROD_FlagEstado`, `TIPPROD_FechaModificacion`, `TIPPROD_FechaRegistro`) VALUES
 	(1, 1, 'Matematicas', '1', NULL, '2011-01-04 04:31:10'),
@@ -2642,7 +2643,7 @@ CREATE TABLE IF NOT EXISTS `ant_tipotarea` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_tipotarea: ~3 rows (aproximadamente)
-DELETE FROM `ant_tipotarea`;
+-- DELETE FROM `ant_tipotarea`;
 /*!40000 ALTER TABLE `ant_tipotarea` DISABLE KEYS */;
 INSERT INTO `ant_tipotarea` (`TIPOTAREAP_Codigo`, `TIPOTAREAC_Nombre`, `TIPOTAREAC_FechaRegistro`) VALUES
 	(1, 'Problemas para PC', '2015-09-29 14:17:08'),
@@ -2669,7 +2670,7 @@ CREATE TABLE IF NOT EXISTS `ant_trabajo` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_trabajo: ~0 rows (aproximadamente)
-DELETE FROM `ant_trabajo`;
+-- DELETE FROM `ant_trabajo`;
 /*!40000 ALTER TABLE `ant_trabajo` DISABLE KEYS */;
 /*!40000 ALTER TABLE `ant_trabajo` ENABLE KEYS */;
 
@@ -2684,7 +2685,7 @@ CREATE TABLE IF NOT EXISTS `ant_turno` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_turno: ~2 rows (aproximadamente)
-DELETE FROM `ant_turno`;
+-- DELETE FROM `ant_turno`;
 /*!40000 ALTER TABLE `ant_turno` DISABLE KEYS */;
 INSERT INTO `ant_turno` (`TURNOP_Codigo`, `TURNOC_Descripcion`, `TURNOC_Estado`, `TURNOC_FechaRegistro`) VALUES
 	(1, 'Mañana', '1', '2015-12-25 16:37:54'),
@@ -2703,7 +2704,7 @@ CREATE TABLE IF NOT EXISTS `ant_universidad` (
 ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_universidad: ~18 rows (aproximadamente)
-DELETE FROM `ant_universidad`;
+-- DELETE FROM `ant_universidad`;
 /*!40000 ALTER TABLE `ant_universidad` DISABLE KEYS */;
 INSERT INTO `ant_universidad` (`UNIVP_Codigo`, `UNIVC_Nombre`, `UNIVC_Iniciales`, `UNIVC_FechaModificacion`, `UNIVC_FechaRegistro`) VALUES
 	(1, 'Universidad Nacional Mayor de San Marcos', 'UNMSM', NULL, '2015-10-26 07:19:02'),
@@ -2746,7 +2747,7 @@ CREATE TABLE IF NOT EXISTS `ant_usuario` (
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 
 -- Volcando datos para la tabla cepreadm.ant_usuario: ~8 rows (aproximadamente)
-DELETE FROM `ant_usuario`;
+-- DELETE FROM `ant_usuario`;
 /*!40000 ALTER TABLE `ant_usuario` DISABLE KEYS */;
 INSERT INTO `ant_usuario` (`USUA_Codigo`, `PERSP_Codigo`, `ROL_Codigo`, `USUA_usuario`, `USUA_Password`, `USUA_FlagEstado`, `USUA_FechaModificacion`, `USUA_FechaRegistro`) VALUES
 	(7, 1, 4, 'demo', 'e10adc3949ba59abbe56e057f20f883e', '1', '2015-08-05 12:09:17', '2015-08-04 00:25:58'),
@@ -2779,7 +2780,7 @@ CREATE TABLE IF NOT EXISTS `ant_vigilancia` (
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_vigilancia: ~3 rows (aproximadamente)
-DELETE FROM `ant_vigilancia`;
+-- DELETE FROM `ant_vigilancia`;
 /*!40000 ALTER TABLE `ant_vigilancia` DISABLE KEYS */;
 INSERT INTO `ant_vigilancia` (`VIGILAP_Codigo`, `PROP_Codigo`, `TIPCICLOP_Codigo`, `VIGILAC_Nombre`, `VIGILAC_Numero`, `VIGILAC_Descripcion`, `VIGILAC_Fecha`, `VIGILAC_FechaModificacion`, `VIGILAC_FechaRegistro`) VALUES
 	(2, 104, 1, '', 2, 'Relacion de Vigilantes para la vigilancia de la practica calificada numero 2', '2016-03-12', NULL, '2016-03-11 22:47:43'),
@@ -2806,7 +2807,7 @@ CREATE TABLE IF NOT EXISTS `ant_vigilanciadetalle` (
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.ant_vigilanciadetalle: ~5 rows (aproximadamente)
-DELETE FROM `ant_vigilanciadetalle`;
+-- DELETE FROM `ant_vigilanciadetalle`;
 /*!40000 ALTER TABLE `ant_vigilanciadetalle` DISABLE KEYS */;
 INSERT INTO `ant_vigilanciadetalle` (`VIGILADETP_Codigo`, `VIGILAP_Codigo`, `PROD_Codigo`, `PROP_Codigo`, `VIGILADETC_FechaModificacion`, `VIGILADETC_FechaRegistro`) VALUES
 	(8, 2, 93, 107, NULL, '2016-03-11 22:47:43'),
@@ -2855,7 +2856,7 @@ CREATE TABLE IF NOT EXISTS `course` (
 ) ENGINE=InnoDB AUTO_INCREMENT=379 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.course: ~362 rows (aproximadamente)
-DELETE FROM `course`;
+-- DELETE FROM `course`;
 /*!40000 ALTER TABLE `course` DISABLE KEYS */;
 INSERT INTO `course` (`id`, `APERTUP_Codigo`, `CURSOCIP_Codigo`, `flgAsignado`, `code`, `directory`, `db_name`, `course_language`, `title`, `description`, `category_code`, `visibility`, `show_score`, `tutor_name`, `visual_code`, `department_name`, `department_url`, `disk_quota`, `last_visit`, `last_edit`, `creation_date`, `expiration_date`, `target_course_code`, `subscribe`, `unsubscribe`, `registration_code`, `legal`, `activate_legal`, `course_type_id`) VALUES
 	(1, 0, 7, 0, '161BASITRIGOND102T', '161BASITRIGOND102T', NULL, 'spanish', 'Trigonometria D102 Basico-Tarde', 'DescripciÃ³n del curso', NULL, 1, 1, NULL, '161BASITRIGOND102T', NULL, 'http://', 0, NULL, NULL, '2016-02-13 07:33:46', NULL, NULL, 1, 0, '', '', 0, 1),
@@ -3258,7 +3259,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 ) ENGINE=InnoDB AUTO_INCREMENT=150 DEFAULT CHARSET=latin1;
 
 -- Volcando datos para la tabla cepreadm.user: ~143 rows (aproximadamente)
-DELETE FROM `user`;
+-- DELETE FROM `user`;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 INSERT INTO `user` (`user_id`, `lastname`, `firstname`, `username`, `password`, `auth_source`, `email`, `status`, `official_code`, `phone`, `picture_uri`, `creator_id`, `competences`, `diplomas`, `openarea`, `teach`, `productions`, `chatcall_user_id`, `chatcall_date`, `chatcall_text`, `language`, `registration_date`, `expiration_date`, `active`, `openid`, `theme`, `hr_dept_id`) VALUES
 	(1, 'Martin', 'Trujillo Bustamante', 'mtrujillo', '496bd9e51adbd1af72f8a225a5ea12e25f8bdf9c', 'platform', 'martin.trujillo1105@gmail.com', 1, 'Administrador', '957595320', '', 1, NULL, NULL, NULL, NULL, NULL, 0, '0000-00-00 00:00:00', '', 'spanish', '2015-09-16 20:55:15', '0000-00-00 00:00:00', 1, 'http://', NULL, 0),

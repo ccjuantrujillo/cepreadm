@@ -1,4 +1,4 @@
-var base_url  = "http://localhost:81/cepreadm/";
+var base_url  = "http://localhost/cepreadm/";
 jQuery(document).ready(function(){
    $("#cerrar").click(function(){
        url = base_url+"index.php/inicio/salir";
